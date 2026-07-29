@@ -44,6 +44,249 @@ public enum AssetType: Sendable, Equatable {
     case unknown
 }
 
+// MARK: - Cosign verification
+
+/// Protocol for verifying Cosign keyless signatures on release checksums.
+/// Apps provide an implementation (e.g. shelling out to the cosign CLI);
+/// tests stub it for fast verification without requiring cosign installed.
+public protocol CosignVerifier: Sendable {
+    /// Fetch the cosign signature file for the given release tag.
+    func fetchSignature(tag: String) async throws -> Data
+    /// Fetch the cosign certificate file for the given release tag.
+    func fetchCertificate(tag: String) async throws -> Data
+    /// Verify a cosign signature on the given content.
+    func verifySignature(content: Data, signature: Data, certificate: Data) async throws
+}
+
+/// Configuration for Cosign keyless signature verification.
+/// When non-nil on an `UpdateApplier`, the checksums.txt is verified
+/// against its cosign signature before any downloaded asset is trusted.
+///
+/// Swift port of corekit/updatecheck/cosign.Config.
+public struct CosignConfig: Sendable {
+    /// The GitHub repository slug (e.g. "danieljustus/symaira-vault").
+    public let repo: String
+
+    /// The artifact name used in signature filenames
+    /// (e.g. "symvault" → "symvault_1.0.0_checksums.txt.sig").
+    public let binaryName: String
+
+    /// Base URL for downloading cosign artifacts. Defaults to
+    /// "https://github.com/{repo}/releases/download" when empty.
+    public let downloadBaseURL: String
+
+    /// The certificate identity regexp passed to cosign verify-blob.
+    /// Defaults to a pattern matching the release workflow of `repo` when empty.
+    public let identityRegexp: String
+
+    /// The verifier implementation. Handles both fetching artifacts
+    /// and verifying signatures.
+    public let verifier: CosignVerifier
+
+    public init(
+        repo: String,
+        binaryName: String,
+        downloadBaseURL: String = "",
+        identityRegexp: String = "",
+        verifier: CosignVerifier? = nil
+    ) {
+        self.repo = repo
+        self.binaryName = binaryName
+        self.downloadBaseURL = downloadBaseURL
+        self.identityRegexp = identityRegexp
+        self.verifier = verifier ?? CosignCLIVerifier(
+            repo: repo,
+            binaryName: binaryName,
+            downloadBaseURL: downloadBaseURL,
+            identityRegexp: identityRegexp
+        )
+    }
+
+    /// Returns the identity regexp, defaulting to a GitHub Actions release workflow pattern.
+    public func identityRegexpOrDefault() -> String {
+        if !identityRegexp.isEmpty { return identityRegexp }
+        return #"https://github\.com/\#(repo)/\.github/workflows/release\.yml@refs/tags/v.*"#
+    }
+
+    /// Returns the download base URL, defaulting to the GitHub releases download path.
+    public func downloadBaseURLOrDefault() -> String {
+        if !downloadBaseURL.isEmpty { return downloadBaseURL }
+        return "https://github.com/\(repo)/releases/download"
+    }
+
+    /// The signature filename for the given tag (e.g. "symvault_1.0.0_checksums.txt.sig").
+    public func signatureFileName(tag: String) -> String {
+        let v = tag.replacingOccurrences(of: "v", with: "", options: .anchored)
+        return "\(binaryName)_\(v)_checksums.txt.sig"
+    }
+
+    /// The certificate filename for the given tag (e.g. "symvault_1.0.0_checksums.txt.pem").
+    public func certificateFileName(tag: String) -> String {
+        let v = tag.replacingOccurrences(of: "v", with: "", options: .anchored)
+        return "\(binaryName)_\(v)_checksums.txt.pem"
+    }
+
+    /// Fetch the cosign signature for a release tag. Delegates to the verifier.
+    public func fetchSignature(tag: String) async throws -> Data {
+        return try await verifier.fetchSignature(tag: tag)
+    }
+
+    /// Fetch the cosign certificate for a release tag. Delegates to the verifier.
+    public func fetchCertificate(tag: String) async throws -> Data {
+        return try await verifier.fetchCertificate(tag: tag)
+    }
+
+    /// Verify a cosign signature on the given checksums content.
+    public func verifySignature(content: Data, signature: Data, certificate: Data) async throws {
+        try await verifier.verifySignature(content: content, signature: signature, certificate: certificate)
+    }
+}
+
+/// Default `CosignVerifier` implementation that shells out to the `cosign` CLI.
+/// Falls back gracefully with a clear error when cosign is not installed.
+public struct CosignCLIVerifier: CosignVerifier, Sendable {
+    /// The GitHub repository slug.
+    public let repo: String
+    /// The artifact name.
+    public let binaryName: String
+    /// Base URL for downloading cosign artifacts.
+    public let downloadBaseURL: String
+    /// The certificate identity regexp.
+    public let identityRegexp: String
+    /// HTTP client for fetching artifacts.
+    private let httpClient: UpdateHTTPClient
+
+    /// The OIDC issuer for cosign keyless signatures.
+    public static let oidcIssuer = "https://token.actions.githubusercontent.com"
+
+    public init(
+        repo: String,
+        binaryName: String,
+        downloadBaseURL: String = "",
+        identityRegexp: String = "",
+        httpClient: UpdateHTTPClient = URLSession.shared
+    ) {
+        self.repo = repo
+        self.binaryName = binaryName
+        self.downloadBaseURL = downloadBaseURL
+        self.identityRegexp = identityRegexp
+        self.httpClient = httpClient
+    }
+
+    private func downloadBaseURLOrDefault() -> String {
+        if !downloadBaseURL.isEmpty { return downloadBaseURL }
+        return "https://github.com/\(repo)/releases/download"
+    }
+
+    private func signatureFileName(tag: String) -> String {
+        let v = tag.replacingOccurrences(of: "v", with: "", options: .anchored)
+        return "\(binaryName)_\(v)_checksums.txt.sig"
+    }
+
+    private func certificateFileName(tag: String) -> String {
+        let v = tag.replacingOccurrences(of: "v", with: "", options: .anchored)
+        return "\(binaryName)_\(v)_checksums.txt.pem"
+    }
+
+    public func fetchSignature(tag: String) async throws -> Data {
+        return try await fetchArtifact(tag: tag, fileName: signatureFileName(tag:), label: "signature")
+    }
+
+    public func fetchCertificate(tag: String) async throws -> Data {
+        return try await fetchArtifact(tag: tag, fileName: certificateFileName(tag:), label: "certificate")
+    }
+
+    private func fetchArtifact(tag: String, fileName: (String) -> String, label: String) async throws -> Data {
+        let v = tag.replacingOccurrences(of: "v", with: "", options: .anchored)
+        guard !v.isEmpty else {
+            throw UpdateApplierError.cosignVerificationFailed("Version must not be empty")
+        }
+
+        let name = fileName(tag)
+        let base = downloadBaseURLOrDefault()
+        let urlString = "\(base)/v\(v)/\(name)"
+
+        guard let url = URL(string: urlString),
+              url.scheme == "https" else {
+            throw UpdateApplierError.cosignVerificationFailed(
+                "Cosign \(label) URL must use HTTPS, got \(urlString)"
+            )
+        }
+
+        var request = URLRequest(url: url, timeoutInterval: 30)
+        request.httpMethod = "GET"
+
+        let (data, response) = try await httpClient.data(for: request)
+
+        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
+            throw UpdateApplierError.cosignVerificationFailed(
+                "Fetch cosign \(label): HTTP \(http.statusCode)"
+            )
+        }
+
+        return data
+    }
+
+    public func verifySignature(content: Data, signature: Data, certificate: Data) async throws {
+        // Check if cosign CLI is available.
+        let which = Process()
+        which.executableURL = URL(fileURLWithPath: "/usr/bin/which")
+        which.arguments = ["cosign"]
+
+        let whichPipe = Pipe()
+        which.standardOutput = whichPipe
+        try? which.run()
+        which.waitUntilExit()
+
+        guard which.terminationStatus == 0 else {
+            throw UpdateApplierError.cosignVerificationFailed(
+                "cosign CLI not found — install cosign from https://docs.sigstore.dev to verify release signatures"
+            )
+        }
+
+        // Write temp files.
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("cosign-verify-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: tempDir) }
+
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+
+        let contentPath = tempDir.appendingPathComponent("content").path
+        let sigPath = tempDir.appendingPathComponent("signature.sig").path
+        let certPath = tempDir.appendingPathComponent("certificate.pem").path
+
+        try content.write(to: URL(fileURLWithPath: contentPath))
+        try signature.write(to: URL(fileURLWithPath: sigPath))
+        try certificate.write(to: URL(fileURLWithPath: certPath))
+
+        // Run cosign verify-blob.
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+        process.arguments = [
+            "cosign", "verify-blob",
+            "--certificate", certPath,
+            "--signature", sigPath,
+            "--certificate-identity-regexp", identityRegexp,
+            "--certificate-oidc-issuer", CosignCLIVerifier.oidcIssuer,
+            contentPath,
+        ]
+
+        let stderrPipe = Pipe()
+        process.standardError = stderrPipe
+
+        try process.run()
+        process.waitUntilExit()
+
+        guard process.terminationStatus == 0 else {
+            let stderrData = try stderrPipe.fileHandleForReading.readToEnd() ?? Data()
+            let stderrStr = String(decoding: stderrData, as: UTF8.self).trimmingCharacters(in: .whitespacesAndNewlines)
+            throw UpdateApplierError.cosignVerificationFailed(
+                "cosign verify-blob failed: \(stderrStr)"
+            )
+        }
+    }
+}
+
 // MARK: - Errors
 
 /// Typed errors that can occur during the update application process.
@@ -82,6 +325,10 @@ public enum UpdateApplierError: Error, Sendable, Equatable {
 /// checksums.txt, and provides optional progress callbacks. Supports both
 /// raw binary and .app bundle (DMG/ZIP) releases.
 ///
+/// Optional hardening (all disabled by default):
+/// - Install method detection (`checkInstallMethod`): rejects Homebrew installs.
+/// - Cosign verification (`cosignConfig`): verifies checksums.txt signature.
+///
 /// This is the Swift port of corekit/updatecheck/updateapply.
 public struct UpdateApplier: Sendable {
 
@@ -105,6 +352,10 @@ public struct UpdateApplier: Sendable {
     /// the asset name when empty.
     public let binaryName: String?
 
+    /// When non-nil, enables Cosign keyless signature verification of
+    /// checksums.txt before any downloaded asset is trusted.
+    public let cosignConfig: CosignConfig?
+
     /// Maximum body size for downloaded assets and checksums (1 GiB cap).
     private static let maxAssetBody: Int64 = 1 << 30
 
@@ -123,13 +374,16 @@ public struct UpdateApplier: Sendable {
     ///         rejects self-update for them. Defaults to false.
     ///   - binaryName: Display name for install-method guidance messages.
     ///         Defaults to nil (uses asset name).
+    ///   - cosignConfig: When non-nil, enables Cosign keyless signature
+    ///         verification of checksums.txt. Defaults to nil (disabled).
     public init(
         os: String? = nil,
         arch: String? = nil,
         client: UpdateHTTPClient = URLSession.shared,
         progress: UpdateProgressHandler? = nil,
         checkInstallMethod: Bool = false,
-        binaryName: String? = nil
+        binaryName: String? = nil,
+        cosignConfig: CosignConfig? = nil
     ) {
         self.os = os ?? UpdateApplier.currentOS()
         self.arch = arch ?? UpdateApplier.currentArch()
@@ -137,6 +391,7 @@ public struct UpdateApplier: Sendable {
         self.progress = progress
         self.checkInstallMethod = checkInstallMethod
         self.binaryName = binaryName
+        self.cosignConfig = cosignConfig
     }
 
     // MARK: - Apply (binary path)
@@ -219,6 +474,22 @@ public struct UpdateApplier: Sendable {
 
         // 4. Download and parse checksums.txt.
         let checksums = try await fetchChecksums(from: release.assets)
+
+        // 4b. Optional cosign verification of checksums.
+        if let cosign = cosignConfig {
+            // Build the checksums data for verification.
+            var checksumsData = ""
+            for (name, sum) in checksums {
+                checksumsData += "\(sum)  \(name)\n"
+            }
+            let sig = try await cosign.fetchSignature(tag: release.tagName)
+            let cert = try await cosign.fetchCertificate(tag: release.tagName)
+            try await cosign.verifySignature(
+                content: Data(checksumsData.utf8),
+                signature: sig,
+                certificate: cert
+            )
+        }
 
         // 5. Look up the expected checksum for the selected asset.
         guard let expectedSum = checksums[asset.name] else {

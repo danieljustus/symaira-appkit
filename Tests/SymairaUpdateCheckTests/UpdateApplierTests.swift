@@ -650,4 +650,272 @@ final class UpdateApplierTests: XCTestCase {
         XCTAssertTrue(applier.checkInstallMethod)
         XCTAssertEqual(applier.binaryName, "testtool")
     }
+
+    // MARK: - CosignConfig
+
+    func testCosignConfigFilenameGeneration() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault"
+        )
+        XCTAssertEqual(cfg.signatureFileName(tag: "v1.0.0"), "symvault_1.0.0_checksums.txt.sig")
+        XCTAssertEqual(cfg.signatureFileName(tag: "1.0.0"), "symvault_1.0.0_checksums.txt.sig")
+        XCTAssertEqual(cfg.certificateFileName(tag: "v2.3.4"), "symvault_2.3.4_checksums.txt.pem")
+    }
+
+    func testCosignConfigDefaultURL() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault"
+        )
+        XCTAssertEqual(cfg.downloadBaseURLOrDefault(), "https://github.com/danieljustus/symaira-vault/releases/download")
+    }
+
+    func testCosignConfigCustomURL() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            downloadBaseURL: "https://releases.example.com"
+        )
+        XCTAssertEqual(cfg.downloadBaseURLOrDefault(), "https://releases.example.com")
+    }
+
+    func testCosignConfigDefaultIdentityRegexp() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault"
+        )
+        let regexp = cfg.identityRegexpOrDefault()
+        XCTAssertTrue(regexp.contains("danieljustus/symaira-vault"))
+        XCTAssertTrue(regexp.contains("release"))
+    }
+
+    func testCosignConfigCustomIdentityRegexp() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            identityRegexp: "custom-pattern"
+        )
+        XCTAssertEqual(cfg.identityRegexpOrDefault(), "custom-pattern")
+    }
+
+    func testCosignConfigInitDefaults() {
+        let cfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault"
+        )
+        XCTAssertEqual(cfg.repo, "danieljustus/symaira-vault")
+        XCTAssertEqual(cfg.binaryName, "symvault")
+        XCTAssertEqual(cfg.downloadBaseURL, "")
+        XCTAssertEqual(cfg.identityRegexp, "")
+    }
+
+    // MARK: - CosignVerifier stubs
+
+    /// A stub CosignVerifier that always succeeds.
+    private final class StubPassingCosignVerifier: CosignVerifier, @unchecked Sendable {
+        func fetchSignature(tag: String) async throws -> Data {
+            return Data("stub-signature".utf8)
+        }
+        func fetchCertificate(tag: String) async throws -> Data {
+            return Data("stub-certificate".utf8)
+        }
+        func verifySignature(content: Data, signature: Data, certificate: Data) async throws {
+            // Always passes.
+        }
+    }
+
+    /// A stub CosignVerifier that always fails.
+    private final class StubFailingCosignVerifier: CosignVerifier, @unchecked Sendable {
+        func fetchSignature(tag: String) async throws -> Data {
+            return Data("stub-signature".utf8)
+        }
+        func fetchCertificate(tag: String) async throws -> Data {
+            return Data("stub-certificate".utf8)
+        }
+        func verifySignature(content: Data, signature: Data, certificate: Data) async throws {
+            throw UpdateApplierError.cosignVerificationFailed("stub verification failure")
+        }
+    }
+
+    /// A stub CosignVerifier that fails on missing signature.
+    private final class StubMissingSignatureVerifier: CosignVerifier, @unchecked Sendable {
+        var failOnFetch = false
+        func fetchSignature(tag: String) async throws -> Data {
+            if failOnFetch {
+                throw UpdateApplierError.cosignVerificationFailed("signature not found")
+            }
+            return Data("stub-signature".utf8)
+        }
+        func fetchCertificate(tag: String) async throws -> Data {
+            return Data("stub-certificate".utf8)
+        }
+        func verifySignature(content: Data, signature: Data, certificate: Data) async throws {
+            // passes
+        }
+    }
+
+    // MARK: - Cosign: applyBundle with valid signature
+
+    func testApplyBundleWithValidCosignSignature() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        let cosignCfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            verifier: StubPassingCosignVerifier()
+        )
+
+        let applier = UpdateApplier(
+            os: "darwin",
+            arch: "arm64",
+            client: client,
+            cosignConfig: cosignCfg
+        )
+
+        let result = try await applier.applyBundle(release: release)
+        defer { try? FileManager.default.removeItem(at: result) }
+
+        let downloaded = try Data(contentsOf: result)
+        XCTAssertEqual(downloaded, assetBody)
+    }
+
+    // MARK: - Cosign: applyBundle with invalid signature
+
+    func testApplyBundleRejectsOnInvalidCosignSignature() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        let cosignCfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            verifier: StubFailingCosignVerifier()
+        )
+
+        let applier = UpdateApplier(
+            os: "darwin",
+            arch: "arm64",
+            client: client,
+            cosignConfig: cosignCfg
+        )
+
+        do {
+            _ = try await applier.applyBundle(release: release)
+            XCTFail("expected cosignVerificationFailed error")
+        } catch UpdateApplierError.cosignVerificationFailed {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    // MARK: - Cosign: applyBundle with missing signature
+
+    func testApplyBundleRejectsOnMissingCosignSignature() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        let verifier = StubMissingSignatureVerifier()
+        verifier.failOnFetch = true
+
+        let cosignCfg = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            verifier: verifier
+        )
+
+        let applier = UpdateApplier(
+            os: "darwin",
+            arch: "arm64",
+            client: client,
+            cosignConfig: cosignCfg
+        )
+
+        do {
+            _ = try await applier.applyBundle(release: release)
+            XCTFail("expected cosignVerificationFailed error for missing signature")
+        } catch UpdateApplierError.cosignVerificationFailed {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    // MARK: - Cosign config nil (disabled) does not verify
+
+    func testApplyBundleWithoutCosignConfigSkipsVerification() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        // No cosignConfig (defaults to nil).
+        let applier = UpdateApplier(
+            os: "darwin",
+            arch: "arm64",
+            client: client
+        )
+        XCTAssertNil(applier.cosignConfig)
+
+        let result = try await applier.applyBundle(release: release)
+        defer { try? FileManager.default.removeItem(at: result) }
+
+        let downloaded = try Data(contentsOf: result)
+        XCTAssertEqual(downloaded, assetBody)
+    }
 }
