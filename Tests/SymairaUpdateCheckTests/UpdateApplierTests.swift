@@ -434,4 +434,220 @@ final class UpdateApplierTests: XCTestCase {
         XCTAssertEqual(applier.arch, "amd64")
 #endif
     }
+
+    // MARK: - Asset type detection
+
+    func testDetectAssetTypeDMG() {
+        let applier = UpdateApplier()
+        XCTAssertEqual(applier.detectAssetType(name: "MyApp_darwin_arm64.dmg"), .appBundleDMG)
+        XCTAssertEqual(applier.detectAssetType(name: "MyApp.DMG"), .appBundleDMG)
+    }
+
+    func testDetectAssetTypeZIP() {
+        let applier = UpdateApplier()
+        XCTAssertEqual(applier.detectAssetType(name: "MyApp_darwin_arm64.zip"), .appBundleZip)
+        XCTAssertEqual(applier.detectAssetType(name: "MyApp.ZIP"), .appBundleZip)
+    }
+
+    func testDetectAssetTypeBinary() {
+        let applier = UpdateApplier()
+        XCTAssertEqual(applier.detectAssetType(name: "mytool_darwin_arm64"), .binary)
+        XCTAssertEqual(applier.detectAssetType(name: "mytool_darwin_arm64.tar.gz"), .binary)
+        XCTAssertEqual(applier.detectAssetType(name: "mytool"), .binary)
+    }
+
+    // MARK: - Install method detection (stubbed - no real filesystem manipulation)
+
+    func testDetectInstallMethodEmptyPath() {
+        let method = UpdateApplier.detectInstallMethod(at: "")
+        XCTAssertEqual(method, .unknown)
+    }
+
+    func testDetectInstallMethodHomebrewByPath() {
+        let method = UpdateApplier.detectInstallMethod(at: "/opt/homebrew/bin/symvault")
+        XCTAssertEqual(method, .homebrew)
+    }
+
+    func testDetectInstallMethodHomebrewByCellar() {
+        let method = UpdateApplier.detectInstallMethod(at: "/usr/local/Cellar/symvault/1.0.0/bin/symvault")
+        XCTAssertEqual(method, .homebrew)
+    }
+
+    func testDetectInstallMethodDirectDownloadByPath() {
+        let method = UpdateApplier.detectInstallMethod(at: "/usr/local/bin/symvault")
+        XCTAssertEqual(method, .directDownload)
+    }
+
+    func testDetectInstallMethodPackageManager() {
+        let method = UpdateApplier.detectInstallMethod(at: "/usr/bin/symvault")
+        XCTAssertEqual(method, .packageManager)
+    }
+
+    func testDetectInstallMethodGoInstallByPath() {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        let method = UpdateApplier.detectInstallMethod(at: "\(home)/go/bin/symvault")
+        XCTAssertEqual(method, .goInstall)
+    }
+
+    func testDetectInstallMethodUserBin() {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        let method = UpdateApplier.detectInstallMethod(at: "\(home)/bin/symvault")
+        XCTAssertEqual(method, .directDownload)
+    }
+
+    func testDetectInstallMethodLocalBin() {
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        let method = UpdateApplier.detectInstallMethod(at: "\(home)/.local/bin/symvault")
+        XCTAssertEqual(method, .directDownload)
+    }
+
+    // MARK: - Self-update support
+
+    func testIsSelfUpdateSupported() {
+        XCTAssertTrue(UpdateApplier.isSelfUpdateSupported(.directDownload))
+        XCTAssertTrue(UpdateApplier.isSelfUpdateSupported(.unknown))
+        XCTAssertFalse(UpdateApplier.isSelfUpdateSupported(.homebrew))
+        XCTAssertFalse(UpdateApplier.isSelfUpdateSupported(.goInstall))
+        XCTAssertFalse(UpdateApplier.isSelfUpdateSupported(.packageManager))
+        XCTAssertFalse(UpdateApplier.isSelfUpdateSupported(.buildFromSource))
+    }
+
+    func testGuidanceForHomebrew() {
+        let msg = UpdateApplier.guidance(for: .homebrew, binaryName: "symvault")
+        XCTAssertTrue(msg.contains("brew upgrade"))
+        XCTAssertTrue(msg.contains("symvault"))
+    }
+
+    func testGuidanceForGoInstall() {
+        let msg = UpdateApplier.guidance(for: .goInstall, binaryName: "symvault")
+        XCTAssertTrue(msg.contains("go install"))
+        XCTAssertTrue(msg.contains("symvault"))
+    }
+
+    // MARK: - findAppBundle (with temp directory)
+
+    func testFindAppBundleInTempDirectory() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("updateapply-test-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: tempDir) }
+
+        // Create a fake .app structure.
+        let appDir = tempDir.appendingPathComponent("MyApp.app")
+        let contentsDir = appDir.appendingPathComponent("Contents")
+        try FileManager.default.createDirectory(at: contentsDir, withIntermediateDirectories: true)
+
+        // Add an Info.plist so it's recognized as a valid app bundle.
+        let plistPath = contentsDir.appendingPathComponent("Info.plist")
+        let plistContent = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0"><dict><key>CFBundleName</key><string>MyApp</string></dict></plist>
+        """
+        try Data(plistContent.utf8).write(to: plistPath)
+
+        let applier = UpdateApplier()
+        let found = applier.findAppBundle(in: tempDir)
+        XCTAssertNotNil(found)
+        XCTAssertEqual(found?.lastPathComponent, "MyApp.app")
+    }
+
+    func testFindAppBundleReturnsNilWhenNoneExist() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("updateapply-test-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: tempDir) }
+
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+
+        // Create a file that looks like .app but has no Info.plist.
+        let fakeApp = tempDir.appendingPathComponent("NotARealApp.app")
+        try Data("fake".utf8).write(to: fakeApp)
+
+        let applier = UpdateApplier()
+        let found = applier.findAppBundle(in: tempDir)
+        XCTAssertNil(found)
+    }
+
+    // MARK: - applyBundle with binary asset (same as apply)
+
+    func testApplyBundleWithBinaryAsset() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        let applier = UpdateApplier(os: "darwin", arch: "arm64", client: client)
+        let result = try await applier.applyBundle(release: release)
+        defer { try? FileManager.default.removeItem(at: result) }
+
+        let downloaded = try Data(contentsOf: result)
+        XCTAssertEqual(downloaded, assetBody, "binary asset downloaded via applyBundle should match")
+    }
+
+    // MARK: - Install method rejection (with stub client)
+
+    func testApplyBundleRejectsHomebrewWhenCheckEnabled() async throws {
+        let homebrewPath = "/opt/homebrew/bin/symvault"
+
+        let assetBody = Data("binary".utf8)
+        let expectedSum = sha256Hex(assetBody)
+
+        let client = StubUpdateHTTPClient()
+        let checksumsText = "\(expectedSum)  mytool_darwin_arm64\n"
+        client.setResponse(path: "/checksums.txt", body: Data(checksumsText.utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+
+        let applier = UpdateApplier(os: "darwin", arch: "arm64", client: client, checkInstallMethod: true, binaryName: "symvault")
+
+        do {
+            _ = try await applier.applyBundle(release: release, targetPath: homebrewPath)
+            XCTFail("expected unsupportedInstallMethod error for Homebrew")
+        } catch UpdateApplierError.unsupportedInstallMethod(let method, guidance: let guidance) {
+            XCTAssertEqual(method, .homebrew)
+            XCTAssertTrue(guidance.contains("brew"), "guidance should mention brew")
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    // MARK: - Init defaults
+
+    func testInitDefaults() {
+        let applier = UpdateApplier()
+        XCTAssertFalse(applier.checkInstallMethod, "checkInstallMethod should default to false")
+        XCTAssertNil(applier.binaryName)
+    }
+
+    func testInitWithCustomValues() {
+        let applier = UpdateApplier(
+            os: "linux",
+            arch: "amd64",
+            checkInstallMethod: true,
+            binaryName: "testtool"
+        )
+        XCTAssertEqual(applier.os, "linux")
+        XCTAssertEqual(applier.arch, "amd64")
+        XCTAssertTrue(applier.checkInstallMethod)
+        XCTAssertEqual(applier.binaryName, "testtool")
+    }
 }

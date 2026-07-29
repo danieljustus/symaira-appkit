@@ -11,6 +11,39 @@ import Crypto
 /// `total` is 0 when the server did not report Content-Length.
 public typealias UpdateProgressHandler = @Sendable (_ written: Int64, _ total: Int64) -> Void
 
+// MARK: - Install method detection
+
+/// Describes how a binary or app bundle was installed, determining whether
+/// self-update is safe (Swift port of corekit/installmethod).
+public enum InstallMethod: String, Sendable, Equatable, CaseIterable {
+    /// Downloaded directly from a GitHub release. Self-update is safe.
+    case directDownload = "direct-download"
+    /// Installed via Homebrew. Users should update with "brew upgrade".
+    case homebrew
+    /// Installed via "go install".
+    case goInstall = "go-install"
+    /// Installed via a system package manager (APT, YUM, etc.).
+    case packageManager = "package-manager"
+    /// Compiled locally from source.
+    case buildFromSource = "build-from-source"
+    /// Installation method could not be determined.
+    case unknown
+}
+
+// MARK: - Asset type detection
+
+/// The type of a release asset, used to decide how to install it.
+public enum AssetType: Sendable, Equatable {
+    /// A standalone binary executable (.tar.gz, raw binary, etc.).
+    case binary
+    /// A .app bundle inside a DMG disk image.
+    case appBundleDMG
+    /// A .app bundle inside a ZIP archive.
+    case appBundleZip
+    /// Asset type could not be determined from the filename.
+    case unknown
+}
+
 // MARK: - Errors
 
 /// Typed errors that can occur during the update application process.
@@ -29,12 +62,25 @@ public enum UpdateApplierError: Error, Sendable, Equatable {
     case unparseableChecksums
     /// An HTTP error was returned from the server.
     case httpStatus(Int)
+    /// Self-update is not supported for the detected install method.
+    case unsupportedInstallMethod(InstallMethod, guidance: String)
+    /// The asset is a .app bundle but installation required a writable /Applications.
+    case applicationsNotWritable
+    /// Failed to mount a DMG disk image.
+    case dmgMountFailed(String)
+    /// No .app bundle was found inside the DMG or ZIP archive.
+    case appBundleNotFound
+    /// Failed to copy the .app bundle to its destination.
+    case appBundleCopyFailed(String)
+    /// Cosign signature verification failed.
+    case cosignVerificationFailed(String)
 }
 
 // MARK: - UpdateApplier
 
 /// Downloads a platform-matching release asset, verifies its SHA256 against
-/// checksums.txt, and provides optional progress callbacks.
+/// checksums.txt, and provides optional progress callbacks. Supports both
+/// raw binary and .app bundle (DMG/ZIP) releases.
 ///
 /// This is the Swift port of corekit/updatecheck/updateapply.
 public struct UpdateApplier: Sendable {
@@ -51,6 +97,14 @@ public struct UpdateApplier: Sendable {
     /// Optional progress callback invoked during asset download.
     private let progress: UpdateProgressHandler?
 
+    /// When true, detects the installation method of the target binary
+    /// and rejects self-update for Homebrew-managed binaries.
+    public let checkInstallMethod: Bool
+
+    /// Display name used in install-method guidance messages. Defaults to
+    /// the asset name when empty.
+    public let binaryName: String?
+
     /// Maximum body size for downloaded assets and checksums (1 GiB cap).
     private static let maxAssetBody: Int64 = 1 << 30
 
@@ -65,19 +119,27 @@ public struct UpdateApplier: Sendable {
     ///           the current platform's architecture.
     ///   - client: The HTTP client for downloads. Defaults to `URLSession.shared`.
     ///   - progress: Optional callback for download progress updates.
+    ///   - checkInstallMethod: When true, detects Homebrew-managed installs and
+    ///         rejects self-update for them. Defaults to false.
+    ///   - binaryName: Display name for install-method guidance messages.
+    ///         Defaults to nil (uses asset name).
     public init(
         os: String? = nil,
         arch: String? = nil,
         client: UpdateHTTPClient = URLSession.shared,
-        progress: UpdateProgressHandler? = nil
+        progress: UpdateProgressHandler? = nil,
+        checkInstallMethod: Bool = false,
+        binaryName: String? = nil
     ) {
         self.os = os ?? UpdateApplier.currentOS()
         self.arch = arch ?? UpdateApplier.currentArch()
         self.client = client
         self.progress = progress
+        self.checkInstallMethod = checkInstallMethod
+        self.binaryName = binaryName
     }
 
-    // MARK: - Apply
+    // MARK: - Apply (binary path)
 
     /// Download the platform-matching asset from the release, verify its
     /// SHA256 against `checksums.txt`, and return the path to the verified
@@ -117,6 +179,427 @@ public struct UpdateApplier: Sendable {
         }
 
         return tempURL
+    }
+
+    // MARK: - Apply (bundle install)
+
+    /// Download the platform-matching asset and, if it is a .app bundle
+    /// (DMG or ZIP), install it to `/Applications`. Returns the path
+    /// to the installed .app bundle.
+    ///
+    /// For DMG assets, the disk image is mounted via `hdiutil`, the .app
+    /// is copied to `/Applications`, and the image is unmounted.
+    ///
+    /// For ZIP assets, the archive is extracted, the .app is located, and
+    /// copied to `/Applications`.
+    ///
+    /// Raw binaries are downloaded to a temp file (same as `apply(release:)`).
+    ///
+    /// - Parameters:
+    ///   - release: The release containing assets and a checksums.txt.
+    ///   - targetPath: Optional path to the running binary for install-method
+    ///         detection. Only used when `checkInstallMethod` is true.
+    /// - Returns: The URL of the installed artifact (temp file for binaries,
+    ///         `/Applications/AppName.app` for bundles).
+    public func applyBundle(release: ReleaseInfo, targetPath: String? = nil) async throws -> URL {
+        // 1. Select the asset matching os + arch.
+        let asset = try selectAsset(from: release.assets)
+
+        // 2. Optional install method detection.
+        if checkInstallMethod, let path = targetPath {
+            let method = UpdateApplier.detectInstallMethod(at: path)
+            guard UpdateApplier.isSelfUpdateSupported(method) else {
+                let guidance = UpdateApplier.guidance(for: method, binaryName: binaryName ?? asset.name)
+                throw UpdateApplierError.unsupportedInstallMethod(method, guidance: guidance)
+            }
+        }
+
+        // 3. Determine asset type.
+        let assetType = detectAssetType(name: asset.name)
+
+        // 4. Download and parse checksums.txt.
+        let checksums = try await fetchChecksums(from: release.assets)
+
+        // 5. Look up the expected checksum for the selected asset.
+        guard let expectedSum = checksums[asset.name] else {
+            throw UpdateApplierError.checksumMismatch(
+                assetName: asset.name,
+                got: "<no entry in checksums.txt>",
+                expected: "<any entry>"
+            )
+        }
+
+        // 6. Download the asset to a temp file (with progress + streaming SHA256).
+        let (tempURL, actualSum) = try await downloadToTemp(asset: asset)
+
+        // 7. Verify the checksum.
+        guard actualSum.lowercased() == expectedSum.lowercased() else {
+            try? FileManager.default.removeItem(at: tempURL)
+            throw UpdateApplierError.checksumMismatch(
+                assetName: asset.name,
+                got: actualSum.lowercased(),
+                expected: expectedSum.lowercased()
+            )
+        }
+
+        // 8. If it's a bundle, install it to /Applications.
+        switch assetType {
+        case .appBundleDMG:
+            return try installDMG(at: tempURL, assetName: asset.name)
+        case .appBundleZip:
+            return try installZip(at: tempURL, assetName: asset.name)
+        case .binary, .unknown:
+            return tempURL
+        }
+    }
+
+    // MARK: - Asset type detection
+
+    /// Detect the asset type from the filename.
+    ///
+    /// - `.dmg` files are treated as app bundle DMGs.
+    /// - `.zip` files are treated as app bundle ZIPs.
+    /// - Everything else is treated as a raw binary.
+    public func detectAssetType(name: String) -> AssetType {
+        let lower = name.lowercased()
+        if lower.hasSuffix(".dmg") {
+            return .appBundleDMG
+        }
+        if lower.hasSuffix(".zip") {
+            return .appBundleZip
+        }
+        return .binary
+    }
+
+    // MARK: - DMG installation
+
+    /// Mount a DMG, copy the .app bundle to /Applications, and unmount.
+    /// Uses `hdiutil` for mount/unmount operations.
+    public func installDMG(at dmgURL: URL, assetName: String) throws -> URL {
+        guard FileManager.default.isWritableFile(atPath: "/Applications") else {
+            throw UpdateApplierError.applicationsNotWritable
+        }
+
+        // Mount the DMG.
+        let mountResult = try mountDMG(at: dmgURL)
+        defer {
+            // Always try to unmount, even on error.
+            _ = try? unmountDMG(at: mountResult.mountPoint)
+        }
+
+        // Find the .app bundle on the mounted volume.
+        guard let appURL = findAppBundle(in: mountResult.mountPoint) else {
+            throw UpdateApplierError.appBundleNotFound
+        }
+
+        let appName = appURL.lastPathComponent
+        let destURL = URL(fileURLWithPath: "/Applications").appendingPathComponent(appName)
+
+        // Remove existing .app if present (the running instance is already loaded).
+        if FileManager.default.fileExists(atPath: destURL.path) {
+            try? FileManager.default.removeItem(at: destURL)
+        }
+
+        // Copy the .app to /Applications.
+        do {
+            try FileManager.default.copyItem(at: appURL, to: destURL)
+        } catch {
+            throw UpdateApplierError.appBundleCopyFailed(
+                "Failed to copy \(appURL.path) to \(destURL.path): \(error.localizedDescription)"
+            )
+        }
+
+        // Remove quarantine attribute if present.
+        _ = try? Process.run(
+            URL(fileURLWithPath: "/usr/bin/xattr"),
+            arguments: ["-d", "com.apple.quarantine", destURL.path]
+        )
+
+        return destURL
+    }
+
+    // MARK: - ZIP installation
+
+    /// Extract a ZIP archive, find the .app bundle, and copy it to /Applications.
+    public func installZip(at zipURL: URL, assetName: String) throws -> URL {
+        guard FileManager.default.isWritableFile(atPath: "/Applications") else {
+            throw UpdateApplierError.applicationsNotWritable
+        }
+
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("updateapply-zip-\(UUID().uuidString)")
+        defer {
+            try? FileManager.default.removeItem(at: tempDir)
+        }
+
+        // Create the temp extraction directory.
+        try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
+
+        // Use `ditto` for ZIP extraction (more reliable than unzip for .app bundles).
+        let dittoProcess = Process()
+        dittoProcess.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
+        dittoProcess.arguments = ["-xk", zipURL.path, tempDir.path]
+        try dittoProcess.run()
+        dittoProcess.waitUntilExit()
+
+        guard dittoProcess.terminationStatus == 0 else {
+            throw UpdateApplierError.appBundleCopyFailed(
+                "ditto extraction failed with exit code \(dittoProcess.terminationStatus)"
+            )
+        }
+
+        // Find the .app bundle.
+        guard let appURL = findAppBundle(in: tempDir) else {
+            throw UpdateApplierError.appBundleNotFound
+        }
+
+        let appName = appURL.lastPathComponent
+        let destURL = URL(fileURLWithPath: "/Applications").appendingPathComponent(appName)
+
+        // Remove existing .app if present.
+        if FileManager.default.fileExists(atPath: destURL.path) {
+            try? FileManager.default.removeItem(at: destURL)
+        }
+
+        // Copy the .app to /Applications.
+        do {
+            try FileManager.default.copyItem(at: appURL, to: destURL)
+        } catch {
+            throw UpdateApplierError.appBundleCopyFailed(
+                "Failed to copy \(appURL.path) to \(destURL.path): \(error.localizedDescription)"
+            )
+        }
+
+        // Remove quarantine attribute.
+        _ = try? Process.run(
+            URL(fileURLWithPath: "/usr/bin/xattr"),
+            arguments: ["-d", "com.apple.quarantine", destURL.path]
+        )
+
+        return destURL
+    }
+
+    // MARK: - DMG helpers
+
+    /// Represents a mounted DMG volume.
+    public struct DMGMountResult: Sendable {
+        /// The mount point directory (e.g. "/Volumes/MyApp").
+        public let mountPoint: URL
+        /// The device identifier (e.g. "/dev/disk3s1").
+        public let device: String
+    }
+
+    /// Mount a DMG using `hdiutil attach`.
+    private func mountDMG(at dmgURL: URL) throws -> DMGMountResult {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        process.arguments = ["attach", "-nobrowse", "-readonly", "-plist", dmgURL.path]
+
+        let pipe = Pipe()
+        process.standardOutput = pipe
+
+        try process.run()
+        process.waitUntilExit()
+
+        guard process.terminationStatus == 0 else {
+            throw UpdateApplierError.dmgMountFailed(
+                "hdiutil attach failed with exit code \(process.terminationStatus)"
+            )
+        }
+
+        let data = try pipe.fileHandleForReading.readToEnd() ?? Data()
+        let plist = try PropertyListSerialization.propertyList(from: data, options: [], format: nil)
+        guard let dict = plist as? [String: Any],
+              let entities = dict["system-entities"] as? [[String: Any]] else {
+            throw UpdateApplierError.dmgMountFailed("Failed to parse hdiutil plist output")
+        }
+
+        // Find the mount point entity.
+        for entity in entities {
+            if let mountPoint = entity["mount-point"] as? String,
+               let devEntry = entity["dev-entry"] as? String,
+               !mountPoint.isEmpty {
+                return DMGMountResult(
+                    mountPoint: URL(fileURLWithPath: mountPoint),
+                    device: devEntry
+                )
+            }
+        }
+
+        throw UpdateApplierError.dmgMountFailed("No mount point found in hdiutil output")
+    }
+
+    /// Unmount a DMG using `hdiutil detach`.
+    private func unmountDMG(at mountPoint: URL) throws {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/hdiutil")
+        process.arguments = ["detach", mountPoint.path]
+        try process.run()
+        process.waitUntilExit()
+    }
+
+    /// Recursively search for a .app bundle in a directory.
+    public func findAppBundle(in directory: URL) -> URL? {
+        let enumerator = FileManager.default.enumerator(
+            at: directory,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles, .skipsPackageDescendants]
+        )
+
+        while let url = enumerator?.nextObject() as? URL {
+            if url.pathExtension.lowercased() == "app" {
+                // Verify it's actually a bundle (has Contents/Info.plist).
+                let infoPlist = url.appendingPathComponent("Contents/Info.plist")
+                if FileManager.default.fileExists(atPath: infoPlist.path) {
+                    return url
+                }
+            }
+        }
+        return nil
+    }
+
+    // MARK: - Install method detection
+
+    /// Detect how a binary or app was installed at the given path.
+    /// Swift port of corekit/installmethod.Detect.
+    public static func detectInstallMethod(at binaryPath: String) -> InstallMethod {
+        guard !binaryPath.isEmpty else { return .unknown }
+
+        // Resolve symlinks.
+        let realPath: String
+        if let resolved = try? FileManager.default
+            .destinationOfSymbolicLink(atPath: binaryPath) {
+            realPath = resolved
+        } else {
+            realPath = binaryPath
+        }
+
+        // Normalize to absolute path.
+        let absPath = URL(fileURLWithPath: realPath).standardized.path
+
+        // Check env vars first.
+        if let method = detectFromEnv(absPath) { return method }
+
+        // Check path patterns.
+        if let method = detectFromPath(absPath) { return method }
+
+        // Check Cellar receipts.
+        if absPath.contains("/Cellar/") { return .homebrew }
+
+        // Check writability.
+        return detectFromWritability(absPath)
+    }
+
+    /// Returns true only for `directDownload`.
+    public static func isSelfUpdateSupported(_ method: InstallMethod) -> Bool {
+        return method == .directDownload || method == .unknown
+    }
+
+    /// Returns actionable upgrade instructions for the given method.
+    public static func guidance(for method: InstallMethod, binaryName: String) -> String {
+        switch method {
+        case .directDownload:
+            return "Re-run the quick install script or download the latest release from GitHub"
+        case .homebrew:
+            return "Update via Homebrew: brew update && brew upgrade \(binaryName)"
+        case .goInstall:
+            return "Update via Go: go install github.com/danieljustus/\(binaryName)@latest"
+        case .packageManager:
+            return "Update via your system package manager"
+        case .buildFromSource:
+            return "Rebuild from source: git pull && swift build"
+        case .unknown:
+            return "Unable to determine installation method. Reinstall from the GitHub releases page"
+        }
+    }
+
+    // MARK: - Detection helpers
+
+    private static func detectFromEnv(_ absPath: String) -> InstallMethod? {
+        if let prefix = ProcessInfo.processInfo.environment["HOMEBREW_PREFIX"] {
+            let resolved = (try? FileManager.default
+                .destinationOfSymbolicLink(atPath: prefix)) ?? prefix
+            if absPath.hasPrefix(resolved) {
+                return .homebrew
+            }
+        }
+
+        if let gopath = ProcessInfo.processInfo.environment["GOPATH"] {
+            let resolved = (try? FileManager.default
+                .destinationOfSymbolicLink(atPath: gopath)) ?? gopath
+            let binDir = resolved + "/bin"
+            if absPath.hasPrefix(binDir) {
+                return .goInstall
+            }
+        }
+
+        if let gomodcache = ProcessInfo.processInfo.environment["GOMODCACHE"] {
+            let resolved = (try? FileManager.default
+                .destinationOfSymbolicLink(atPath: gomodcache)) ?? gomodcache
+            if absPath.hasPrefix(resolved) {
+                return .goInstall
+            }
+        }
+
+        return nil
+    }
+
+    private static func detectFromPath(_ absPath: String) -> InstallMethod? {
+        if absPath.contains("/opt/homebrew/") { return .homebrew }
+        if absPath.contains("/usr/local/Cellar/") { return .homebrew }
+        if absPath.contains("/.linuxbrew/") { return .homebrew }
+        if absPath.hasPrefix("/usr/bin/") { return .packageManager }
+        if absPath.hasPrefix("/usr/local/bin/") { return .directDownload }
+
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+
+        // GOPATH/bin.
+        if let gopath = ProcessInfo.processInfo.environment["GOPATH"] {
+            let resolved = (try? FileManager.default
+                .destinationOfSymbolicLink(atPath: gopath)) ?? gopath
+            let binDir = resolved + "/"
+            if absPath.hasPrefix(binDir) { return .goInstall }
+        }
+
+        // ~/go/bin.
+        let goBin = home + "/go/bin/"
+        if absPath.hasPrefix(goBin) { return .goInstall }
+
+        // User-writable directories → direct download.
+        let userBins = [
+            home + "/bin/",
+            home + "/.local/bin/",
+            home + "/.cargo/bin/",
+        ]
+        for dir in userBins {
+            if absPath.hasPrefix(dir) { return .directDownload }
+        }
+
+        return nil
+    }
+
+    private static func detectFromWritability(_ absPath: String) -> InstallMethod {
+#if os(Windows)
+        return .buildFromSource
+#else
+        let dir = (absPath as NSString).deletingLastPathComponent
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: dir),
+              let permissions = attrs[.posixPermissions] as? Int else {
+            return .unknown
+        }
+
+        // Check if user has write permission on the directory.
+        if permissions & 0o200 != 0 {
+            return .directDownload
+        }
+
+        // Check if group/other write is allowed (less strict).
+        if permissions & 0o022 != 0 {
+            return .directDownload
+        }
+
+        return .buildFromSource
+#endif
     }
 
     // MARK: - Asset selection
