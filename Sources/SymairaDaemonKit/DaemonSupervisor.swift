@@ -1,5 +1,6 @@
 #if os(macOS)
 import Foundation
+import SymairaCLIRunner
 
 /// Defines the operational state of a background daemon.
 public enum DaemonState: Sendable, Equatable {
@@ -102,12 +103,7 @@ public final class DaemonSupervisor: @unchecked Sendable {
         proc.executableURL = executable
         proc.arguments = arguments
         
-        var mergedEnv = ProcessInfo.processInfo.environment
-        if let path = mergedEnv["PATH"] {
-            mergedEnv["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:\(path)"
-        } else {
-            mergedEnv["PATH"] = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
-        }
+        var mergedEnv = CLIRunner.augmentedEnvironment(ProcessInfo.processInfo.environment)
         if let environment = environment {
             for (key, val) in environment {
                 mergedEnv[key] = val
