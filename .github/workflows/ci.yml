@@ -24,12 +24,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # /opt/homebrew = Apple Silicon (macbook runner), /usr/local = Intel (mac-mini runner)
+  # /opt/homebrew = Apple Silicon (MacBook runner), /usr/local = legacy Intel path
   PATH: /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
 jobs:
   test:
-    runs-on: [self-hosted, macOS, X64, ARM64, mac-mini]  # Xcode 27 MacBook runner
+    runs-on: [self-hosted, macOS, ARM64, macbook-appkit]  # Xcode 27 MacBook runner
     steps:
       - uses: actions/checkout@v7
         with:
@@ -64,7 +64,7 @@ jobs:
           swift test -v -j "$JOBS"
 
   swift-62-build:
-    runs-on: [self-hosted, macOS, X64, ARM64, mac-mini]  # Xcode 27 MacBook runner
+    runs-on: [self-hosted, macOS, ARM64, macbook-appkit]  # Xcode 27 MacBook runner
     steps:
       - uses: actions/checkout@v7
         with:
