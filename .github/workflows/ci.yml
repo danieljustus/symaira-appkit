@@ -29,7 +29,7 @@ env:
 
 jobs:
   test:
-    runs-on: [self-hosted, macOS, X64, mac-mini]  # Mac Mini runner (GitHub macOS queue is the bottleneck)
+    runs-on: [self-hosted, macOS, X64, ARM64, mac-mini]  # Xcode 27 MacBook runner
     steps:
       - uses: actions/checkout@v7
         with:
@@ -64,7 +64,7 @@ jobs:
           swift test -v -j "$JOBS"
 
   swift-62-build:
-    runs-on: [self-hosted, macOS, X64, mac-mini]
+    runs-on: [self-hosted, macOS, X64, ARM64, mac-mini]  # Xcode 27 MacBook runner
     steps:
       - uses: actions/checkout@v7
         with:
