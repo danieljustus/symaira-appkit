@@ -130,13 +130,20 @@ enum SubprocessRunner {
         box.process.terminationHandler = { _ in
             semaphore.signal()
         }
+        // The handler is only guaranteed to fire when it is installed
+        // before the process dies. A fast child (e.g. `which`) may already
+        // be gone; never wait on a signal that can no longer arrive.
+        guard box.process.isRunning else {
+            return false
+        }
         if semaphore.wait(timeout: .now() + timeout) == .timedOut {
             // Timeout: terminate the child, then give it a short grace
             // period before escalating to SIGKILL.
             box.process.terminate()
             if semaphore.wait(timeout: .now() + terminationGraceSeconds) == .timedOut {
                 kill(box.process.processIdentifier, SIGKILL)
-                semaphore.wait()
+                // SIGKILL cannot be ignored; wait bounded for the handler.
+                _ = semaphore.wait(timeout: .now() + terminationGraceSeconds)
             }
             return true
         }
