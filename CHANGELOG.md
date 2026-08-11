@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   sidebar included — off-screen. The message now takes its width from the
   container (`.frame(maxWidth: .infinity, alignment: .leading)`) and the
   `Spacer` is gone. Error text wraps by nature, so every client that surfaces
-  errors through `SymairaNotice` was exposed (#67).
+  errors through `SymairaNotice` was exposed (#68).
 
 ## [0.9.1] - 2026-08-07
 

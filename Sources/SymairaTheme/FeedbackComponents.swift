@@ -103,7 +103,7 @@ public struct SymairaNotice: View {
             // from `.fixedSize(horizontal: false, vertical: true)` next to a
             // `Spacer`: that combination has no solution inside a
             // NavigationSplitView detail column on macOS 26, and a message long
-            // enough to wrap leaves the whole window blank (#67).
+            // enough to wrap leaves the whole window blank (#68).
             VStack(alignment: .leading, spacing: SymairaSpacing.xSmall) {
                 if let title {
                     Text(title)

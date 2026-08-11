@@ -57,7 +57,7 @@ final class FeedbackComponentsTests: XCTestCase {
     /// surrounding `NavigationSplitView`. Laying the message out with
     /// `.fixedSize(horizontal: false, vertical: true)` next to a `Spacer` gave
     /// the split view an unbounded height, which pushed every column off-screen
-    /// and left the window blank (#67).
+    /// and left the window blank (#68).
     func testNoticeWithWrappingMessageKeepsSplitViewWithinItsHost() {
         let longMessage = String(repeating: "Failed to load the profile index. ", count: 8)
         let size = CGSize(width: 720, height: 480)
