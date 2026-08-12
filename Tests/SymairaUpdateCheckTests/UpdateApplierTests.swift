@@ -50,7 +50,7 @@ private final class StubUpdateHTTPClient: UpdateHTTPClient, @unchecked Sendable 
 // MARK: - Test helpers
 
 /// A sendable box for capturing values inside progress callbacks.
-private final class ProgressBox: @unchecked Sendable {
+final class ProgressBox: @unchecked Sendable {
     var lastWritten: Int64 = -1
 }
 
@@ -71,12 +71,12 @@ private func makeRelease(
 // MARK: - Streaming stub HTTP client (#74)
 
 /// A simple thread-safe counter for asserting chunk/progress counts.
-private final class CounterBox: @unchecked Sendable {
+final class CounterBox: @unchecked Sendable {
     var count = 0
 }
 
 /// Yields `data` in `chunkSize`-byte slices, counting each consumed slice.
-private struct SlicedByteStream: UpdateByteStream {
+struct SlicedByteStream: UpdateByteStream {
     private let data: Data
     private let chunkSize: Int
     private let counter: CounterBox
@@ -117,7 +117,7 @@ private struct SlicedByteStream: UpdateByteStream {
 /// An HTTP client stub that implements the streaming seam, delivering bodies
 /// as `chunkSize`-byte chunks and recording how many chunks the caller
 /// consumed (to prove early rejection / mid-stream aborts).
-private final class StreamingStubUpdateHTTPClient: UpdateHTTPStreamingClient, @unchecked Sendable {
+final class StreamingStubUpdateHTTPClient: UpdateHTTPStreamingClient, @unchecked Sendable {
     var responses: [String: (Data, Int)] = [:]
     /// Per-path Content-Length overrides used to simulate servers that
     /// advertise a body size that differs from what they send.
