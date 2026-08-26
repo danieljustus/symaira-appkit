@@ -1,8 +1,6 @@
-# symaira-appkit
+# Symaira AppKit
 
-[![CI](https://github.com/danieljustus/symaira-appkit/actions/workflows/ci.yml/badge.svg)](https://github.com/danieljustus/symaira-appkit/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
-[![Swift 6](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
+[![CI](https://github.com/danieljustus/symaira-appkit/actions/workflows/ci.yml/badge.svg)](https://github.com/danieljustus/symaira-appkit/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/danieljustus/symaira-appkit?label=Release)](https://github.com/danieljustus/symaira-appkit/releases/latest) [![Coverage](https://img.shields.io/badge/coverage-not%20published-lightgrey)](https://github.com/danieljustus/symaira-appkit/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/danieljustus/symaira-appkit)](LICENSE) [![Swift 6](https://img.shields.io/badge/swift-6.0-orange)](https://swift.org)
 
 ![Symaira AppKit social preview](docs/assets/social-preview.png)
 
@@ -17,6 +15,14 @@ Every Symaira app stays fully standalone: this package is consumed as a **pinned
 - **Shared foundation, standalone apps** — theme, CLI runner, tool detection, keychain, update check, daemon supervision and ingest contracts in one place, with a version handshake so apps and cores never silently disagree.
 
 > **Status:** pre-1.0. Breaking API changes bump the minor version — review the [CHANGELOG](CHANGELOG.md) before bumping your pin.
+
+## Install
+
+Add the package as an exact-pinned dependency in the client app's `Package.swift`:
+
+```swift
+.package(url: "https://github.com/danieljustus/symaira-appkit.git", exact: "0.11.0")
+```
 
 ## Modules
 
@@ -55,11 +61,6 @@ fails to build. `SymairaTheme`, `SymairaKeychain`, and `SymairaMCP` are safe to
 adopt in an iOS client today.
 
 ## Usage
-
-```swift
-// Package.swift of a client app — always pin exactly:
-.package(url: "https://github.com/danieljustus/symaira-appkit.git", exact: "0.11.0")
-```
 
 Review the [CHANGELOG](CHANGELOG.md) before bumping your pin — every release documents its additions, fixes, and breaking changes.
 
