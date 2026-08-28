@@ -175,8 +175,26 @@ final class CLIRunnerTests: XCTestCase {
         }
     }
 
+    func testErrorDescriptionRedactsAdditionalCredentialShapes() {
+        let aiza = "AIza" + String(repeating: "a1", count: 12)
+        let glpat = "glpat-" + String(repeating: "g7", count: 8)
+        let akia = "AK" + "IA" + String(repeating: "B7", count: 8)
+        let asia = "AS" + "IA" + String(repeating: "C8", count: 8)
+        let stripe = "sk" + "_live_" + String(repeating: "q7", count: 12)
+        let pem = "-----BEGIN " + "RSA PRIVATE KEY-----\n"
+            + String(repeating: "A", count: 64)
+            + "\n-----END " + "RSA PRIVATE KEY-----"
+
+        for fixture in [aiza, glpat, akia, asia, stripe, pem] {
+            let err = CLIRunnerError.executionFailed(code: 1, fullStderr: "error: \(fixture)")
+            let desc = err.errorDescription ?? ""
+            XCTAssertFalse(desc.contains(fixture), "Credential shape not redacted: \(desc)")
+            XCTAssertTrue(desc.contains(SymairaSecretRedactor.placeholder), "Expected redaction in: \(desc)")
+        }
+    }
+
     func testFullStderrIsNeverRedacted() {
-        let secretStderr = "API_KEY=sk-supersecret"
+        let secretStderr = "API_KEY=sk-" + "supersecret"
         let err = CLIRunnerError.executionFailed(code: 1, fullStderr: secretStderr)
         // The fullStderr property returns the raw, unredacted text.
         XCTAssertEqual(err.fullStderr, secretStderr)
