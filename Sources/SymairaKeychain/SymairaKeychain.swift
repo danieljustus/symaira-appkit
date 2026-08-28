@@ -101,6 +101,15 @@ public struct SymairaKeychain: Sendable {
     public let service: String
     private let backend: any _SymairaKeychainBackend
 
+    /// A single serial queue bounds the number of potentially wedged
+    /// `securityd` workers to one for the whole process. A timed-out operation
+    /// cannot be cancelled, so a concurrent queue would strand one worker per
+    /// caller forever.
+    private static let boundedReadQueue = DispatchQueue(
+        label: "dev.symaira.keychain.bounded-read",
+        qos: .userInitiated
+    )
+
     /// Namespaced service for a Symaira app, e.g. `SymairaKeychain(app: "symseek")`
     /// → service `dev.symaira.symseek`.
     public init(app: String) {
@@ -152,13 +161,7 @@ public struct SymairaKeychain: Sendable {
     public func save(_ value: String, key: String, accessControl: SymairaKeychainAccessControl) throws -> Bool {
         let material = try makeSaveMaterial(value: value, accessControl: accessControl)
         let identityQuery = baseQuery(key: key)
-        var existingQuery = identityQuery
-        existingQuery[kSecReturnAttributes as String] = true
-        existingQuery[kSecReturnData as String] = true
-        existingQuery[kSecMatchLimit as String] = kSecMatchLimitOne
-
-        let (lookupStatus, existingItem) = backend.copyMatching(existingQuery)
-        if lookupStatus == errSecItemNotFound {
+        guard let existing = try existingItem(key: key) else {
             let addStatus = backend.add(material.addQuery(key: key, service: service))
             guard addStatus == errSecSuccess else {
                 throw SymairaKeychainError.saveFailed(addStatus)
@@ -166,17 +169,11 @@ public struct SymairaKeychain: Sendable {
             return true
         }
 
-        guard lookupStatus == errSecSuccess,
-              let existingAttributes = existingItem as? [String: Any],
-              let oldData = existingAttributes[kSecValueData as String] as? Data else {
-            throw SymairaKeychainError.saveFailed(lookupStatus)
-        }
-
-        if accessControlChanged(existingAttributes: existingAttributes, requested: material.accessControl) {
+        if accessControlChanged(existingAttributes: existing.attributes, requested: material.accessControl) {
             try replaceExistingItem(
                 key: key,
-                oldData: oldData,
-                oldAttributes: existingAttributes,
+                oldData: existing.data,
+                oldAttributes: existing.attributes,
                 material: material
             )
         } else {
@@ -185,6 +182,10 @@ public struct SymairaKeychain: Sendable {
                 attributes: [kSecValueData as String: material.data]
             )
             guard updateStatus == errSecSuccess else {
+                _ = backend.update(
+                    identityQuery,
+                    attributes: [kSecValueData as String: existing.data]
+                )
                 throw SymairaKeychainError.saveFailed(updateStatus)
             }
         }
@@ -229,7 +230,7 @@ public struct SymairaKeychain: Sendable {
         let box = ReadResultBox()
         let semaphore = DispatchSemaphore(value: 0)
 
-        DispatchQueue.global(qos: .userInitiated).async {
+        Self.boundedReadQueue.async {
             let result = Result { try self.read(key: key) }
             box.lock.lock()
             box.value = result
@@ -245,19 +246,31 @@ public struct SymairaKeychain: Sendable {
         return try box.value?.get()
     }
 
-    /// Saves a value and verifies the write with a read-back. A successful
-    /// `SecItemAdd` does not guarantee that this binary can read the item back
-    /// (for example, an ACL can be bound to another signing identity), so
-    /// verification surfaces that failure immediately.
+    /// Saves a value and verifies the write with a bounded read-back. A
+    /// successful `SecItemAdd` does not guarantee that this binary can read
+    /// the item back (for example, an ACL can be bound to another signing
+    /// identity), so verification surfaces that failure immediately.
     ///
+    /// - Parameter timeout: Maximum number of seconds to wait for the read-back.
     /// - Throws: `SymairaKeychainError.verificationFailed` when the read-back
-    ///   returns a different value or no value.
+    ///   returns a different value, no value, or times out.
     @discardableResult
-    public func saveVerified(_ value: String, key: String) throws -> Bool {
+    public func saveVerified(
+        _ value: String,
+        key: String,
+        timeout: TimeInterval = 5
+    ) throws -> Bool {
+        let previous = try existingItem(key: key)
         try save(value, key: key)
-        let readBack = try read(key: key)
-        guard readBack == value else {
-            throw SymairaKeychainError.verificationFailed
+
+        do {
+            let readBack = try read(key: key, timeout: timeout)
+            guard readBack == value else {
+                throw SymairaKeychainError.verificationFailed
+            }
+        } catch {
+            restoreAfterFailedVerification(key: key, previous: previous)
+            throw error
         }
         return true
     }
@@ -350,6 +363,29 @@ public struct SymairaKeychain: Sendable {
         ]
     }
 
+    private struct ExistingItem {
+        let data: Data
+        let attributes: [String: Any]
+    }
+
+    private func existingItem(key: String) throws -> ExistingItem? {
+        var query = baseQuery(key: key)
+        query[kSecReturnAttributes as String] = true
+        query[kSecReturnData as String] = true
+        query[kSecMatchLimit as String] = kSecMatchLimitOne
+
+        let (status, item) = backend.copyMatching(query)
+        if status == errSecItemNotFound {
+            return nil
+        }
+        guard status == errSecSuccess,
+              let attributes = item as? [String: Any],
+              let data = attributes[kSecValueData as String] as? Data else {
+            throw SymairaKeychainError.saveFailed(status)
+        }
+        return ExistingItem(data: data, attributes: attributes)
+    }
+
     private func accessControlChanged(
         existingAttributes: [String: Any],
         requested: SecAccessControl?
@@ -363,6 +399,26 @@ public struct SymairaKeychain: Sendable {
             return true
         }
         return !CFEqual(existingObject, requested)
+    }
+
+    private func restoreAfterFailedVerification(
+        key: String,
+        previous: ExistingItem?
+    ) {
+        guard let previous else {
+            _ = backend.delete(baseQuery(key: key))
+            return
+        }
+
+        if previous.attributes[kSecAttrAccessControl as String] != nil {
+            _ = backend.delete(baseQuery(key: key))
+            _ = backend.add(restorationQuery(key: key, data: previous.data, attributes: previous.attributes))
+        } else {
+            _ = backend.update(
+                baseQuery(key: key),
+                attributes: [kSecValueData as String: previous.data]
+            )
+        }
     }
 
     private func replaceExistingItem(

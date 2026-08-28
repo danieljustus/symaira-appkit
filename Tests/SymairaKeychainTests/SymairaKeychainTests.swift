@@ -198,6 +198,58 @@ final class SymairaKeychainTests: XCTestCase {
         XCTAssertEqual(backend.deleteCount, 1)
         XCTAssertEqual(backend.addCount, 2, "failed replacement plus restoration")
     }
+
+    // MARK: - Bounded reads
+
+    func testBoundedReadReturnsNilWhenKeychainDoesNotAnswer() throws {
+        let backend = BlockingReadBackend()
+        let kc = SymairaKeychain(service: "test", backend: backend)
+
+        let value = try kc.read(key: "token", timeout: 0.01)
+
+        XCTAssertNil(value)
+        XCTAssertEqual(backend.started.wait(timeout: .now() + 1), .success)
+        backend.release.signal()
+        XCTAssertEqual(backend.finished.wait(timeout: .now() + 1), .success)
+    }
+
+    func testBoundedReadsUseAtMostOneStrandedWorker() throws {
+        let backend = BlockingReadBackend()
+        let kc = SymairaKeychain(service: "test", backend: backend)
+        let firstFinished = DispatchSemaphore(value: 0)
+
+        DispatchQueue.global().async {
+            _ = try? kc.read(key: "first", timeout: 0.01)
+            firstFinished.signal()
+        }
+
+        XCTAssertEqual(backend.started.wait(timeout: .now() + 1), .success)
+        let secondValue = try kc.read(key: "second", timeout: 0.01)
+        XCTAssertNil(secondValue)
+        XCTAssertEqual(firstFinished.wait(timeout: .now() + 1), .success)
+        XCTAssertEqual(backend.maxActiveReads, 1)
+
+        backend.release.signal()
+        backend.release.signal()
+        XCTAssertEqual(backend.finished.wait(timeout: .now() + 1), .success)
+        XCTAssertEqual(backend.finished.wait(timeout: .now() + 1), .success)
+    }
+
+    func testSaveVerifiedFailsWhenBoundedReadTimesOut() throws {
+        let backend = BlockingReadBackend()
+        let kc = SymairaKeychain(service: "test", backend: backend)
+
+        do {
+            _ = try kc.saveVerified("value", key: "token", timeout: 0.01)
+            XCTFail("expected verification to fail after a bounded read timeout")
+        } catch SymairaKeychainError.verificationFailed {
+            // Expected: the bounded read returns nil on timeout.
+        }
+
+        XCTAssertEqual(backend.started.wait(timeout: .now() + 1), .success)
+        backend.release.signal()
+        XCTAssertEqual(backend.finished.wait(timeout: .now() + 1), .success)
+    }
 }
 
 private final class InMemoryKeychainBackend: _SymairaKeychainBackend, @unchecked Sendable {
@@ -248,5 +300,44 @@ private final class InMemoryKeychainBackend: _SymairaKeychainBackend, @unchecked
         deleteCount += 1
         value = nil
         return errSecSuccess
+    }
+}
+
+private final class BlockingReadBackend: _SymairaKeychainBackend, @unchecked Sendable {
+    let started = DispatchSemaphore(value: 0)
+    let release = DispatchSemaphore(value: 0)
+    let finished = DispatchSemaphore(value: 0)
+    private let lock = NSLock()
+    private var activeReads = 0
+    private(set) var maxActiveReads = 0
+
+    func copyMatching(_ query: [String: Any]) -> (OSStatus, Any?) {
+        let isBoundedRead = query[kSecUseDataProtectionKeychain as String] != nil
+            && query[kSecReturnAttributes as String] == nil
+        guard isBoundedRead else { return (errSecItemNotFound, nil) }
+
+        lock.lock()
+        activeReads += 1
+        maxActiveReads = max(maxActiveReads, activeReads)
+        lock.unlock()
+        started.signal()
+        release.wait()
+        lock.lock()
+        activeReads -= 1
+        lock.unlock()
+        finished.signal()
+        return (errSecItemNotFound, nil)
+    }
+
+    func add(_ query: [String: Any]) -> OSStatus {
+        errSecSuccess
+    }
+
+    func update(_ query: [String: Any], attributes: [String: Any]) -> OSStatus {
+        errSecSuccess
+    }
+
+    func delete(_ query: [String: Any]) -> OSStatus {
+        errSecSuccess
     }
 }
