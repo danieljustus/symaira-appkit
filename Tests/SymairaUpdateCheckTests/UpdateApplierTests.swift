@@ -954,6 +954,63 @@ final class UpdateApplierTests: XCTestCase {
         }
     }
 
+    // MARK: - Cosign: apply(release:) uses the shared verification pipeline
+
+    func testApplyRejectsOnInvalidCosignSignature() async throws {
+        let assetBody = Data("fake-binary-content".utf8)
+        let expectedSum = sha256Hex(assetBody)
+        let client = StubUpdateHTTPClient()
+        client.setResponse(path: "/checksums.txt", body: Data("\(expectedSum)  mytool_darwin_arm64\n".utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: Int64(assetBody.count)),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+        let cosignConfig = CosignConfig(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault",
+            verifier: StubFailingCosignVerifier()
+        )
+        let applier = UpdateApplier(os: "darwin", arch: "arm64", client: client, cosignConfig: cosignConfig)
+
+        do {
+            _ = try await applier.apply(release: release)
+            XCTFail("expected cosignVerificationFailed error")
+        } catch UpdateApplierError.cosignVerificationFailed {
+            // expected
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
+    // MARK: - Install-method checks use the shared verification pipeline
+
+    func testApplyRejectsHomebrewWhenCheckEnabled() async throws {
+        let release = ReleaseInfo(
+            tagName: "v1.2.0",
+            htmlURL: "https://github.com/example/releases/tag/v1.2.0",
+            assets: [
+                Asset(name: "mytool_darwin_arm64", browserDownloadURL: "https://example.com/asset", size: 0),
+                Asset(name: "checksums.txt", browserDownloadURL: "https://example.com/checksums.txt", size: 0),
+            ]
+        )
+        let applier = UpdateApplier(os: "darwin", arch: "arm64", checkInstallMethod: true)
+
+        do {
+            _ = try await applier.apply(release: release, targetPath: "/opt/homebrew/bin/mytool")
+            XCTFail("expected unsupportedInstallMethod error for Homebrew")
+        } catch UpdateApplierError.unsupportedInstallMethod(let method, guidance: _) {
+            XCTAssertEqual(method, .homebrew)
+        } catch {
+            XCTFail("unexpected error: \(error)")
+        }
+    }
+
     // MARK: - Cosign: applyBundle with missing signature
 
     func testApplyBundleRejectsOnMissingCosignSignature() async throws {
