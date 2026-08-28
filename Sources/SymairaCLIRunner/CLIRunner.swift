@@ -98,8 +98,12 @@ public enum CLIRunnerError: Error, LocalizedError, Sendable {
 /// so they can be reached from the cancellation handler.
 private final class ProcessBox: @unchecked Sendable {
     let process = Process()
+    private let terminationLock = NSLock()
 
     func terminateIfRunning() {
+        terminationLock.lock()
+        defer { terminationLock.unlock() }
+
         if process.isRunning {
             process.terminate()
         }
@@ -380,11 +384,23 @@ public struct CLIRunner: Sendable {
 
 // MARK: - Shared mutable truncation flag
 
-/// Lightweight `@unchecked Sendable` box for a boolean flag that
-/// `readWithLimit` sets when output exceeds the cap.  Only ever
-/// accessed from the `DispatchQueue` serial context or read after
-/// both reads have settled, so a full lock is not required.
+/// Thread-safe box for a flag written by the two concurrent pipe readers and
+/// read after both reads have settled.
 private final class TruncationFlag: @unchecked Sendable {
-    var value = false
+    private let lock = NSLock()
+    private var storedValue = false
+
+    var value: Bool {
+        get {
+            lock.lock()
+            defer { lock.unlock() }
+            return storedValue
+        }
+        set {
+            lock.lock()
+            defer { lock.unlock() }
+            storedValue = newValue
+        }
+    }
 }
 #endif

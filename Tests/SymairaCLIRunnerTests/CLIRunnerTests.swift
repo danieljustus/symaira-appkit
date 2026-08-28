@@ -214,6 +214,23 @@ final class CLIRunnerTests: XCTestCase {
         XCTAssertLessThanOrEqual(result.stdout.count, 10_100)
     }
 
+    func testOutputTruncationHandlesBothStreamsConcurrently() async throws {
+        let command = "printf 'stdout-start'; printf 'stderr-start' >&2; "
+            + "dd if=/dev/zero bs=65536 count=8 2>/dev/null & "
+            + "dd if=/dev/zero bs=65536 count=8 >&2 2>/dev/null & wait"
+        let result = try await runner.run(
+            sh,
+            arguments: ["-c", command],
+            maxOutputBytes: 10_000
+        )
+
+        XCTAssertTrue(result.isTruncated, "Expected truncation from either stream")
+        XCTAssertGreaterThan(result.stdout.count, 0, "stdout reader did not receive output")
+        XCTAssertGreaterThan(result.stderr.count, 0, "stderr reader did not receive output")
+        XCTAssertLessThanOrEqual(result.stdout.count, 10_000)
+        XCTAssertLessThanOrEqual(result.stderr.count, 10_000)
+    }
+
     func testRunCheckedThrowsOnTruncation() async {
         do {
             _ = try await runner.runChecked(
