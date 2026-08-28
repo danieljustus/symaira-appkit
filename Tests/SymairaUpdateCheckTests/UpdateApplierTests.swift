@@ -838,14 +838,20 @@ final class UpdateApplierTests: XCTestCase {
         XCTAssertEqual(cfg.downloadBaseURLOrDefault(), "https://releases.example.com")
     }
 
-    func testCosignConfigDefaultIdentityRegexp() {
-        let cfg = CosignConfig(
+    func testCosignConfigDefaultIdentityRegexpAgreesWithCLIVerifier() {
+        let config = CosignConfig(
             repo: "danieljustus/symaira-vault",
             binaryName: "symvault"
         )
-        let regexp = cfg.identityRegexpOrDefault()
-        XCTAssertTrue(regexp.contains("danieljustus/symaira-vault"))
-        XCTAssertTrue(regexp.contains("release"))
+        let cliVerifier = CosignCLIVerifier(
+            repo: "danieljustus/symaira-vault",
+            binaryName: "symvault"
+        )
+
+        XCTAssertEqual(config.identityRegexpOrDefault(), cliVerifier.identityRegexpOrDefault())
+        XCTAssertEqual(config.downloadBaseURLOrDefault(), cliVerifier.downloadBaseURLOrDefault())
+        XCTAssertEqual(config.signatureFileName(tag: "v2.3.4"), cliVerifier.signatureFileName(tag: "v2.3.4"))
+        XCTAssertEqual(config.certificateFileName(tag: "v2.3.4"), cliVerifier.certificateFileName(tag: "v2.3.4"))
     }
 
     func testCosignConfigCustomIdentityRegexp() {
