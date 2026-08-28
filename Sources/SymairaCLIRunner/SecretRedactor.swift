@@ -7,11 +7,11 @@ public enum SymairaSecretRedactor {
 
     private static let patterns: [NSRegularExpression] = [
         #"-----BEGIN [A-Z ]+-----[A-Za-z0-9+/=.\s]+?-----END [A-Z ]+-----"#,
-        #"(sk-[A-Za-z0-9_-]{8,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|glpat-[A-Za-z0-9_-]{8,}|xox[baprs]-[A-Za-z0-9-]{8,}|AIza[0-9A-Za-z_-]{20,}|sk_live_[A-Za-z0-9]{10,}|(?:AKIA|ASIA)[0-9A-Z]{16})"#,
-        #"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"#,
+        #"(sk-[A-Za-z0-9_-]{8,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|glpat-[A-Za-z0-9_-]{8,}|xox[baprs]-[A-Za-z0-9-]{8,}|AIza[0-9A-Za-z_-]{20,}|sk_live_[A-Za-z0-9]{10,}|(?:AKIA|ASIA)[0-9A-Z]{16})"#,
+        #"eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*"#,
         #"[A-Za-z0-9+/=]{40,}"#,
         #"\b[0-9a-fA-F]{32,}\b"#,
-        #"(?i)(authorization|bearer|api[_-]?key|token|secret|password|passwd|credential|auth)\s*[:=]\s*(\"[^\"]+\"|'[^']+'|[A-Za-z0-9._-]{8,})"#,
+        #"(?i)(authorization|bearer|api[_-]?key|token|secret|password|passwd|credential|auth)\s*[:=]\s*(\"[^\"]+\"|'[^']+'|\S{8,})"#,
         #"(?i)\bbearer\s+[A-Za-z0-9._-]{12,}"#,
         #"«redacted:[^»]*»"#,
     ].compactMap { try? NSRegularExpression(pattern: $0) }
