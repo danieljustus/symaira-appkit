@@ -1,5 +1,24 @@
+import Foundation
 import XCTest
 @testable import SymairaToolKit
+
+private final class SignatureVerificationRecorder: @unchecked Sendable {
+    private let lock = NSLock()
+    private var count = 0
+
+    func verify(_ url: URL) -> Bool {
+        lock.lock()
+        count += 1
+        lock.unlock()
+        return true
+    }
+
+    var invocationCount: Int {
+        lock.lock()
+        defer { lock.unlock() }
+        return count
+    }
+}
 
 final class RegistryTests: XCTestCase {
     func testRegistryHasNoGhostTools() {
@@ -283,6 +302,28 @@ final class BinaryLocatorTests: XCTestCase {
     func testVerifySignatureFailsForUnsignedScript() throws {
         let url = try makeExecutable(named: "unsigned", in: tempDir)
         XCTAssertFalse(BinaryLocator.verifySignature(at: url))
+    }
+
+    func testSignatureVerificationCacheUsesPathAndModificationDate() throws {
+        let bin = try makeExecutable(named: "symcached-signature", in: tempDir)
+        let recorder = SignatureVerificationRecorder()
+        let locator = BinaryLocator(
+            bundle: nil,
+            searchPATH: tempDir.path,
+            extraDirectories: [],
+            signatureVerifier: recorder.verify
+        )
+
+        XCTAssertNotNil(locator.locate("symcached-signature"))
+        XCTAssertNotNil(locator.locate("symcached-signature"))
+        XCTAssertEqual(recorder.invocationCount, 1, "An unchanged binary should be verified once")
+
+        try FileManager.default.setAttributes(
+            [.modificationDate: Date(timeIntervalSinceNow: 2)],
+            ofItemAtPath: bin.path
+        )
+        XCTAssertNotNil(locator.locate("symcached-signature"))
+        XCTAssertEqual(recorder.invocationCount, 2, "A binary with a changed modification date should be re-verified")
     }
 
     /// Builds a minimal, loadable app bundle so `Bundle.executableURL` resolves.
