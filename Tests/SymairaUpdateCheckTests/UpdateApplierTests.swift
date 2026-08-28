@@ -711,6 +711,48 @@ final class UpdateApplierTests: XCTestCase {
         XCTAssertEqual(downloaded, assetBody, "binary asset downloaded via applyBundle should match")
     }
 
+    // MARK: - UpdateChecker payload/cache to applyBundle (#126)
+
+    func testCachedReleaseAssetsFeedApplyBundle() async throws {
+        let cacheDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("updateapply-cache-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: cacheDirectory) }
+
+        let assetBody = Data("cached-bundle-payload".utf8)
+        let checksum = sha256Hex(assetBody)
+        let client = StubUpdateHTTPClient()
+        let payload = """
+        {"tag_name":"v1.2.0","html_url":"https://github.com/example/releases/tag/v1.2.0","assets":[{"name":"mytool_darwin_arm64","browser_download_url":"https://example.com/asset","size":\(assetBody.count)},{"name":"checksums.txt","browser_download_url":"https://example.com/checksums.txt","size":80}]}
+        """
+        client.setResponse(path: "/repos/example/mytool/releases/latest", body: Data(payload.utf8))
+        client.setResponse(path: "/checksums.txt", body: Data("\(checksum)  mytool_darwin_arm64\n".utf8))
+        client.setResponse(path: "/asset", body: assetBody)
+
+        let freshChecker = UpdateChecker(
+            owner: "example",
+            repo: "mytool",
+            client: client,
+            cacheDirectory: cacheDirectory
+        )
+        _ = try await freshChecker.check(currentVersion: "v1.0.0", force: true)
+
+        let cachedChecker = UpdateChecker(
+            owner: "example",
+            repo: "mytool",
+            client: client,
+            cacheDirectory: cacheDirectory
+        )
+        let cachedResult = try await cachedChecker.check(currentVersion: "v1.0.0")
+        let release = try XCTUnwrap(cachedResult)
+        XCTAssertEqual(release.assets.first?.browserDownloadURL, "https://example.com/asset")
+        XCTAssertEqual(release.assets.first?.size, Int64(assetBody.count))
+
+        let applier = UpdateApplier(os: "darwin", arch: "arm64", client: client)
+        let result = try await applier.applyBundle(release: release)
+        defer { try? FileManager.default.removeItem(at: result) }
+        XCTAssertEqual(try Data(contentsOf: result), assetBody)
+    }
+
     // MARK: - Install method rejection (with stub client)
 
     func testApplyBundleRejectsHomebrewWhenCheckEnabled() async throws {
