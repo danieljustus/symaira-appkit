@@ -13,7 +13,7 @@ quietly diverging.
 
 | File | Vendored from |
 |---|---|
-| `update_check_invariants.json` | `symaira-corekit` `RUST-001` contract correction tracked by [`symaira-corekit#223`](https://github.com/danieljustus/symaira-corekit/issues/223); replace with the release tag before merge |
+| `update_check_invariants.json` | `symaira-corekit` [`5626213:contracts/update_check_invariants.json`](https://github.com/danieljustus/symaira-corekit/blob/56262137f7be9fabcc152b09032fedbbfec83c1c/contracts/update_check_invariants.json) (RUST-001 contract correction) |
 | `json_encoding.json` | `symaira-corekit` [`v0.13.0:contracts/json_encoding.json`](https://github.com/danieljustus/symaira-corekit/blob/v0.13.0/contracts/json_encoding.json) |
 | `llm_providers.json` | `symaira-corekit` `main:contracts/llm_providers.json` (provider contract issue #172) |
 | `llm_errors.json` | `symaira-corekit` `main:contracts/llm_errors.json` (provider contract issue #172) |
