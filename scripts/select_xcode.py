@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Select the newest installed full Xcode meeting this package's minimum."""
+"""Select the newest installed full Xcode meeting the CI minimum."""
 
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ import sys
 from pathlib import Path
 from typing import Callable, Iterable
 
-MIN_XCODE = (16, 0)
+# Xcode 26 supplies the Swift 6.2 toolchain covered by the CI build.
+MIN_XCODE = (26, 0)
 
 
 def xcode_version(developer_dir: Path, runner: Callable[..., subprocess.CompletedProcess] = subprocess.run) -> tuple[int, ...]:
@@ -56,12 +57,13 @@ def installed_candidates() -> list[Path]:
     explicit = os.environ.get("DEVELOPER_DIR")
     if explicit:
         explicit_dir = Path(explicit)
-        if (
-            explicit_dir.is_dir()
-            and explicit_dir.name == "Developer"
-            and explicit_dir.parent.name == "Contents"
-        ):
-            return [explicit_dir.parent.parent]
+        expected = explicit_dir.name == "Developer" and explicit_dir.parent.name == "Contents"
+        if not explicit_dir.is_dir() or not expected:
+            raise RuntimeError(
+                f"DEVELOPER_DIR must name an installed Xcode Developer directory: {explicit}"
+            )
+        return [explicit_dir.parent.parent]
+
     beta = Path("/Applications/Xcode-beta.app")
     apps = sorted(Path("/Applications").glob("Xcode*.app"), key=lambda path: path.name)
     return ([beta] if beta.exists() else []) + [app for app in apps if app != beta]
@@ -71,8 +73,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--minimum",
-        default="16.0",
-        help="minimum Xcode version (default: 16.0; Swift 6.2 jobs use 26.0)",
+        default="26.0",
+        help="minimum Xcode version (default: 26.0 for Swift 6.2 coverage)",
     )
     args = parser.parse_args()
     minimum = tuple(int(part) for part in args.minimum.split("."))

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 import tempfile
 import unittest
@@ -10,7 +11,7 @@ from pathlib import Path
 from subprocess import CompletedProcess
 
 sys.path.insert(0, str(Path(__file__).parent))
-from select_xcode import MIN_XCODE, select_xcode  # noqa: E402
+from select_xcode import MIN_XCODE, installed_candidates, select_xcode  # noqa: E402
 
 
 class SelectXcodeTests(unittest.TestCase):
@@ -48,8 +49,23 @@ class SelectXcodeTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             select_xcode([self.old], xcode_25, minimum=(26, 0))
 
-    def test_minimum_matches_swift_tools_requirement(self) -> None:
-        self.assertEqual(MIN_XCODE, (16, 0))
+    def test_minimum_matches_swift_62_coverage_requirement(self) -> None:
+        self.assertEqual(MIN_XCODE, (26, 0))
+
+    def test_invalid_explicit_developer_dir_fails_closed(self) -> None:
+        invalid = str(Path(self.temp_dir.name) / "missing" / "Contents" / "Developer")
+        old = os.environ.get("DEVELOPER_DIR")
+        os.environ["DEVELOPER_DIR"] = invalid
+        self.addCleanup(self._restore_developer_dir, old)
+
+        with self.assertRaises(RuntimeError):
+            installed_candidates()
+
+    def _restore_developer_dir(self, value: str | None) -> None:
+        if value is None:
+            os.environ.pop("DEVELOPER_DIR", None)
+        else:
+            os.environ["DEVELOPER_DIR"] = value
 
 
 if __name__ == "__main__":

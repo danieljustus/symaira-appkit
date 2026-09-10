@@ -31,10 +31,10 @@ jobs:
           # clean=false: skip Post-Run git cleanup (hangs on self-hosted macOS runners)
           clean: false
       - name: Select supported Xcode
-        # Package.swift requires Swift tools version 6.0; Xcode 16.0+ supplies it.
+        # Xcode 26 supplies Swift 6.2; this PR job is the required compatibility coverage.
         # Select the newest installed full Xcode without changing machine state.
         run: |
-          XCODE="$(python3 scripts/select_xcode.py)"
+          XCODE="$(python3 scripts/select_xcode.py --minimum 26.0)"
           echo "DEVELOPER_DIR=$XCODE" >> "$GITHUB_ENV"
           DEVELOPER_DIR="$XCODE" xcodebuild -version
       - name: Regression-test Xcode selection
@@ -61,13 +61,14 @@ jobs:
         run: python3 scripts/check-readme.py
 
   swift-62-build:
-    if: github.event_name != 'pull_request'  # PR test already builds with the same Swift 6.2/Xcode 27 toolchain
+    if: github.event_name != 'pull_request'  # additional Swift 6.2 coverage runs on main and the weekly safety net
     runs-on: [self-hosted, macOS, ARM64, macbook-appkit]  # supported self-hosted runner
     steps:
       - uses: actions/checkout@v7
         with:
           clean: false
       - name: Select supported Xcode
+        # Xcode 26 supplies the Swift 6.2 toolchain covered by this build.
         run: |
           XCODE="$(python3 scripts/select_xcode.py --minimum 26.0)"
           echo "DEVELOPER_DIR=$XCODE" >> "$GITHUB_ENV"
@@ -85,7 +86,7 @@ jobs:
   # macOS. Builds the package against the iOS Simulator SDK in parallel with
   # the macOS jobs. Build-only: `swift build --sdk` needs no code signing.
   ios-build:
-    if: github.event_name != 'pull_request'  # full iOS compatibility build runs on main and the weekly safety net
+    if: github.event_name != 'pull_request'  # full iOS compatibility coverage runs on main and the weekly safety net
     runs-on: [self-hosted, macOS, ARM64, macbook-appkit]  # supported self-hosted runner
     steps:
       - uses: actions/checkout@v7
