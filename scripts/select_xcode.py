@@ -55,7 +55,13 @@ def select_xcode(
 def installed_candidates() -> list[Path]:
     explicit = os.environ.get("DEVELOPER_DIR")
     if explicit:
-        return [Path(explicit).parent.parent]
+        explicit_dir = Path(explicit)
+        if (
+            explicit_dir.is_dir()
+            and explicit_dir.name == "Developer"
+            and explicit_dir.parent.name == "Contents"
+        ):
+            return [explicit_dir.parent.parent]
     beta = Path("/Applications/Xcode-beta.app")
     apps = sorted(Path("/Applications").glob("Xcode*.app"), key=lambda path: path.name)
     return ([beta] if beta.exists() else []) + [app for app in apps if app != beta]
