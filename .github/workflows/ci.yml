@@ -49,7 +49,8 @@ jobs:
         run: |
           MEM_GB=$(($(sysctl -n hw.memsize) / 1073741824))
           if [ "$MEM_GB" -le 8 ]; then JOBS=2; elif [ "$MEM_GB" -le 16 ]; then JOBS=4; else JOBS=6; fi
-          swift build -v -j "$JOBS"
+          # Keep manifest metadata per checkout; the self-hosted runner is shared by worktrees.
+          swift build --manifest-cache local -v -j "$JOBS"
       # Runs the full XCTest suite on every push, pull request and the weekly
       # schedule; the schedule catches upstream/toolchain drift (self-hosted
       # runner — faster than queueing on macOS GitHub runners).
@@ -57,7 +58,7 @@ jobs:
         run: |
           MEM_GB=$(($(sysctl -n hw.memsize) / 1073741824))
           if [ "$MEM_GB" -le 8 ]; then JOBS=2; elif [ "$MEM_GB" -le 16 ]; then JOBS=4; else JOBS=6; fi
-          swift test -v -j "$JOBS"
+          swift test --manifest-cache local -v -j "$JOBS"
       - name: Verify README examples
         run: python3 scripts/check-readme.py
 
@@ -80,7 +81,7 @@ jobs:
         run: |
           MEM_GB=$(($(sysctl -n hw.memsize) / 1073741824))
           if [ "$MEM_GB" -le 8 ]; then JOBS=2; elif [ "$MEM_GB" -le 16 ]; then JOBS=4; else JOBS=6; fi
-          swift build -v -j "$JOBS"
+          swift build --manifest-cache local -v -j "$JOBS"
 
   # Regression test for #44: ba4bbb2 removed the iOS platform declaration from
   # Package.swift and the break was invisible because the CI only built for
@@ -108,7 +109,7 @@ jobs:
         # deployment target), so assert the resolved manifest explicitly to keep
         # this job red if the declaration is removed again (#44 regression).
         run: |
-          PLATFORMS="$(swift package dump-package)"
+          PLATFORMS="$(swift package --manifest-cache local dump-package)"
           if ! grep -q '"platformName"[[:space:]]*:[[:space:]]*"ios"' <<<"$PLATFORMS"; then
             echo "::error::Package.swift does not declare iOS support; add platforms: [.iOS(.v17)] back." >&2
             exit 1
@@ -118,4 +119,4 @@ jobs:
         run: |
           MEM_GB=$(($(sysctl -n hw.memsize) / 1073741824))
           if [ "$MEM_GB" -le 8 ]; then JOBS=2; elif [ "$MEM_GB" -le 16 ]; then JOBS=4; else JOBS=6; fi
-          swift build --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios17.0-simulator -j "$JOBS"
+          swift build --manifest-cache local --sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)" --triple arm64-apple-ios17.0-simulator -j "$JOBS"
