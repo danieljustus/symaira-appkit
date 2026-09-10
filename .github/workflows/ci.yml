@@ -31,10 +31,11 @@ jobs:
           # clean=false: skip Post-Run git cleanup (hangs on self-hosted macOS runners)
           clean: false
       - name: Select supported Xcode
-        # Xcode 26 supplies Swift 6.2; this PR job is the required compatibility coverage.
+        # CI ignores a stale runner-level selection; direct explicit selections fail closed.
+        # Minimum Xcode 26 supplies the required Swift 6.2 compatibility coverage.
         # Select the newest installed full Xcode without changing machine state.
         run: |
-          XCODE="$(python3 scripts/select_xcode.py --minimum 26.0)"
+          XCODE="$(env -u DEVELOPER_DIR python3 scripts/select_xcode.py --minimum 26.0)"
           echo "DEVELOPER_DIR=$XCODE" >> "$GITHUB_ENV"
           DEVELOPER_DIR="$XCODE" xcodebuild -version
       - name: Regression-test Xcode selection
@@ -70,7 +71,7 @@ jobs:
       - name: Select supported Xcode
         # Xcode 26 supplies the Swift 6.2 toolchain covered by this build.
         run: |
-          XCODE="$(python3 scripts/select_xcode.py --minimum 26.0)"
+          XCODE="$(env -u DEVELOPER_DIR python3 scripts/select_xcode.py --minimum 26.0)"
           echo "DEVELOPER_DIR=$XCODE" >> "$GITHUB_ENV"
           DEVELOPER_DIR="$XCODE" xcodebuild -version
       - name: Swift version
@@ -94,8 +95,9 @@ jobs:
           # clean=false: skip Post-Run git cleanup (hangs on self-hosted macOS runners)
           clean: false
       - name: Select supported Xcode
+        # Ignore any stale runner-level selection; direct explicit selections fail closed.
         run: |
-          XCODE="$(python3 scripts/select_xcode.py)"
+          XCODE="$(env -u DEVELOPER_DIR python3 scripts/select_xcode.py --minimum 26.0)"
           echo "DEVELOPER_DIR=$XCODE" >> "$GITHUB_ENV"
           DEVELOPER_DIR="$XCODE" xcodebuild -version
       - name: Swift version
