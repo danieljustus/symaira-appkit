@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- `make lint` now resolves `swift-format` through the selected Xcode before
+  trying PATH, and fails on a missing formatter or any lint finding (#161).
+  A shared four-space formatting configuration, `make format`, isolated
+  Makefile regressions and the same strict CI gate prevent silent skips.
+  Swift sources and the design-token generator now follow that configuration.
+- UI smoke tests now render through the native test host on the main actor
+  instead of reading an uninstalled SwiftUI view's body (#162). Decode-error
+  test helpers and README examples also consume their results explicitly.
+
 ### Added
 - **Liquid Topography** design system: `design/liquid-topography/` holds the
   source of truth (`DESIGN.md`, `topo.json`), the token generator

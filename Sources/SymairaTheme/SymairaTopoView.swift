@@ -1,3 +1,4 @@
+import Observation
 // Symaira Liquid Topography – SwiftUI-Hintergrund (macOS 14+ / iOS 17+).
 // Nutzung:
 //   ZStack { SymairaTopoView(model: topo); content }
@@ -6,7 +7,7 @@
 //   Card().topoProtected(in: topo, hill: true) // Schutzzone + Hügel
 //   topo.state = .thinking ; topo.ripple(at: point)
 import SwiftUI
-import Observation
+
 #if os(macOS)
 import AppKit
 #endif
@@ -15,13 +16,19 @@ public enum SymairaTopo { public static let space = "symaira.topo" }
 
 public enum SymairaTopoState: String, CaseIterable, Sendable {
     case idle, thinking, problem, input
-    struct Target { let speed, warp, think, problem, ask, tintAmount: Double; let tintIsCritical: Bool }
+    struct Target {
+        let speed, warp, think, problem, ask, tintAmount: Double
+        let tintIsCritical: Bool
+    }
     var target: Target {
-        switch self {   // 1:1 aus topo.json
-        case .idle:     Target(speed: 0.018, warp: 0.65, think: 0, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
-        case .thinking: Target(speed: 0.04,  warp: 0.75, think: 1, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
-        case .problem:  Target(speed: 0.012, warp: 0.6,  think: 0, problem: 1, ask: 0, tintAmount: 0.55, tintIsCritical: true)
-        case .input:    Target(speed: 0.016, warp: 0.6,  think: 0, problem: 0, ask: 1, tintAmount: 0.45, tintIsCritical: false)
+        switch self {  // 1:1 aus topo.json
+        case .idle: Target(speed: 0.018, warp: 0.65, think: 0, problem: 0, ask: 0, tintAmount: 0, tintIsCritical: false)
+        case .thinking:
+            Target(speed: 0.04, warp: 0.75, think: 1, problem: 0, ask: 0, tintAmount: 0, tintIsCritical: false)
+        case .problem:
+            Target(speed: 0.012, warp: 0.6, think: 0, problem: 1, ask: 0, tintAmount: 0.55, tintIsCritical: true)
+        case .input:
+            Target(speed: 0.016, warp: 0.6, think: 0, problem: 0, ask: 1, tintAmount: 0.45, tintIsCritical: false)
         }
     }
 }
@@ -56,22 +63,31 @@ public final class SymairaTopoModel {
             selected = visible
         }
         return selected.flatMap { r -> [Float] in
-            [Float(r.0.minX - viewport.minX), Float(r.0.minY - viewport.minY),
-             Float(r.0.width), Float(r.0.height), r.1 ? 1 : 0]
+            [
+                Float(r.0.minX - viewport.minX), Float(r.0.minY - viewport.minY),
+                Float(r.0.width), Float(r.0.height), r.1 ? 1 : 0,
+            ]
         }
     }
     /// Welle im Koordinatenraum `SymairaTopo.space`. Mit `key` gedrosselt (ein Auslöser feuert nicht pro Frame).
     public func ripple(at p: CGPoint, strength: Double = 1, key: String? = nil) {
         if let key {
-            if let t = lastKeyed[key], Date.now.timeIntervalSince(t) < SymairaTokens.Topo.layoutRippleThrottleSeconds { return }
+            if let t = lastKeyed[key], Date.now.timeIntervalSince(t) < SymairaTokens.Topo.layoutRippleThrottleSeconds {
+                return
+            }
             lastKeyed[key] = .now
         }
-        ripples.append((p, .now, strength)); if ripples.count > 8 { ripples.removeFirst() }
+        ripples.append((p, .now, strength))
+        if ripples.count > 8 { ripples.removeFirst() }
     }
     /// GUI-Element hat sich bewegt/vergrößert (Aufklappen, Verschieben, Seitenleiste) → Welle ab Schwelle.
     func layoutChanged(id: String, rect: CGRect) {
-        guard let a = anchors[id] else { anchors[id] = rect; return }
-        let d = abs(a.midX - rect.midX) + abs(a.midY - rect.midY) + abs(a.width - rect.width) + abs(a.height - rect.height)
+        guard let a = anchors[id] else {
+            anchors[id] = rect
+            return
+        }
+        let d =
+            abs(a.midX - rect.midX) + abs(a.midY - rect.midY) + abs(a.width - rect.width) + abs(a.height - rect.height)
         if d > SymairaTokens.Topo.layoutMoveThreshold {
             anchors[id] = rect
             ripple(at: CGPoint(x: rect.midX, y: rect.midY), strength: 0.6, key: id)
@@ -81,16 +97,23 @@ public final class SymairaTopoModel {
     /// Klick, Halten und Ziehen. Beim Ziehen pausiert Hover, daher Position über Deltas fortschreiben.
     func handle(_ e: NSEvent) {
         guard var p = pointer else { return }
-        let T = SymairaTokens.Topo.self
+        let tokens = SymairaTokens.Topo.self
         switch e.type {
         case .leftMouseDown:
-            pressed = true; dragTravel = 0; ripple(at: p, strength: T.clickRipple)
+            pressed = true
+            dragTravel = 0
+            ripple(at: p, strength: tokens.clickRipple)
         case .leftMouseDragged:
-            p.x += e.deltaX; p.y += e.deltaY; pointer = p
+            p.x += e.deltaX
+            p.y += e.deltaY
+            pointer = p
             let step = hypot(e.deltaX, e.deltaY)
             pointerVelocity = min(1, pointerVelocity + step / 120)
             dragTravel += step
-            if dragTravel > T.dragRippleEvery { dragTravel = 0; ripple(at: p, strength: 0.35) }
+            if dragTravel > tokens.dragRippleEvery {
+                dragTravel = 0
+                ripple(at: p, strength: 0.35)
+            }
         case .leftMouseUp:
             pressed = false
         default: break
@@ -99,7 +122,7 @@ public final class SymairaTopoModel {
     #endif
 }
 
-private final class Clock {   // Referenztyp: Mutation im Render-Pfad invalidiert keine View
+private final class Clock {  // Referenztyp: Mutation im Render-Pfad invalidiert keine View
     var a = Animated()
     var monitor: Any?
 }
@@ -138,8 +161,9 @@ public struct SymairaTopoView: View {
     public var body: some View {
         GeometryReader { geo in
             TimelineView(.animation(minimumInterval: 1 / SymairaTokens.Topo.fps, paused: paused)) { ctx in
-                Rectangle().fill(SymairaTokens.canvas)   // Shader zeichnet die Linien über die Canvas-Farbe
-                    .colorEffect(shader(size: geo.size, origin: geo.frame(in: .named(SymairaTopo.space)).origin, now: ctx.date))
+                Rectangle().fill(SymairaTokens.canvas)  // Shader zeichnet die Linien über die Canvas-Farbe
+                    .colorEffect(
+                        shader(size: geo.size, origin: geo.frame(in: .named(SymairaTopo.space)).origin, now: ctx.date))
             }
         }
         .allowsHitTesting(false)
@@ -161,14 +185,21 @@ public struct SymairaTopoView: View {
         Color.clear.onContinuousHover(coordinateSpace: .named(SymairaTopo.space)) { phase in
             switch phase {
             case .active(let p):
-                if model.pressed { return }   // während Ziehen gilt die Delta-Fortschreibung
-                if let old = model.pointer { model.pointerVelocity = min(1, model.pointerVelocity + hypot(p.x - old.x, p.y - old.y) / 120) }
+                if model.pressed { return }  // während Ziehen gilt die Delta-Fortschreibung
+                if let old = model.pointer {
+                    model.pointerVelocity = min(1, model.pointerVelocity + hypot(p.x - old.x, p.y - old.y) / 120)
+                }
                 model.pointer = p
             case .ended: if !model.pressed { model.pointer = nil }
             }
         }
         .onAppear(perform: installMouseMonitor)
-        .onDisappear { if let m = clock.monitor { NSEvent.removeMonitor(m); clock.monitor = nil } }
+        .onDisappear {
+            if let m = clock.monitor {
+                NSEvent.removeMonitor(m)
+                clock.monitor = nil
+            }
+        }
         #else
         Color.clear
         #endif
@@ -179,7 +210,8 @@ public struct SymairaTopoView: View {
         guard clock.monitor == nil else { return }
         let model = self.model
         // Lokaler Monitor beobachtet nur, Events laufen unverändert weiter an Buttons usw.
-        clock.monitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .leftMouseDragged, .leftMouseUp]) { e in
+        clock.monitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .leftMouseDragged, .leftMouseUp]) {
+            e in
             MainActor.assumeIsolated { model.handle(e) }
             return e
         }
@@ -196,62 +228,102 @@ public struct SymairaTopoView: View {
         let tg = model.state.target
         a.last = now
         func ease(_ c: Double, _ t: Double) -> Double { c + (t - c) * f }
-        a.cur = .init(speed: ease(a.cur.speed, tg.speed), warp: ease(a.cur.warp, tg.warp), think: ease(a.cur.think, tg.think),
-                      problem: ease(a.cur.problem, tg.problem), ask: ease(a.cur.ask, tg.ask),
-                      tintAmount: ease(a.cur.tintAmount, tg.tintAmount), tintIsCritical: tg.tintIsCritical)
-        if !paused { a.flowT += a.cur.speed * dt; a.rt += dt }
-        if model.state == .thinking, a.rt > a.nextThink, let s = model.statusPoint { model.ripple(at: s, strength: 0.8); a.nextThink = a.rt + 1.4 }
+        a.cur = .init(
+            speed: ease(a.cur.speed, tg.speed), warp: ease(a.cur.warp, tg.warp), think: ease(a.cur.think, tg.think),
+            problem: ease(a.cur.problem, tg.problem), ask: ease(a.cur.ask, tg.ask),
+            tintAmount: ease(a.cur.tintAmount, tg.tintAmount), tintIsCritical: tg.tintIsCritical)
+        if !paused {
+            a.flowT += a.cur.speed * dt
+            a.rt += dt
+        }
+        if model.state == .thinking, a.rt > a.nextThink, let s = model.statusPoint {
+            model.ripple(at: s, strength: 0.8)
+            a.nextThink = a.rt + 1.4
+        }
         let target = still ? nil : model.pointer.map { CGPoint(x: $0.x - o.x, y: $0.y - o.y) }
         if let p = target {
             let m = 1 - exp(-dt / 0.12)
-            a.mouse = a.mouse.x < -9e3 ? p : CGPoint(x: a.mouse.x + (p.x - a.mouse.x) * m, y: a.mouse.y + (p.y - a.mouse.y) * m)
+            a.mouse =
+                a.mouse.x < -9e3
+                ? p : CGPoint(x: a.mouse.x + (p.x - a.mouse.x) * m, y: a.mouse.y + (p.y - a.mouse.y) * m)
         }
         model.pointerVelocity *= exp(-dt / 0.5)
         let goal = target == nil ? 0 : 0.45 + 0.55 * model.pointerVelocity
         a.mouseAmt += (goal - a.mouseAmt) * (1 - exp(-dt / 0.25))
         a.press += ((still || !model.pressed ? 0 : 1) - a.press) * (1 - exp(-dt / SymairaTokens.Topo.pressSeconds))
         // Fläche verschoben/verkleinert (z. B. Seitenleiste auf/zu) → Welle von der Kante
-        if let lo = a.lastOrigin, let ls = a.lastSize, abs(lo.x - o.x) + abs(lo.y - o.y) + abs(ls.width - size.width) > 1 {
-            model.ripple(at: CGPoint(x: 0, y: o.y + size.height / 2), strength: SymairaTokens.Topo.layoutEdgeRipple, key: "layout.edge")
+        if let lo = a.lastOrigin, let ls = a.lastSize,
+            abs(lo.x - o.x) + abs(lo.y - o.y) + abs(ls.width - size.width) > 1
+        {
+            model.ripple(
+                at: CGPoint(x: 0, y: o.y + size.height / 2), strength: SymairaTokens.Topo.layoutEdgeRipple,
+                key: "layout.edge")
         }
-        a.lastOrigin = o; a.lastSize = size
+        a.lastOrigin = o
+        a.lastSize = size
         model.ripples.removeAll { now.timeIntervalSince($0.1) > 2.4 }
         clock.a = a
 
         let rects = model.protectedRects(in: CGRect(origin: o, size: size))
-        let rip: [Float] = still ? [] : model.ripples.flatMap { r -> [Float] in [Float(r.0.x - o.x), Float(r.0.y - o.y), Float(now.timeIntervalSince(r.1)), Float(r.2)] }
+        let rip: [Float] =
+            still
+            ? []
+            : model.ripples.flatMap { r -> [Float] in
+                [Float(r.0.x - o.x), Float(r.0.y - o.y), Float(now.timeIntervalSince(r.1)), Float(r.2)]
+            }
         let dark = scheme == .dark
-        let ask = model.askPoint.map { CGPoint(x: $0.x - o.x, y: $0.y - o.y) } ?? CGPoint(x: size.width / 2, y: size.height - 60)
-        let T = SymairaTokens.Topo.self
+        let ask =
+            model.askPoint.map { CGPoint(x: $0.x - o.x, y: $0.y - o.y) }
+            ?? CGPoint(x: size.width / 2, y: size.height - 60)
+        let tokens = SymairaTokens.Topo.self
         return Self.library.symairaTopo(
             .float4(size.width, size.height, a.flowT, a.rt),
-            .float4(a.mouse.x, a.mouse.y, a.mouseAmt, dark ? 1 : T.lightModeFactor),
+            .float4(a.mouse.x, a.mouse.y, a.mouseAmt, dark ? 1 : tokens.lightModeFactor),
             .float4(a.cur.warp, a.cur.think, a.cur.problem, a.cur.ask),
             .float4(a.cur.tintAmount, ask.x, ask.y, displayScale),
-            .float4(T.scale, T.levels, T.lineAlpha, T.indexAlpha),
-            .float4(T.bandAlpha, T.maxAlpha, T.basinOpen, a.press),
-            .float4(T.pointerRadius, T.pointerStrength, T.pressDepth, 0),
+            .float4(tokens.scale, tokens.levels, tokens.lineAlpha, tokens.indexAlpha),
+            .float4(tokens.bandAlpha, tokens.maxAlpha, tokens.basinOpen, a.press),
+            .float4(tokens.pointerRadius, tokens.pointerStrength, tokens.pressDepth, 0),
             .color(SymairaTokens.topo),
-            .color(a.cur.tintIsCritical ? SymairaTokens.critical : (a.cur.ask > 0.01 ? SymairaTokens.primary : SymairaTokens.topo)),
+            .color(
+                a.cur.tintIsCritical
+                    ? SymairaTokens.critical : (a.cur.ask > 0.01 ? SymairaTokens.primary : SymairaTokens.topo)),
             .floatArray(rects),
             .floatArray(rip))
     }
 }
 
-public extension View {
+extension View {
     /// Schutzzone: keine Höhenlinien unter diesem Element. `hill`: Linien legen sich drumherum.
-    func topoProtected(in model: SymairaTopoModel, hill: Bool = false, id: String = UUID().uuidString) -> some View {
+    public func topoProtected(in model: SymairaTopoModel, hill: Bool = false, id: String = UUID().uuidString)
+        -> some View
+    {
         modifier(TopoProtect(model: model, hill: hill, id: id))
     }
 }
 
 private struct TopoProtect: ViewModifier {
-    let model: SymairaTopoModel; let hill: Bool; @State var id: String
-    init(model: SymairaTopoModel, hill: Bool, id: String) { self.model = model; self.hill = hill; _id = State(initialValue: id) }
+    let model: SymairaTopoModel
+    let hill: Bool
+    @State var id: String
+    init(model: SymairaTopoModel, hill: Bool, id: String) {
+        self.model = model
+        self.hill = hill
+        _id = State(initialValue: id)
+    }
     func body(content: Content) -> some View {
         content
-            .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(SymairaTopo.space)) } action: { model.layoutChanged(id: id, rect: $0); model.rects[id] = ($0, hill) }
-            .onDisappear { model.rects[id] = nil; model.anchors[id] = nil; model.lastKeyed[id] = nil }
+            .onGeometryChange(for: CGRect.self) {
+                $0.frame(in: .named(SymairaTopo.space))
+            } action: {
+                model.layoutChanged(id: id, rect: $0)
+                model.rects[id] = ($0, hill)
+            }
+            .onDisappear {
+                model.rects[id] = nil
+                model.anchors[id] = nil
+                model.lastKeyed[id] = nil
+            }
     }
 }
 
@@ -284,12 +356,19 @@ private struct TopoWindowVisibility: NSViewRepresentable {
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
             stop()
-            guard let window else { changed?(false); return }
-            for name in [NSWindow.didChangeOcclusionStateNotification,
-                         NSWindow.didMiniaturizeNotification, NSWindow.didDeminiaturizeNotification] {
-                observers.append(NotificationCenter.default.addObserver(forName: name, object: window, queue: .main) { [weak self] _ in
-                    MainActor.assumeIsolated { self?.publish() }
-                })
+            guard let window else {
+                changed?(false)
+                return
+            }
+            for name in [
+                NSWindow.didChangeOcclusionStateNotification,
+                NSWindow.didMiniaturizeNotification, NSWindow.didDeminiaturizeNotification,
+            ] {
+                observers.append(
+                    NotificationCenter.default.addObserver(forName: name, object: window, queue: .main) {
+                        [weak self] _ in
+                        MainActor.assumeIsolated { self?.publish() }
+                    })
             }
             publish()
         }

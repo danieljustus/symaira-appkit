@@ -110,9 +110,9 @@ public enum SymairaTextRole: Sendable {
     /// DESIGN.md; only the uppercase section label is opened up.
     public var tracking: CGFloat {
         switch self {
-        case .display: -0.65 // -0.025em at 26 pt
-        case .title: -0.3 // -0.015em at 20 pt
-        case .heading: -0.16 // -0.01em at 16 pt
+        case .display: -0.65  // -0.025em at 26 pt
+        case .title: -0.3  // -0.015em at 20 pt
+        case .heading: -0.16  // -0.01em at 16 pt
         case .sectionLabel: 0.6
         default: 0
         }
@@ -126,7 +126,8 @@ private struct SymairaTextRoleModifier: ViewModifier {
     let respectsForeground: Bool
 
     func body(content: Content) -> some View {
-        let styled = content
+        let styled =
+            content
             .font(role.font)
             .tracking(role.tracking)
         if respectsForeground {

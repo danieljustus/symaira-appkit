@@ -1,13 +1,15 @@
-import XCTest
 import SwiftUI
+import XCTest
+
 @testable import SymairaTheme
 
 /// Liquid Topography: Shader liegt im Bundle, rendert sichtbar, Schutzzonen bleiben frei.
 @MainActor
 final class LiquidTopographyTests: XCTestCase {
     func testShaderLibraryIsBundled() throws {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: "default", withExtension: "metallib"),
-                                "default.metallib fehlt im SymairaTheme-Bundle")
+        let url = try XCTUnwrap(
+            Bundle.module.url(forResource: "default", withExtension: "metallib"),
+            "default.metallib fehlt im SymairaTheme-Bundle")
         XCTAssertGreaterThan(try Data(contentsOf: url).count, 1_000)
     }
 
@@ -51,8 +53,9 @@ final class LiquidTopographyTests: XCTestCase {
         model.rects["offscreen"] = (CGRect(x: 5000, y: 0, width: 100, height: 100), true)
         let values = model.protectedRects(in: viewport)
         XCTAssertEqual(values.count, 5, "overflow must use a conservative union, not a truncated list")
-        let union = CGRect(x: CGFloat(values[0]) + viewport.minX, y: CGFloat(values[1]) + viewport.minY,
-                           width: CGFloat(values[2]), height: CGFloat(values[3]))
+        let union = CGRect(
+            x: CGFloat(values[0]) + viewport.minX, y: CGFloat(values[1]) + viewport.minY,
+            width: CGFloat(values[2]), height: CGFloat(values[3]))
         for i in 0..<25 { XCTAssertTrue(union.contains(model.rects["element-\(i)"]!.0)) }
         XCTAssertEqual(values[4], 0, "overflow union must not add a large decorative hill")
     }
@@ -79,7 +82,8 @@ final class LiquidTopographyTests: XCTestCase {
             renderer.scale = 1
             return try pixels(XCTUnwrap(renderer.cgImage))
         }
-        XCTAssertEqual(try render(1), try render(2), "nested protection must not add a dark halo or stronger contour hill")
+        XCTAssertEqual(
+            try render(1), try render(2), "nested protection must not add a dark halo or stronger contour hill")
     }
 
     /// Rendert die echte View offscreen: Linien sichtbar außerhalb, keine Linien in der Schutzzone.
@@ -101,19 +105,24 @@ final class LiquidTopographyTests: XCTestCase {
             let i = (y * cg.width + x) * 4
             return abs(Int(px[i]) - canvas.r) + abs(Int(px[i + 1]) - canvas.g) + abs(Int(px[i + 2]) - canvas.b) > 6
         }
-        var outside = 0, inside = 0
-        for y in 0..<cg.height { for x in 0..<cg.width where deviates(x, y) {
-            if zone.insetBy(dx: 6, dy: 6).contains(CGPoint(x: x, y: y)) { inside += 1 } else { outside += 1 }
-        } }
+        var outside = 0
+        var inside = 0
+        for y in 0..<cg.height {
+            for x in 0..<cg.width where deviates(x, y) {
+                if zone.insetBy(dx: 6, dy: 6).contains(CGPoint(x: x, y: y)) { inside += 1 } else { outside += 1 }
+            }
+        }
         XCTAssertGreaterThan(outside, 500, "keine Höhenlinien gerendert")
         XCTAssertEqual(inside, 0, "Linien in der Schutzzone")
     }
 
     private func pixels(_ cg: CGImage) throws -> [UInt8] {
         var buf = [UInt8](repeating: 0, count: cg.width * cg.height * 4)
-        let ctx = try XCTUnwrap(CGContext(data: &buf, width: cg.width, height: cg.height, bitsPerComponent: 8,
-                                          bytesPerRow: cg.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
-                                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+        let ctx = try XCTUnwrap(
+            CGContext(
+                data: &buf, width: cg.width, height: cg.height, bitsPerComponent: 8,
+                bytesPerRow: cg.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
         ctx.draw(cg, in: CGRect(x: 0, y: 0, width: cg.width, height: cg.height))
         return buf
     }

@@ -80,6 +80,7 @@ if let desk = await detector.detect(SymairaToolRegistry.tool(id: "symdesk")!) {
         executable: desk.location.url,
         arguments: ["search", "query", "--json"]
     )
+    print(results)
 }
 ```
 
@@ -152,6 +153,7 @@ material or opaque accessibility fallbacks on earlier systems. See
 ```bash
 make build
 make test
+make lint
 ```
 
 The Makefile resolves a full Xcode toolchain and exports `DEVELOPER_DIR` for
@@ -159,6 +161,14 @@ the build itself, so these work regardless of what `xcode-select` points at.
 A bare `swift build` fails when Command Line Tools are the active developer
 directory, since they ship no XCTest and no SwiftUI macro plugins.
 `make toolchain` shows which toolchain will be used.
+
+`make lint` uses `swift-format` from the selected Xcode, falling back to PATH.
+It fails when the formatter is missing or reports any finding. Set
+`SWIFT_FORMAT=/path/to/swift-format` to use a specific executable.
+`make format` applies the same `.swift-format` rules: four-space indentation,
+120-column wrapping, and the formatter's default lint rules. CI runs the same
+strict gate. `make test-make` checks tool discovery and error propagation in
+isolation; it also runs as part of `make test`.
 
 Requires macOS 14+ or iOS 17+, Swift 6, and a full Xcode installation. Native Liquid Glass is enabled on
 macOS/iOS 26+ when built with a compatible SDK.

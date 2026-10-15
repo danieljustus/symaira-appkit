@@ -1,5 +1,6 @@
 // generiert von build.py aus DESIGN.md – nicht von Hand bearbeiten
 import SwiftUI
+
 #if canImport(AppKit)
 import AppKit
 #elseif canImport(UIKit)
@@ -9,13 +10,17 @@ import UIKit
 public enum SymairaTokens {
     static func adaptive(_ l: (Double, Double, Double), _ d: (Double, Double, Double)) -> Color {
         #if canImport(AppKit)
-        return Color(nsColor: NSColor(name: nil) { a in
-            let c = a.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? d : l
-            return NSColor(srgbRed: c.0, green: c.1, blue: c.2, alpha: 1) })
+        return Color(
+            nsColor: NSColor(name: nil) { a in
+                let c = a.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? d : l
+                return NSColor(srgbRed: c.0, green: c.1, blue: c.2, alpha: 1)
+            })
         #else
-        return Color(uiColor: UIColor { t in
-            let c = t.userInterfaceStyle == .dark ? d : l
-            return UIColor(red: c.0, green: c.1, blue: c.2, alpha: 1) })
+        return Color(
+            uiColor: UIColor { t in
+                let c = t.userInterfaceStyle == .dark ? d : l
+                return UIColor(red: c.0, green: c.1, blue: c.2, alpha: 1)
+            })
         #endif
     }
 

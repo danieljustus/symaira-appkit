@@ -100,17 +100,21 @@ def swift(d, r, topo):
     def rgb(h):
         return ", ".join(f"{int(h[i:i + 2], 16) / 255:.4f}" for i in (1, 3, 5))
     out = ["// generiert von build.py aus DESIGN.md – nicht von Hand bearbeiten",
-           "import SwiftUI", "#if canImport(AppKit)", "import AppKit", "#elseif canImport(UIKit)", "import UIKit", "#endif", "",
+           "import SwiftUI", "", "#if canImport(AppKit)", "import AppKit", "#elseif canImport(UIKit)", "import UIKit", "#endif", "",
            "public enum SymairaTokens {",
            "    static func adaptive(_ l: (Double, Double, Double), _ d: (Double, Double, Double)) -> Color {",
            "        #if canImport(AppKit)",
-           "        return Color(nsColor: NSColor(name: nil) { a in",
-           "            let c = a.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? d : l",
-           "            return NSColor(srgbRed: c.0, green: c.1, blue: c.2, alpha: 1) })",
+           "        return Color(",
+           "            nsColor: NSColor(name: nil) { a in",
+           "                let c = a.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? d : l",
+           "                return NSColor(srgbRed: c.0, green: c.1, blue: c.2, alpha: 1)",
+           "            })",
            "        #else",
-           "        return Color(uiColor: UIColor { t in",
-           "            let c = t.userInterfaceStyle == .dark ? d : l",
-           "            return UIColor(red: c.0, green: c.1, blue: c.2, alpha: 1) })",
+           "        return Color(",
+           "            uiColor: UIColor { t in",
+           "                let c = t.userInterfaceStyle == .dark ? d : l",
+           "                return UIColor(red: c.0, green: c.1, blue: c.2, alpha: 1)",
+           "            })",
            "        #endif", "    }", ""]
     for k, (l, dk) in r.items():
         out.append(f"    public static let {kebab_to_camel(k)} = adaptive(({rgb(l)}), ({rgb(dk)}))")

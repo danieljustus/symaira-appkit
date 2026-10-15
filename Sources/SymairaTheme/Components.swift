@@ -356,14 +356,16 @@ public struct SymairaGlassChromeModifier: ViewModifier {
 
     private func opaqueFallback(_ content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        return content
+        return
+            content
             .background(SymairaTheme.surfaceOpaque(for: colorScheme), in: shape)
             .overlay(shape.stroke(fallbackBorder, lineWidth: contrast == .increased ? 1.5 : 1))
     }
 
     private func materialFallback(_ content: Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        return content
+        return
+            content
             .background(.ultraThinMaterial, in: shape)
             .background((tint ?? .clear).opacity(0.10), in: shape)
             .overlay(shape.stroke(fallbackBorder, lineWidth: contrast == .increased ? 1.5 : 1))

@@ -114,8 +114,12 @@ public struct SymairaSwitchToggleStyle: ToggleStyle {
         HStack(spacing: SymairaSpacing.medium) {
             configuration.label
             // A button keeps the switch keyboard-operable (Space) on macOS.
-            Button { configuration.isOn.toggle() } label: { track(isOn: configuration.isOn) }
-                .buttonStyle(.plain)
+            Button {
+                configuration.isOn.toggle()
+            } label: {
+                track(isOn: configuration.isOn)
+            }
+            .buttonStyle(.plain)
         }
         .opacity(isEnabled ? 1 : 0.55)
         .accessibilityRepresentation {

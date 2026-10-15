@@ -1,6 +1,7 @@
 import CoreText
-import XCTest
 import SwiftUI
+import XCTest
+
 @testable import SymairaTheme
 
 final class TypographyTests: XCTestCase {
@@ -68,8 +69,9 @@ final class TypographyTests: XCTestCase {
 
     func testBundledGoogleSansFlexRegistersWithFixedOpticalSize() throws {
         XCTAssertTrue(SymairaFont.register(), "GoogleSansFlex.ttf must ship in the SymairaTheme bundle")
-        let license = try XCTUnwrap(Bundle.module.url(forResource: "GoogleSansFlex-OFL", withExtension: "txt"),
-                                    "OFL must ship next to the font")
+        let license = try XCTUnwrap(
+            Bundle.module.url(forResource: "GoogleSansFlex-OFL", withExtension: "txt"),
+            "OFL must ship next to the font")
         XCTAssertTrue(try String(contentsOf: license, encoding: .utf8).contains("SIL OPEN FONT LICENSE"))
         XCTAssertNotNil(Bundle.module.url(forResource: "GoogleSansFlex-TRADEMARKS", withExtension: "md"))
         for size in [11.5, 13.5, 26] as [CGFloat] {
@@ -86,15 +88,19 @@ final class TypographyTests: XCTestCase {
     func testFixedOpticalSizeKeepsSmallTextNarrow() {
         SymairaFont.register()
         func width(_ font: CTFont) -> Double {
-            let text = NSAttributedString(string: "Energie & Kühlung · Lüfterprofil Standard",
-                                          attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
+            let text = NSAttributedString(
+                string: "Energie & Kühlung · Lüfterprofil Standard",
+                attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
             return CTLineGetTypographicBounds(CTLineCreateWithAttributedString(text), nil, nil, nil)
         }
         func explicit(opsz: Double) -> CTFont {
             let variation: [NSNumber: Double] = [SymairaFont.axis("wght"): 400, SymairaFont.axis("opsz"): opsz]
-            let attributes: [CFString: Any] = [kCTFontFamilyNameAttribute: SymairaFont.familyName,
-                                               kCTFontVariationAttribute: variation]
-            return CTFontCreateWithFontDescriptor(CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), 13.5, nil)
+            let attributes: [CFString: Any] = [
+                kCTFontFamilyNameAttribute: SymairaFont.familyName,
+                kCTFontVariationAttribute: variation,
+            ]
+            return CTFontCreateWithFontDescriptor(
+                CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), 13.5, nil)
         }
         let fixed = SymairaFont.ctFont(size: 13.5, weight: 400)
         // Optical size following the point size is what made small UI text look letter-spaced.

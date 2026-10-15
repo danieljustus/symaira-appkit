@@ -131,7 +131,9 @@ public struct SymairaNotice: View {
             }
         }
         .padding(SymairaSpacing.medium)
-        .background(toneColor.opacity(0.10), in: RoundedRectangle(cornerRadius: SymairaRadius.control, style: .continuous))
+        .background(
+            toneColor.opacity(0.10), in: RoundedRectangle(cornerRadius: SymairaRadius.control, style: .continuous)
+        )
         .overlay(
             RoundedRectangle(cornerRadius: SymairaRadius.control, style: .continuous)
                 .stroke(toneColor.opacity(0.30), lineWidth: 1)

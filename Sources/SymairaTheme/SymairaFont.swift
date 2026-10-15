@@ -1,6 +1,7 @@
 import CoreText
 import Foundation
 import SwiftUI
+
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #else
@@ -47,7 +48,8 @@ public enum SymairaFont {
             kCTFontFamilyNameAttribute: familyName,
             kCTFontVariationAttribute: variation,
         ]
-        return CTFontCreateWithFontDescriptor(CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), size, nil)
+        return CTFontCreateWithFontDescriptor(
+            CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), size, nil)
     }
 
     /// SwiftUI font for a role. Scales with Dynamic Type relative to `textStyle`.
@@ -57,7 +59,7 @@ public enum SymairaFont {
             return Font.system(size: size, weight: systemWeight(weight))
         }
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        _ = textStyle // macOS has no Dynamic Type; the size is final.
+        _ = textStyle  // macOS has no Dynamic Type; the size is final.
         return Font(ctFont(size: size, weight: weight) as NSFont)
         #else
         let scaled = UIFontMetrics(forTextStyle: uiTextStyle(textStyle)).scaledValue(for: size)
