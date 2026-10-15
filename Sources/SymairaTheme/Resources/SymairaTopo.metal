@@ -39,28 +39,29 @@ static float sdBox(float2 p, float4 r, float rad){
     float2 q = sp / p4.x;
     float2 w = float2(fbm(float3(q * .7, t * .6)), fbm(float3(q * .7 + 5.2, t * .6)));
     float h = fbm(float3(q + w * warp, t));
-    h += prob * .05 * (n3(float3(sp / 26., rt * 2.2)) - .5);
+    h += prob * .025 * (n3(float3(sp / 26., rt * .9)) - .5);
     h -= p5.w * p6.z * exp(-md * md / (p6.x * p6.x * 1.6));   // gedrückt halten: Mulde, Linien ziehen sich ringförmig zusammen
 
-    float mask = 1.;
+    float mask = 1., hill = 0.;
     for (int i = 0; i < rectCount / 5; i++) {
         float4 r = float4(rects[i*5], rects[i*5+1], rects[i*5+2], rects[i*5+3]);
         float sd = sdBox(pos, r, 12.);
-        if (rects[i*5+4] > .5) h += .11 * exp(-max(sd, 0.) / 34.);
-        mask *= smoothstep(6., 22., sd);
+        if (rects[i*5+4] > .5) hill = max(hill, .025 * exp(-max(sd, 0.) / 24.));
+        mask = min(mask, smoothstep(2., 8., sd));
     }
+    h += hill;
     for (int i = 0; i < rippleCount / 4; i++) {
         float2 rp = float2(ripples[i*4], ripples[i*4+1]); float age = ripples[i*4+2], str = ripples[i*4+3];
-        float d = length(pos - rp), front = age * 260.;
-        h += str * .06 * exp(-pow((d - front) / 40., 2.)) * exp(-age * 1.2);
+        float d = length(pos - rp), front = age * 180.;
+        h += str * .03 * exp(-pow((d - front) / 40., 2.)) * exp(-age * 1.2);
     }
-    if (ask > 0.) { float d = length(pos - askP); h += ask * .05 * sin(d / 30. + rt * 2.2) * exp(-d / 380.); }
+    if (ask > 0.) { float d = length(pos - askP); h += ask * .025 * sin(d / 30. + rt * 1.2) * exp(-d / 380.); }
 
     float v = h * p4.y;
     float line = iso(v, .65 * ds, .5), idx = iso(v / 5., 1. * ds, 1.6), band = floor(v) / p4.y;
     float2 e = (pos - float2(res.x * .6, res.y * .55)) / float2(res.x * .36, res.y * .5);
     float vis = mix(1., clamp((length(e) - .78) / .42, 0., 1.), p5.z);
-    float pulse = 1. + think * .18 * sin(rt * 3.);
+    float pulse = 1. + think * .08 * sin(rt * 1.5);
     float a = min((max(line * p4.z, idx * p4.w) + band * p5.x) * vis * pulse, p5.y) * mask * k;
     half3 c = mix(col4.rgb, tint4.rgb, half(tintA));
     // über die Eingangsfarbe (Canvas) komponieren: SwiftUI überspringt vollständig transparente Layer

@@ -18,10 +18,10 @@ public enum SymairaTopoState: String, CaseIterable, Sendable {
     struct Target { let speed, warp, think, problem, ask, tintAmount: Double; let tintIsCritical: Bool }
     var target: Target {
         switch self {   // 1:1 aus topo.json
-        case .idle:     Target(speed: 0.03,  warp: 0.65, think: 0, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
-        case .thinking: Target(speed: 0.09,  warp: 0.95, think: 1, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
-        case .problem:  Target(speed: 0.018, warp: 0.6,  think: 0, problem: 1, ask: 0, tintAmount: 0.55, tintIsCritical: true)
-        case .input:    Target(speed: 0.025, warp: 0.6,  think: 0, problem: 0, ask: 1, tintAmount: 0.45, tintIsCritical: false)
+        case .idle:     Target(speed: 0.018, warp: 0.65, think: 0, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
+        case .thinking: Target(speed: 0.04,  warp: 0.75, think: 1, problem: 0, ask: 0, tintAmount: 0,    tintIsCritical: false)
+        case .problem:  Target(speed: 0.012, warp: 0.6,  think: 0, problem: 1, ask: 0, tintAmount: 0.55, tintIsCritical: true)
+        case .input:    Target(speed: 0.016, warp: 0.6,  think: 0, problem: 0, ask: 1, tintAmount: 0.45, tintIsCritical: false)
         }
     }
 }

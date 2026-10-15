@@ -4,7 +4,7 @@
   "indexEvery": 5,
   "lineAlpha": 0.13,
   "indexAlpha": 0.165,
-  "bandAlpha": 0.05,
+  "bandAlpha": 0.018,
   "maxAlpha": 0.26,
   "basinOpen": 0.7,
   "lightModeFactor": 0.9,
@@ -15,16 +15,16 @@
   "maxProtectedRects": 20,
   "pointer": {
     "radius": 70,
-    "strength": 0.45,
-    "pressDepth": 0.09,
-    "pressSeconds": 0.35,
+    "strength": 0.28,
+    "pressDepth": 0.055,
+    "pressSeconds": 0.55,
     "dragRippleEvery": 70,
-    "clickRipple": 0.45
+    "clickRipple": 0.3
   },
-  "transitionSeconds": 0.6,
+  "transitionSeconds": 0.9,
   "states": {
     "idle": {
-      "speed": 0.03,
+      "speed": 0.018,
       "warp": 0.65,
       "think": 0,
       "problem": 0,
@@ -33,8 +33,8 @@
       "tintAmount": 0
     },
     "thinking": {
-      "speed": 0.09,
-      "warp": 0.95,
+      "speed": 0.04,
+      "warp": 0.75,
       "think": 1,
       "problem": 0,
       "ask": 0,
@@ -43,7 +43,7 @@
       "rippleEverySeconds": 1.4
     },
     "problem": {
-      "speed": 0.018,
+      "speed": 0.012,
       "warp": 0.6,
       "think": 0,
       "problem": 1,
@@ -52,7 +52,7 @@
       "tintAmount": 0.55
     },
     "input": {
-      "speed": 0.025,
+      "speed": 0.016,
       "warp": 0.6,
       "think": 0,
       "problem": 0,
@@ -64,6 +64,6 @@
   "layout": {
     "moveThreshold": 24,
     "rippleThrottleSeconds": 0.35,
-    "edgeRipple": 1.3
+    "edgeRipple": 0.8
   }
 }

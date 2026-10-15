@@ -33,6 +33,10 @@ event delivery. No agents, hardware-control services or credentials are used.
 
 ### Exploratory result
 
+This is the lifecycle-fix experiment at `870e236`, before the later calmer
+motion and narrower protection-transition tuning. It is not a new energy
+measurement of that visual revision.
+
 macOS 27.0.1, Xcode 27.0, AC power, unchanged 20 fps and animation parameters.
 Three fresh process launches per mode; baseline first, candidate second. This
 small, non-interleaved experiment is sufficient to identify the missing pause,

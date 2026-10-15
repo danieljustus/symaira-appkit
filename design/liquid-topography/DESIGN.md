@@ -285,8 +285,8 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 | Eingang | Wirkung |
 |---|---|
-| Zustand `idle` | fließend, Tempo 0.03 |
-| Zustand `thinking` | Tempo 0.09, stärkerer Warp, Atmen, Welle alle 1.4s vom Statuspunkt |
+| Zustand `idle` | ruhig fließend, Tempo 0.018 |
+| Zustand `thinking` | Tempo 0.04, leicht stärkerer Warp, dezentes Atmen, sanfte Welle alle 1.4s vom Statuspunkt |
 | Zustand `problem` | fast Stillstand, körnige Unruhe, leichte Tönung in `critical` |
 | Zustand `input` | Ringe laufen auf das Element zu, das eine Eingabe braucht, Tönung in `primary` |
 | Zeiger | Linien weichen in kleinem Radius (70px) linsenartig aus, stärker bei schneller Bewegung |
@@ -297,7 +297,7 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 **Lesbarkeitsgarantien (nicht verhandelbar):**
 
-1. Jedes Element mit Text oder Bedienfunktion ist eine Schutzzone. Dort wird keine Linie gezeichnet, mit 6–22px weichem Rand.
+1. Jedes Element mit Text oder Bedienfunktion ist eine Schutzzone. Dort wird keine Linie gezeichnet. Ein schmaler 2–8px-Übergang ersetzt den früheren breiten Halo. Überlappende Masken und Konturverformungen werden nicht aufsummiert; sie dürfen keine künstlichen Schatten bilden. Die Flächentönung der Höhenstufen beträgt nur 0.018.
 2. Die Deckkraft der Linien ist hart auf 0.26 begrenzt. Zustände, Wellen und Zeiger können sie nicht überschreiten.
 3. Zustände ändern Tempo, Form und Tönung, aber keine Information. Die Information steht immer im Text (`role="status"` / `role="alert"`).
 4. Bei `prefers-reduced-motion` bzw. „Bewegung reduzieren“ bleibt das Bild statisch, ohne Wellen und ohne Zeigerreaktion. Gleiches gilt für den Stromsparmodus unter iOS.

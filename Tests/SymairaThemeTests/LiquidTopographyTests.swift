@@ -65,6 +65,23 @@ final class LiquidTopographyTests: XCTestCase {
     }
 
     #if os(macOS)
+    func testOverlappingProtectionDoesNotAccumulateShadowOrHill() throws {
+        func render(_ count: Int) throws -> [UInt8] {
+            let model = SymairaTopoModel()
+            for index in 0..<count {
+                model.rects["zone-\(index)"] = (CGRect(x: 100, y: 60, width: 100, height: 80), true)
+            }
+            let view = SymairaTopoView(model: model, animationEnabled: false)
+                .frame(width: 300, height: 200)
+                .coordinateSpace(name: SymairaTopo.space)
+                .environment(\.colorScheme, .dark)
+            let renderer = ImageRenderer(content: view)
+            renderer.scale = 1
+            return try pixels(XCTUnwrap(renderer.cgImage))
+        }
+        XCTAssertEqual(try render(1), try render(2), "nested protection must not add a dark halo or stronger contour hill")
+    }
+
     /// Rendert die echte View offscreen: Linien sichtbar außerhalb, keine Linien in der Schutzzone.
     func testShaderRendersLinesAndKeepsProtectedZoneClear() throws {
         let model = SymairaTopoModel()

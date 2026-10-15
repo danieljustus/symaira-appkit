@@ -34,20 +34,21 @@ void main(){
  vec2 q=sp/scale;
  vec2 w=vec2(fbm(vec3(q*.7,t*.6)),fbm(vec3(q*.7+5.2,t*.6)));
  float h=fbm(vec3(q+w*warp,t));
- h+=prob*.05*(n3(vec3(sp/26.,rt*2.2))-.5);
+ h+=prob*.025*(n3(vec3(sp/26.,rt*.9))-.5);
  h-=press*pD*exp(-md*md/(pR*pR*1.6));
- float mask=1.;
+ float mask=1.,hill=0.;
  for(int i=0;i<20;i++){if(i>=NR)break;float sd=sdBox(px,R[i],12.);
-  if(K[i]>.5)h+=.11*exp(-max(sd,0.)/34.);
-  mask*=smoothstep(6.,22.,sd);}
- for(int i=0;i<8;i++){vec4 r=RP[i];if(r.w<=0.)continue;float d=length(px-r.xy),front=r.z*260.;
-  h+=r.w*.06*exp(-pow((d-front)/40.,2.))*exp(-r.z*1.2);}
- if(ask>0.){float d=length(px-askP);h+=ask*.05*sin(d/30.+rt*2.2)*exp(-d/380.);}
+  if(K[i]>.5)hill=max(hill,.025*exp(-max(sd,0.)/24.));
+  mask=min(mask,smoothstep(2.,8.,sd));}
+ h+=hill;
+ for(int i=0;i<8;i++){vec4 r=RP[i];if(r.w<=0.)continue;float d=length(px-r.xy),front=r.z*180.;
+  h+=r.w*.03*exp(-pow((d-front)/40.,2.))*exp(-r.z*1.2);}
+ if(ask>0.){float d=length(px-askP);h+=ask*.025*sin(d/30.+rt*1.2)*exp(-d/380.);}
  float v=h*levels;
  float line=iso(v,.65*dpr,.5),idx=iso(v/5.,1.*dpr,1.6),band=floor(v)/levels;
  vec2 e=(px-vec2(res.x*.6,res.y*.55))/vec2(res.x*.36,res.y*.5);
  float vis=mix(1.,clamp((length(e)-.78)/.42,0.,1.),basin);
- float pulse=1.+think*.18*sin(rt*3.);
+ float pulse=1.+think*.08*sin(rt*1.5);
  float a=min((max(line*lineA,idx*idxA)+band*bandA)*vis*pulse,maxA)*mask*k;
  vec3 c=mix(col,tint,tintA);
  o=vec4(c*a,a);

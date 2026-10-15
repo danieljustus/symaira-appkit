@@ -59,21 +59,21 @@ public enum SymairaTokens {
         public static let scale: Double = 340.0
         public static let lineAlpha: Double = 0.13
         public static let indexAlpha: Double = 0.165
-        public static let bandAlpha: Double = 0.05
+        public static let bandAlpha: Double = 0.018
         public static let maxAlpha: Double = 0.26
         public static let basinOpen: Double = 0.7
         public static let lightModeFactor: Double = 0.9
-        public static let transitionSeconds: Double = 0.6
+        public static let transitionSeconds: Double = 0.9
         public static let fps: Double = 20.0
         public static let maxProtectedRects = 20
         public static let pointerRadius: Double = 70.0
-        public static let pointerStrength: Double = 0.45
-        public static let pressDepth: Double = 0.09
-        public static let pressSeconds: Double = 0.35
+        public static let pointerStrength: Double = 0.28
+        public static let pressDepth: Double = 0.055
+        public static let pressSeconds: Double = 0.55
         public static let dragRippleEvery: Double = 70.0
-        public static let clickRipple: Double = 0.45
+        public static let clickRipple: Double = 0.3
         public static let layoutMoveThreshold: Double = 24.0
         public static let layoutRippleThrottleSeconds: Double = 0.35
-        public static let layoutEdgeRipple: Double = 1.3
+        public static let layoutEdgeRipple: Double = 0.8
     }
 }
