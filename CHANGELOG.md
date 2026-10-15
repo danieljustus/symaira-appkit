@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Fixed
+- Shared typography now responds to live iOS Dynamic Type changes, including
+  the missing-font fallback, while preserving Google Sans Flex, `opsz` 18,
+  approved weights and tabular digits (#163).
 - `make lint` now resolves `swift-format` through the selected Xcode before
   trying PATH, and fails on a missing formatter or any lint finding (#161).
   A shared four-space formatting configuration, `make format`, isolated
@@ -35,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `surfaceOpaque` and `foreground*` now return the gray Liquid Topography
   palette instead of the warm champagne/black palette. Fixed legacy constants
   (`bgDark`, `goldPrimary`, …) are unchanged.
+- **Breaking (API):** typography values and `SymairaFont.font(...)` now return
+  view-resolved `SymairaFontRole` recipes instead of fixed `Font` values.
+  Ordinary `.font(SymairaTypography...)` and `.symairaText(...)` calls remain;
+  explicit `Font` storage and `Text` return types must migrate. See
+  [typography migration and native regression](docs/typography.md).
 - New `SymairaTheme.accent(for:)` for the champagne accent.
 - **Approved palette and typography (Cockpit design pilot, revision 08):**
   - Google Sans Flex is the brand and UI typeface. The unmodified variable

@@ -6,7 +6,7 @@ import XCTest
 
 final class TypographyTests: XCTestCase {
     func testScaleEntriesAreDistinctWhereTheyShouldBe() {
-        let roles: [Font] = [
+        let roles: [SymairaFontRole] = [
             SymairaTypography.display,
             SymairaTypography.title,
             SymairaTypography.heading,
@@ -111,4 +111,35 @@ final class TypographyTests: XCTestCase {
     func testEmptyStateSymbolSizeIsAToken() {
         XCTAssertEqual(SymairaMetrics.emptyStateSymbolSize, 36)
     }
+
+    #if os(macOS)
+    @MainActor
+    func testRolesPreserveMacOSRendering() throws {
+        SymairaFont.register()
+        let roles = [
+            SymairaTypography.display, SymairaTypography.title, SymairaTypography.heading,
+            SymairaTypography.subheading, SymairaTypography.body, SymairaTypography.bodyEmphasized,
+            SymairaTypography.bodyMedium, SymairaTypography.label, SymairaTypography.callout,
+            SymairaTypography.caption, SymairaTypography.micro, SymairaTypography.readout,
+            SymairaTypography.stat, SymairaTypography.mono, SymairaTypography.monoSmall,
+        ]
+        for role in roles {
+            let baseline: Font
+            switch role.source {
+            case .brand(let size, let weight, _):
+                let font = Font(SymairaFont.ctFont(size: size, weight: weight))
+                baseline = role.tabularDigits ? font.monospacedDigit() : font
+            case .system(let font): baseline = font
+            }
+            let sample = "Energie & Kühlung 0123456789"
+            let current = try XCTUnwrap(ImageRenderer(content: Text(sample).font(role)).cgImage)
+            let previous = try XCTUnwrap(ImageRenderer(content: Text(sample).font(baseline)).cgImage)
+            XCTAssertEqual(current.width, previous.width)
+            XCTAssertEqual(current.height, previous.height)
+            let currentPixels = try XCTUnwrap(current.dataProvider?.data) as Data
+            let previousPixels = try XCTUnwrap(previous.dataProvider?.data) as Data
+            XCTAssertEqual(currentPixels, previousPixels)
+        }
+    }
+    #endif
 }

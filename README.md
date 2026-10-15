@@ -148,6 +148,11 @@ every content card. `symairaButtonStyle`, `symairaGlassChrome`, and
 material or opaque accessibility fallbacks on earlier systems. See
 [`DESIGN.md`](DESIGN.md) for the design rules and migration guidance.
 
+Typography uses view-resolved roles so existing mounted views respond to iOS
+Dynamic Type changes while keeping Google Sans Flex's fixed optical size.
+See [typography API migration and native regression](docs/typography.md) for
+the `Font`/`Text` source changes and the separate simulator check.
+
 ## Build & Test
 
 ```bash

@@ -70,11 +70,25 @@ public struct SymairaSegmentedControl<Value: Hashable>: View {
     }
 
     private func segment(_ option: (value: Value, label: String)) -> some View {
-        let isSelected = option.value == selection
-        return Button {
-            selection = option.value
-        } label: {
-            Text(option.label)
+        SymairaSegmentButton(
+            label: option.label,
+            isSelected: option.value == selection,
+            colorScheme: colorScheme,
+            action: { selection = option.value }
+        )
+    }
+}
+
+private struct SymairaSegmentButton: View {
+    let label: String
+    let isSelected: Bool
+    let colorScheme: ColorScheme
+    let action: () -> Void
+    @FocusState private var isFocused: Bool
+
+    var body: some View {
+        Button(action: action) {
+            Text(label)
                 .font(isSelected ? SymairaTypography.bodyEmphasized : SymairaTypography.bodyMedium)
                 .lineLimit(1)
                 .minimumScaleFactor(0.85)
@@ -93,7 +107,35 @@ public struct SymairaSegmentedControl<Value: Hashable>: View {
                 .contentShape(RoundedRectangle(cornerRadius: SymairaTokens.Radius.md, style: .continuous))
         }
         .buttonStyle(.plain)
+        .focused($isFocused)
+        .symairaKeyboardFocusRing(
+            RoundedRectangle(cornerRadius: SymairaTokens.Radius.md, style: .continuous),
+            isFocused: isFocused
+        )
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+}
+
+private struct SymairaKeyboardFocusRing<S: Shape>: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+
+    let shape: S
+    let isFocused: Bool
+
+    func body(content: Content) -> some View {
+        content.overlay {
+            if isFocused {
+                shape
+                    .stroke(SymairaTheme.focus(for: colorScheme), lineWidth: 2)
+                    .padding(-3)
+            }
+        }
+    }
+}
+
+extension View {
+    fileprivate func symairaKeyboardFocusRing<S: Shape>(_ shape: S, isFocused: Bool) -> some View {
+        modifier(SymairaKeyboardFocusRing(shape: shape, isFocused: isFocused))
     }
 }
 
@@ -114,20 +156,37 @@ public struct SymairaSwitchToggleStyle: ToggleStyle {
         HStack(spacing: SymairaSpacing.medium) {
             configuration.label
             // A button keeps the switch keyboard-operable (Space) on macOS.
-            Button {
-                configuration.isOn.toggle()
-            } label: {
-                track(isOn: configuration.isOn)
-            }
-            .buttonStyle(.plain)
+            SymairaSwitchButton(isOn: configuration.$isOn)
         }
         .opacity(isEnabled ? 1 : 0.55)
         .accessibilityRepresentation {
             Toggle(isOn: configuration.$isOn) { configuration.label }
         }
     }
+}
 
-    private func track(isOn: Bool) -> some View {
+private struct SymairaSwitchButton: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Binding private var isOn: Bool
+    @FocusState private var isFocused: Bool
+
+    init(isOn: Binding<Bool>) {
+        _isOn = isOn
+    }
+
+    var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            track
+        }
+        .buttonStyle(.plain)
+        .focused($isFocused)
+        .symairaKeyboardFocusRing(Capsule(), isFocused: isFocused)
+    }
+
+    private var track: some View {
         ZStack(alignment: isOn ? .trailing : .leading) {
             Capsule().fill(isOn ? SymairaTheme.selected(for: colorScheme) : offTrack)
             Circle()

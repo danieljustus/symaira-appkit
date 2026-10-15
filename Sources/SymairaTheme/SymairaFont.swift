@@ -52,18 +52,21 @@ public enum SymairaFont {
             CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), size, nil)
     }
 
-    /// SwiftUI font for a role. Scales with Dynamic Type relative to `textStyle`.
-    /// Falls back to the system font with the matching weight if the bundled font is unavailable.
-    public static func font(size: CGFloat, weight: Double, relativeTo textStyle: Font.TextStyle) -> Font {
+    /// A view-resolved role, scaling live with Dynamic Type relative to `textStyle`.
+    /// Apply with `View.font(_:)`; concrete `Font`/`Text` consumers must migrate to views.
+    public static func font(size: CGFloat, weight: Double, relativeTo textStyle: Font.TextStyle) -> SymairaFontRole {
+        SymairaFontRole(source: .brand(size: size, weight: weight, relativeTo: textStyle))
+    }
+
+    /// The caller has already resolved the point size in its current view environment.
+    static func resolvedFont(size: CGFloat, weight: Double) -> Font {
         guard isAvailable else {
             return Font.system(size: size, weight: systemWeight(weight))
         }
         #if canImport(AppKit) && !targetEnvironment(macCatalyst)
-        _ = textStyle  // macOS has no Dynamic Type; the size is final.
         return Font(ctFont(size: size, weight: weight) as NSFont)
         #else
-        let scaled = UIFontMetrics(forTextStyle: uiTextStyle(textStyle)).scaledValue(for: size)
-        return Font(ctFont(size: scaled, weight: weight) as UIFont)
+        return Font(ctFont(size: size, weight: weight) as UIFont)
         #endif
     }
 
@@ -80,21 +83,4 @@ public enum SymairaFont {
         }
     }
 
-    #if !(canImport(AppKit) && !targetEnvironment(macCatalyst))
-    private static func uiTextStyle(_ style: Font.TextStyle) -> UIFont.TextStyle {
-        switch style {
-        case .largeTitle: .largeTitle
-        case .title: .title1
-        case .title2: .title2
-        case .title3: .title3
-        case .headline: .headline
-        case .subheadline: .subheadline
-        case .callout: .callout
-        case .caption: .caption1
-        case .caption2: .caption2
-        case .footnote: .footnote
-        default: .body
-        }
-    }
-    #endif
 }

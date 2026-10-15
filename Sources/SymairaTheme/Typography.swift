@@ -7,6 +7,7 @@ import SwiftUI
 /// each role scales with Dynamic Type relative to its text style; macOS has no
 /// Dynamic Type. If the bundled font cannot be registered, the system font with
 /// the same size and weight is used. Monospaced roles stay on SF Mono.
+/// Values are `SymairaFontRole` recipes; `.font(role)` resolves them in the view.
 public enum SymairaTypography {
     /// Hero copy on empty states and onboarding. One per screen at most. 26 / 700.
     public static let display = SymairaFont.font(size: 26, weight: 700, relativeTo: .largeTitle)
@@ -48,10 +49,11 @@ public enum SymairaTypography {
     public static let stat = SymairaFont.font(size: 27, weight: 700, relativeTo: .largeTitle).monospacedDigit()
 
     /// Command output, paths, hashes, identifiers.
-    public static let mono = Font.system(.body, design: .monospaced, weight: .regular)
+    public static let mono = SymairaFontRole(source: .system(.system(.body, design: .monospaced, weight: .regular)))
 
     /// Monospaced detail inside a dense row.
-    public static let monoSmall = Font.system(.caption, design: .monospaced, weight: .regular)
+    public static let monoSmall = SymairaFontRole(
+        source: .system(.system(.caption, design: .monospaced, weight: .regular)))
 }
 
 /// A text role pairs a font with the foreground colour it is meant to carry.
@@ -76,7 +78,7 @@ public enum SymairaTextRole: Sendable {
     case mono
     case monoSmall
 
-    public var font: Font {
+    public var font: SymairaFontRole {
         switch self {
         case .display: SymairaTypography.display
         case .title: SymairaTypography.title
