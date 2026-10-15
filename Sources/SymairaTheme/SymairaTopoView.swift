@@ -42,6 +42,24 @@ public final class SymairaTopoModel {
     @ObservationIgnored var anchors: [String: CGRect] = [:]
     @ObservationIgnored var lastKeyed: [String: Date] = [:]
     public init() {}
+    /// Never drop a protected element. If the bounded shader budget is exceeded,
+    /// conservatively protect their union (decoration gives way to readability).
+    func protectedRects(in viewport: CGRect) -> [Float] {
+        let visible = rects.values.filter { $0.0.intersects(viewport.insetBy(dx: -22, dy: -22)) }
+            .sorted { a, b in
+                a.0.minY == b.0.minY ? a.0.minX < b.0.minX : a.0.minY < b.0.minY
+            }
+        let selected: [(CGRect, Bool)]
+        if visible.count > SymairaTokens.Topo.maxProtectedRects {
+            selected = [(visible.reduce(CGRect.null) { $0.union($1.0) }, false)]
+        } else {
+            selected = visible
+        }
+        return selected.flatMap { r -> [Float] in
+            [Float(r.0.minX - viewport.minX), Float(r.0.minY - viewport.minY),
+             Float(r.0.width), Float(r.0.height), r.1 ? 1 : 0]
+        }
+    }
     /// Welle im Koordinatenraum `SymairaTopo.space`. Mit `key` gedrosselt (ein Auslöser feuert nicht pro Frame).
     public func ripple(at p: CGPoint, strength: Double = 1, key: String? = nil) {
         if let key {
@@ -104,15 +122,22 @@ public struct SymairaTopoView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.displayScale) private var displayScale
+    @Environment(\.scenePhase) private var scenePhase
     @State private var clock = Clock()
-    public init(model: SymairaTopoModel) { self.model = model }
+    @State private var windowVisible = true
+    private let animationEnabled: Bool
+    public init(model: SymairaTopoModel, animationEnabled: Bool = true) {
+        self.model = model
+        self.animationEnabled = animationEnabled
+    }
 
     private var lowPower: Bool { ProcessInfo.processInfo.isLowPowerModeEnabled }
-    private var still: Bool { reduceMotion || lowPower }
+    private var still: Bool { reduceMotion || lowPower || !animationEnabled }
+    private var paused: Bool { still || !windowVisible || scenePhase == .background }
 
     public var body: some View {
         GeometryReader { geo in
-            TimelineView(.animation(minimumInterval: 1 / SymairaTokens.Topo.fps, paused: still)) { ctx in
+            TimelineView(.animation(minimumInterval: 1 / SymairaTokens.Topo.fps, paused: paused)) { ctx in
                 Rectangle().fill(SymairaTokens.canvas)   // Shader zeichnet die Linien über die Canvas-Farbe
                     .colorEffect(shader(size: geo.size, origin: geo.frame(in: .named(SymairaTopo.space)).origin, now: ctx.date))
             }
@@ -120,6 +145,15 @@ public struct SymairaTopoView: View {
         .allowsHitTesting(false)
         .accessibilityHidden(true)
         .background(pointerTracker)
+        #if os(macOS)
+        .background(TopoWindowVisibility(visible: $windowVisible))
+        #endif
+        .onChange(of: paused) { _, _ in
+            clock.a.last = nil
+            model.pressed = false
+            model.pointer = nil
+            model.ripples.removeAll()
+        }
     }
 
     @ViewBuilder private var pointerTracker: some View {
@@ -165,7 +199,7 @@ public struct SymairaTopoView: View {
         a.cur = .init(speed: ease(a.cur.speed, tg.speed), warp: ease(a.cur.warp, tg.warp), think: ease(a.cur.think, tg.think),
                       problem: ease(a.cur.problem, tg.problem), ask: ease(a.cur.ask, tg.ask),
                       tintAmount: ease(a.cur.tintAmount, tg.tintAmount), tintIsCritical: tg.tintIsCritical)
-        if !still { a.flowT += a.cur.speed * dt; a.rt += dt }
+        if !paused { a.flowT += a.cur.speed * dt; a.rt += dt }
         if model.state == .thinking, a.rt > a.nextThink, let s = model.statusPoint { model.ripple(at: s, strength: 0.8); a.nextThink = a.rt + 1.4 }
         let target = still ? nil : model.pointer.map { CGPoint(x: $0.x - o.x, y: $0.y - o.y) }
         if let p = target {
@@ -184,8 +218,7 @@ public struct SymairaTopoView: View {
         model.ripples.removeAll { now.timeIntervalSince($0.1) > 2.4 }
         clock.a = a
 
-        let rects: [Float] = model.rects.values.prefix(SymairaTokens.Topo.maxProtectedRects)
-            .flatMap { r -> [Float] in [Float(r.0.minX - o.x), Float(r.0.minY - o.y), Float(r.0.width), Float(r.0.height), r.1 ? 1 : 0] }
+        let rects = model.protectedRects(in: CGRect(origin: o, size: size))
         let rip: [Float] = still ? [] : model.ripples.flatMap { r -> [Float] in [Float(r.0.x - o.x), Float(r.0.y - o.y), Float(now.timeIntervalSince(r.1)), Float(r.2)] }
         let dark = scheme == .dark
         let ask = model.askPoint.map { CGPoint(x: $0.x - o.x, y: $0.y - o.y) } ?? CGPoint(x: size.width / 2, y: size.height - 60)
@@ -218,6 +251,51 @@ private struct TopoProtect: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onGeometryChange(for: CGRect.self) { $0.frame(in: .named(SymairaTopo.space)) } action: { model.layoutChanged(id: id, rect: $0); model.rects[id] = ($0, hill) }
-            .onDisappear { model.rects[id] = nil; model.anchors[id] = nil }
+            .onDisappear { model.rects[id] = nil; model.anchors[id] = nil; model.lastKeyed[id] = nil }
     }
 }
+
+#if os(macOS)
+/// Observe the owning window, not the application's key window. No polling and
+/// no input interception; a covered/minimized window stops its own timeline.
+private struct TopoWindowVisibility: NSViewRepresentable {
+    @Binding var visible: Bool
+    func makeNSView(context: Context) -> Probe {
+        let binding = $visible
+        let view = Probe()
+        view.changed = { value in
+            Task { @MainActor in
+                if binding.wrappedValue != value { binding.wrappedValue = value }
+            }
+        }
+        return view
+    }
+    func updateNSView(_ view: Probe, context: Context) {}
+    static func dismantleNSView(_ view: Probe, coordinator: ()) { view.stop() }
+
+    final class Probe: NSView {
+        var changed: ((Bool) -> Void)?
+        private var observers: [NSObjectProtocol] = []
+        override func hitTest(_ point: NSPoint) -> NSView? { nil }
+        func stop() {
+            observers.forEach(NotificationCenter.default.removeObserver)
+            observers.removeAll()
+        }
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            stop()
+            guard let window else { changed?(false); return }
+            for name in [NSWindow.didChangeOcclusionStateNotification,
+                         NSWindow.didMiniaturizeNotification, NSWindow.didDeminiaturizeNotification] {
+                observers.append(NotificationCenter.default.addObserver(forName: name, object: window, queue: .main) { [weak self] _ in
+                    MainActor.assumeIsolated { self?.publish() }
+                })
+            }
+            publish()
+        }
+        private func publish() {
+            changed?(window.map { $0.isVisible && !$0.isMiniaturized && $0.occlusionState.contains(.visible) } ?? false)
+        }
+    }
+}
+#endif

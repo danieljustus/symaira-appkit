@@ -14,6 +14,8 @@ struct DemoView: View {
     @State private var topo = SymairaTopoModel()
     @State private var expanded = false
     @State private var text = ""
+    // Explicit, passive benchmark inputs; never coupled to a real agent or credentials.
+    private let benchmark = ProcessInfo.processInfo.environment["SYMAIRA_TOPO_BENCHMARK"]
 
     var body: some View {
         NavigationSplitView {
@@ -28,7 +30,9 @@ struct DemoView: View {
         } detail: {
             ZStack {
                 SymairaTokens.canvas.ignoresSafeArea()
-                SymairaTopoView(model: topo).ignoresSafeArea()
+                if benchmark != "off" {
+                    SymairaTopoView(model: topo, animationEnabled: benchmark != "static").ignoresSafeArea()
+                }
                 VStack(spacing: 20) {
                     Spacer()
                     VStack(alignment: .leading, spacing: 12) {
@@ -78,6 +82,31 @@ struct DemoView: View {
         // Glas-Regel: Seitenleiste + Toolbar = natives Liquid Glass (NavigationSplitView/Toolbar),
         // Inhaltsflächen bleiben deckend. Die Topografie liegt dahinter und scheint durch die Sidebar.
         .containerBackground(for: .window) { SymairaTokens.canvas }
+        .preferredColorScheme(benchmark == nil ? nil : .dark)
+        .task {
+            guard let benchmark else { return }
+            if benchmark == "hidden" {
+                try? await Task.sleep(for: .seconds(1))
+                if let window = NSApp.windows.first(where: { $0.title == "Symaira Liquid Topography" }) {
+                    window.orderOut(nil)
+                    try? await Task.sleep(for: .seconds(1))
+                    NSLog("TOPO_BENCH hidden=%d visible=%d", window.isVisible ? 0 : 1, window.occlusionState.contains(.visible) ? 1 : 0)
+                } else {
+                    NSLog("TOPO_BENCH missing-window")
+                }
+            }
+            guard benchmark == "interaction" else { return }
+            topo.state = .thinking
+            var step = 0.0
+            while !Task.isCancelled {
+                // Deterministic model inputs, NOT evidence of real pointer event delivery.
+                topo.pointer = CGPoint(x: 350 + 120 * sin(step), y: 240 + 80 * cos(step))
+                topo.pointerVelocity = 0.6
+                topo.pressed = true
+                step += 0.05
+                do { try await Task.sleep(for: .milliseconds(50)) } catch { break }
+            }
+        }
     }
 
     private func ripple(at p: CGPoint) { topo.ripple(at: CGPoint(x: 400, y: 300), strength: 0.7) }

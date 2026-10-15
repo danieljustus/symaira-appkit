@@ -301,7 +301,7 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 2. Die Deckkraft der Linien ist hart auf 0.26 begrenzt. Zustände, Wellen und Zeiger können sie nicht überschreiten.
 3. Zustände ändern Tempo, Form und Tönung, aber keine Information. Die Information steht immer im Text (`role="status"` / `role="alert"`).
 4. Bei `prefers-reduced-motion` bzw. „Bewegung reduzieren“ bleibt das Bild statisch, ohne Wellen und ohne Zeigerreaktion. Gleiches gilt für den Stromsparmodus unter iOS.
-5. Höchstens 30 fps, auf Apple-Geräten 20 fps. Der Shader pausiert, wenn das Fenster verdeckt oder die App im Hintergrund ist. Höchstens 20 Schutzzonen werden gleichzeitig übergeben, es zählen nur die sichtbaren.
+5. Höchstens 30 fps, auf Apple-Geräten 20 fps. Native Fenster-Sichtbarkeit und Scene-Phase pausieren die Timeline; im Web pausiert ein verstecktes Dokument. Bei reduzierter Bewegung zeichnet das Web nur nach Zustands-, Layout- oder Theme-Änderungen neu, nicht per Dauertimer. Bei mehr als 20 sichtbaren Schutzzonen wird deren gemeinsame Umhüllung geschützt: Dekoration darf entfallen, Textschutz niemals.
 
 **Einsatz:** In Apps liegt die Ebene hinter der Hauptansicht, nicht hinter Einstellungen, Tabellen oder dichten Listen. Auf symaira.com liegt sie hinter dem Hero und den Leerflächen.
 
@@ -322,7 +322,7 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 ## Known Gaps
 
-- Energie (gemessen 15.10.2026, macOS-Demo, MacBook Pro M4 Pro, Instruments „Activity Monitor“, 15 s, Zustand idle, 20 fps): 12,5–13,4 % CPU, ca. 155 Idle-Wakeups/s, 176 MiB Footprint. GPU-Last und Akku-Energie (Watt) sind nicht gemessen. Für Hintergrundansichten ohne Interaktion ist eine niedrigere Idle-Bildrate (z. B. 12 fps) zu prüfen.
+- Energie: Die erste Instruments-Stichprobe war kein Vorher/Nachher-Vergleich. Der reproduzierbare CPU-Vergleich und seine Grenzen stehen in `VERIFICATION.md`. Das Unsichtbar-Pausieren senkt die CPU-Last deutlich; eine Einsparung bei sichtbarer Animation ist bisher nicht belegt. GPU-Last, Watt und reale iPhone-Akkulaufzeit bleiben ungemessen. Die freigegebene Bildrate bleibt vorerst unverändert.
 - iOS-Simulator: läuft (`build-ios.sh`). Metal für den Simulator muss mit `-target air64-apple-ios26.0-simulator` kompiliert werden, sonst ignoriert SwiftUI den Shader stillschweigend. Echtes Gerät nicht getestet.
 - Tabellen, Menüs, Einstellungen, Onboarding und Fehlerseiten sind noch nicht gestaltet.
 - Logo und App-Icons (A3 „Verzahnt“) sind noch nicht an die graue Palette angepasst.

@@ -42,6 +42,28 @@ final class LiquidTopographyTests: XCTestCase {
         XCTAssertEqual(m.ripples.count, 1)
     }
 
+    func testProtectionOverflowKeepsEveryVisibleElementCovered() {
+        let model = SymairaTopoModel()
+        let viewport = CGRect(x: 272, y: 40, width: 1000, height: 800)
+        for i in 0..<25 {
+            model.rects["element-\(i)"] = (CGRect(x: 300 + i * 20, y: 80, width: 30, height: 30), true)
+        }
+        model.rects["offscreen"] = (CGRect(x: 5000, y: 0, width: 100, height: 100), true)
+        let values = model.protectedRects(in: viewport)
+        XCTAssertEqual(values.count, 5, "overflow must use a conservative union, not a truncated list")
+        let union = CGRect(x: CGFloat(values[0]) + viewport.minX, y: CGFloat(values[1]) + viewport.minY,
+                           width: CGFloat(values[2]), height: CGFloat(values[3]))
+        for i in 0..<25 { XCTAssertTrue(union.contains(model.rects["element-\(i)"]!.0)) }
+        XCTAssertEqual(values[4], 0, "overflow union must not add a large decorative hill")
+    }
+
+    func testProtectionFiltersOffscreenBeforeApplyingBudgetAndConvertsCoordinates() {
+        let model = SymairaTopoModel()
+        for i in 0..<30 { model.rects["outside-\(i)"] = (CGRect(x: -1000, y: -1000, width: 50, height: 50), false) }
+        model.rects["visible"] = (CGRect(x: 300, y: 80, width: 100, height: 50), true)
+        XCTAssertEqual(model.protectedRects(in: CGRect(x: 272, y: 40, width: 500, height: 400)), [28, 40, 100, 50, 1])
+    }
+
     #if os(macOS)
     /// Rendert die echte View offscreen: Linien sichtbar außerhalb, keine Linien in der Schutzzone.
     func testShaderRendersLinesAndKeepsProtectedZoneClear() throws {

@@ -94,7 +94,7 @@ export function mountTopo(host, {
   let tintCur = tintFor(params.states.idle);
   const rip = [], mouse = { x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, amt: 0, tAmt: 0, vel: 0, down: false, press: 0, travel: 0 };
   const anchors = new WeakMap(), keyed = new Map(); let lastHost = null;
-  let flowT = 0, rt = 0, last = 0, nextThink = 0, raf = 0, alive = true;
+  let flowT = 0, rt = 0, last = 0, nextThink = 0, raf = null, alive = true;
   const RB = new Float32Array(80), KB = new Float32Array(20), PB = new Float32Array(32);
 
   const local = (x, y) => { const r = host.getBoundingClientRect(); return [x - r.left, y - r.top]; };
@@ -109,6 +109,7 @@ export function mountTopo(host, {
     if (!params.states[s]) throw new Error(`unbekannter Zustand ${s}`);
     state = s; askEl = el || null; host.dataset.topoState = s;
     const status = host.querySelector("[data-topo-status]"); if (status) ripple(status, 0.9);
+    schedule();
   }
   const onMove = (e) => { const [x, y] = local(e.clientX, e.clientY);
     mouse.vel = Math.min(1, mouse.vel + Math.hypot(x - mouse.tx, y - mouse.ty) / 120);
@@ -123,25 +124,41 @@ export function mountTopo(host, {
 
   function collect(hr) {
     let n = 0;
+    let left = Infinity, topmost = Infinity, right = -Infinity, bottom = -Infinity;
+    const limit = Math.min(20, params.maxProtectedRects);
     for (const el of root.querySelectorAll(`${protect}, ${hill}`)) {
-      if (n >= params.maxProtectedRects) break;
       const r = el.getBoundingClientRect();
       const an = anchors.get(el);
       if (!an) anchors.set(el, r);
       else if (Math.abs(an.x - r.x) + Math.abs(an.y - r.y) + Math.abs(an.width - r.width) + Math.abs(an.height - r.height) > params.layout.moveThreshold) {
         anchors.set(el, r); ripple(center(el), 0.6, el); }
-      const top = Math.max(r.top, hr.top), bot = Math.min(r.bottom, hr.bottom);
-      if (r.width < 1 || bot - top < 1) continue;
-      RB.set([r.left - hr.left, top - hr.top, r.width, bot - top], n * 4);
-      KB[n] = el.matches(hill) ? 1 : 0; n++;
+      if (r.width < 1 || r.height < 1 || r.bottom < hr.top - 22 || r.top > hr.bottom + 22 ||
+          r.right < hr.left - 22 || r.left > hr.right + 22) continue;
+      left = Math.min(left, r.left); topmost = Math.min(topmost, r.top);
+      right = Math.max(right, r.right); bottom = Math.max(bottom, r.bottom);
+      if (n < limit) {
+        RB.set([r.left - hr.left, r.top - hr.top, r.width, r.height], n * 4);
+        KB[n] = el.matches(hill) ? 1 : 0;
+      }
+      n++;
+    }
+    if (n > limit) {
+      // Never leave the 21st element exposed: conservatively mask their union.
+      RB.set([left - hr.left, topmost - hr.top, right - left, bottom - topmost]);
+      KB[0] = 0;
+      return 1;
     }
     return n;
   }
 
+  function schedule() {
+    if (alive && !document.hidden && raf === null) raf = requestAnimationFrame(frame);
+  }
   function frame(ts) {
-    if (!alive) return;
+    raf = null;
+    if (!alive || document.hidden) return;
     const still = reduce.matches, cap = 1000 / params.fps.web;
-    if (last && ts - last < cap - 1) { raf = requestAnimationFrame(frame); return; }
+    if (!still && last && ts - last < cap - 1) { schedule(); return; }
     const dt = last ? Math.min(0.06, (ts - last) / 1000) : 0; last = ts;
     const tg = params.states[state], f = 1 - Math.exp(-dt / params.transitionSeconds);
     for (const key of KEYS) cur[key] += (tg[key] - cur[key]) * f;
@@ -174,16 +191,47 @@ export function mountTopo(host, {
     gl.uniform3f(U.col, ...hexRGB(css("--sym-topo"))); gl.uniform3f(U.tint, ...tintCur);
     gl.uniform4fv(U.R, RB); gl.uniform1fv(U.K, KB); gl.uniform1i(U.NR, n); gl.uniform4fv(U.RP, PB);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-    // ponytail: bei reduzierter Bewegung nur bei Layout-/Theme-Änderungen neu zeichnen; Upgrade: ResizeObserver statt 4-fps-Takt
-    if (!document.hidden) raf = still ? setTimeout(() => requestAnimationFrame(frame), 250) : requestAnimationFrame(frame);
+    if (!still) schedule();
   }
-  const onVis = () => { if (!document.hidden) { last = 0; raf = requestAnimationFrame(frame); } };
+  const onVis = () => {
+    if (raf !== null) cancelAnimationFrame(raf);
+    raf = null; last = 0;
+    mouse.down = false;
+    schedule();
+  };
+  const onReduce = () => {
+    rip.length = 0; mouse.amt = 0; mouse.press = 0; mouse.down = false;
+    schedule();
+  };
+  const resize = new ResizeObserver(schedule);
+  resize.observe(host);
+  const mutations = new MutationObserver(records => {
+    if (records.some(r => r.target !== cv)) schedule();
+  });
+  mutations.observe(root === document ? document.documentElement : root, {
+    subtree: true, childList: true, attributes: true,
+    attributeFilter: ['class', 'style', 'data-theme', 'hidden', 'aria-expanded'],
+  });
+  // Themes are commonly applied outside the component root, on <html>/<body>.
+  for (let ancestor = host.parentElement; ancestor; ancestor = ancestor.parentElement) {
+    if (ancestor === root || root === document) break;
+    mutations.observe(ancestor, { attributes: true, attributeFilter: ['class', 'style', 'data-theme'] });
+  }
+  const colorScheme = matchMedia('(prefers-color-scheme: dark)');
+  colorScheme.addEventListener('change', schedule);
+  reduce.addEventListener('change', onReduce);
+  addEventListener('resize', schedule);
+  addEventListener('scroll', schedule, true);
   document.addEventListener("visibilitychange", onVis);
-  raf = requestAnimationFrame(frame);
+  schedule();
 
   return {
     supported: true, setState, ripple,
-    destroy() { alive = false; cancelAnimationFrame(raf); clearTimeout(raf); document.removeEventListener("visibilitychange", onVis);
+    destroy() { alive = false; if (raf !== null) cancelAnimationFrame(raf); document.removeEventListener("visibilitychange", onVis);
+      resize.disconnect(); mutations.disconnect(); reduce.removeEventListener('change', onReduce);
+      colorScheme.removeEventListener('change', schedule);
+      removeEventListener('resize', schedule); removeEventListener('scroll', schedule, true);
+      gl.deleteBuffer(buf); gl.deleteProgram(prog);
       pointerTarget.removeEventListener("pointermove", onMove); leaveTarget.removeEventListener("pointerleave", onLeave); pointerTarget.removeEventListener("pointerdown", onDown); removeEventListener("pointerup", onUp); removeEventListener("pointercancel", onUp); cv.remove(); },
   };
 }
