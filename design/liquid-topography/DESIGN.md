@@ -322,7 +322,8 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 ## Known Gaps
 
-- Energieverbrauch des Metal-Shaders ist noch nicht mit Instruments gemessen.
+- Energie (gemessen 15.10.2026, macOS-Demo, MacBook Pro M4 Pro, Instruments „Activity Monitor“, 15 s, Zustand idle, 20 fps): 12,5–13,4 % CPU, ca. 155 Idle-Wakeups/s, 176 MiB Footprint. GPU-Last und Akku-Energie (Watt) sind nicht gemessen. Für Hintergrundansichten ohne Interaktion ist eine niedrigere Idle-Bildrate (z. B. 12 fps) zu prüfen.
+- iOS-Simulator: läuft (`build-ios.sh`). Metal für den Simulator muss mit `-target air64-apple-ios26.0-simulator` kompiliert werden, sonst ignoriert SwiftUI den Shader stillschweigend. Echtes Gerät nicht getestet.
 - Tabellen, Menüs, Einstellungen, Onboarding und Fehlerseiten sind noch nicht gestaltet.
 - Logo und App-Icons (A3 „Verzahnt“) sind noch nicht an die graue Palette angepasst.
 - Inter ist als Web-Ersatz festgelegt, aber noch nicht als Datei eingebunden.

@@ -54,7 +54,13 @@ Die `.metal`-Datei muss im App- bzw. Package-Target liegen, damit `ShaderLibrary
 
 Siehe `DESIGN.md` → *Known Gaps*. SwiftUI-Clients nutzen `import SymairaTheme`; die Web-Komponente wird nach `symaira.com` vendored.
 
-## Native Demo (macOS)
+## Native Demos
+
+```bash
+zsh design/liquid-topography/apple/Demo/build-ios.sh <ausgabeordner>   # iOS-Simulator
+```
+
+### macOS
 
 ```bash
 zsh design/liquid-topography/apple/Demo/build.sh <ausgabeordner>   # baut .app mit swiftc + metallib, ohne Xcode-Projekt

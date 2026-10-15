@@ -8,6 +8,9 @@
 //   topo.setState("input", askElement);        // Ringe laufen auf askElement zu
 //   topo.ripple(element, 0.8);                 // GUI-Ereignis
 // Markup: data-topo="protect" = Schutzzone (Text/Buttons), data-topo="hill" = Schutzzone + Hügel.
+// Hintergrund hinter Seiteninhalt (position: fixed, pointer-events: none):
+//   mountTopo(bg, { params, pointerTarget: window, root: document,
+//                   protect: "h1, p, .button", hill: ".card" });
 
 const VS = `#version 300 es
 in vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
@@ -52,7 +55,14 @@ void main(){
 
 const KEYS = ["speed", "warp", "think", "problem", "ask", "tintAmount"];
 
-export function mountTopo(host, { params, theme = () => host.closest("[data-theme]")?.dataset.theme } = {}) {
+export function mountTopo(host, {
+  params,
+  theme = () => host.closest("[data-theme]")?.dataset.theme,
+  pointerTarget = host,          // window, wenn der Host hinter dem Inhalt liegt
+  root = host,                   // Suchbereich für Schutzzonen
+  protect = '[data-topo="protect"]',
+  hill = '[data-topo="hill"]',
+} = {}) {
   if (!params) throw new Error("mountTopo: params (topo.json) fehlen");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const cv = document.createElement("canvas");
@@ -108,11 +118,12 @@ export function mountTopo(host, { params, theme = () => host.closest("[data-them
   const onDown = (e) => { mouse.down = true; mouse.travel = 0; ripple(local(e.clientX, e.clientY), params.pointer.clickRipple); };
   const onUp = () => { mouse.down = false; };
   addEventListener("pointerup", onUp); addEventListener("pointercancel", onUp);
-  host.addEventListener("pointermove", onMove); host.addEventListener("pointerleave", onLeave); host.addEventListener("pointerdown", onDown);
+  const leaveTarget = pointerTarget === window ? document.documentElement : pointerTarget;
+  pointerTarget.addEventListener("pointermove", onMove); leaveTarget.addEventListener("pointerleave", onLeave); pointerTarget.addEventListener("pointerdown", onDown);
 
   function collect(hr) {
     let n = 0;
-    for (const el of host.querySelectorAll("[data-topo]")) {
+    for (const el of root.querySelectorAll(`${protect}, ${hill}`)) {
       if (n >= params.maxProtectedRects) break;
       const r = el.getBoundingClientRect();
       const an = anchors.get(el);
@@ -122,7 +133,7 @@ export function mountTopo(host, { params, theme = () => host.closest("[data-them
       const top = Math.max(r.top, hr.top), bot = Math.min(r.bottom, hr.bottom);
       if (r.width < 1 || bot - top < 1) continue;
       RB.set([r.left - hr.left, top - hr.top, r.width, bot - top], n * 4);
-      KB[n] = el.dataset.topo === "hill" ? 1 : 0; n++;
+      KB[n] = el.matches(hill) ? 1 : 0; n++;
     }
     return n;
   }
@@ -173,6 +184,6 @@ export function mountTopo(host, { params, theme = () => host.closest("[data-them
   return {
     supported: true, setState, ripple,
     destroy() { alive = false; cancelAnimationFrame(raf); clearTimeout(raf); document.removeEventListener("visibilitychange", onVis);
-      host.removeEventListener("pointermove", onMove); host.removeEventListener("pointerleave", onLeave); host.removeEventListener("pointerdown", onDown); removeEventListener("pointerup", onUp); removeEventListener("pointercancel", onUp); cv.remove(); },
+      pointerTarget.removeEventListener("pointermove", onMove); leaveTarget.removeEventListener("pointerleave", onLeave); pointerTarget.removeEventListener("pointerdown", onDown); removeEventListener("pointerup", onUp); removeEventListener("pointercancel", onUp); cv.remove(); },
   };
 }
