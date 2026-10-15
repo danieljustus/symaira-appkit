@@ -124,3 +124,29 @@ final class ComponentsTests: XCTestCase {
         )
     }
 }
+
+@MainActor
+final class SelectionControlsTests: XCTestCase {
+    private enum Profile: Hashable { case system, cool, max }
+
+    func testSelectionControlsRenderInBothAppearances() {
+        var profile = Profile.system
+        let binding = Binding(get: { profile }, set: { profile = $0 })
+        var isOn = true
+        let toggle = Binding(get: { isOn }, set: { isOn = $0 })
+        for scheme in [ColorScheme.light, .dark] {
+            ThemeRenderHost.render(
+                VStack {
+                    SymairaSegmentedControl("Lüfterprofil", selection: binding,
+                                            options: [(.system, "Standard"), (.cool, "Cool"), (.max, "Max")])
+                    Toggle("Wachhalten", isOn: toggle).toggleStyle(.symairaSwitch)
+                    Text("Karte").symairaCard()
+                    SymairaLockedLabel()
+                    Button("Anwenden") {}.symairaButtonStyle(.primary)
+                    Button("Abbrechen") {}.symairaButtonStyle(.secondary)
+                }
+                .environment(\.colorScheme, scheme)
+            )
+        }
+    }
+}

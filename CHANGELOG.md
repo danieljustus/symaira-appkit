@@ -26,6 +26,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   palette instead of the warm champagne/black palette. Fixed legacy constants
   (`bgDark`, `goldPrimary`, …) are unchanged.
 - New `SymairaTheme.accent(for:)` for the champagne accent.
+- **Approved palette and typography (Cockpit design pilot, revision 08):**
+  - Google Sans Flex is the brand and UI typeface. The unmodified variable
+    font ships in `SymairaTheme` with its OFL licence and trademark notice;
+    `SymairaFont` registers it per process and fixes the optical size at
+    `opsz` 18, because automatic optical sizing widened small UI text by 5 to
+    8 %. `SymairaTypography` roles now use it (system font fallback).
+  - Light-mode selection uses ink instead of pale champagne (1.2:1 → 15.7:1).
+    New adaptive roles `selected`, `onSelected`, `focus`, `warning`,
+    `onCritical`; light mode has its own `ink-3` and status colours.
+  - New components: `SymairaSegmentedControl`, `.symairaSwitch` toggle style,
+    `.symairaCard()`, `SymairaLockedLabel`. Primary buttons are opaque ink,
+    secondary buttons opaque `raised`; only toolbar buttons use Liquid Glass.
+  - Design kit: 52 contrast checks in `build.py`, Google Sans Flex in
+    `tokens.css` and the catalogue (`opsz` fixed with `!important`, since any
+    `font` shorthand resets it).
 
 ## [0.14.2] - 2026-08-30
 

@@ -62,9 +62,14 @@ def run(p):
     check("topography: status mask follows text, not full paragraph width",
           text_mask['found'] and text_mask['maskWidth'] < text_mask['blockWidth'], json.dumps(text_mask))
     check("desktop: tokens.css loaded (canvas var set)",
-          page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--sym-canvas').trim()") == "#ECECEA")
+          page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--sym-canvas').trim()") == "#EEEDEA")
     check("desktop: body type from .sym-type-* not required; body font resolves",
           page.evaluate("getComputedStyle(document.body).fontFamily").strip() != "")
+    page.evaluate("document.fonts.ready")
+    check("type: Google Sans Flex loaded from the bundled original file",
+          page.evaluate("document.fonts.check('600 13px \\\"Google Sans Flex\\\"') && [...document.fonts].some(f=>f.family.includes('Google Sans Flex') && f.status==='loaded')"))
+    check("type: fixed optical size opsz 18 on body text",
+          page.evaluate("(()=>{const s=getComputedStyle(document.querySelector('.hint')||document.body);return s.fontOpticalSizing==='none'&&s.fontVariationSettings.replace(/\\s/g,'')===\"\\\"opsz\\\"18\"})()"))
     check("desktop: no horizontal overflow", page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"))
 
     # Theme toggle
@@ -268,8 +273,9 @@ def run(p):
           return {ink_canvas: R(v('ink'), v('canvas')), ink2_surface: R(v('ink-2'), v('surface')),
                   ink3_surface: R(v('ink-3'), v('surface')), critical_surface: R(v('critical'), v('surface')),
                   positive_surface: R(v('positive'), v('surface')),
-                  onprimary_critical: R(v('on-primary'), v('critical')),
-                  onprimary_primary: R(v('on-primary'), v('primary'))};
+                  oncritical_critical: R(v('on-critical'), v('critical')),
+                  onprimary_primary: R(v('on-primary'), v('primary')),
+                  onselected_selected: R(v('on-selected'), v('selected'))};
         })()""")
     light = contrast_pairs("light")
     dark = contrast_pairs("dark")

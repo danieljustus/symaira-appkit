@@ -48,7 +48,10 @@ CHECKS = [
     ("ink-2", "sidebar", 4.5), ("ink-3", "sidebar", 4.5), ("ink", "selection", 4.5),
     ("ink-2", "raised", 4.5), ("on-primary", "primary", 4.5), ("ink", "primary-soft", 4.5),
     ("critical", "critical-soft", 4.5), ("critical", "surface", 4.5), ("positive", "surface", 4.5),
-    ("primary", "canvas", 3.0), ("primary", "surface", 3.0),
+    ("on-critical", "critical", 4.5), ("on-selected", "selected", 4.5), ("warning", "surface", 4.5), ("warning", "canvas", 4.5),
+    ("positive", "canvas", 4.5), ("critical", "canvas", 4.5), ("ink-3", "raised", 4.5),
+    # nicht-textuelle Zustände (WCAG 1.4.11): Auswahl gegen Schiene und Karte, Fokus gegen Hintergrund
+    ("selected", "raised", 3.0), ("selected", "surface", 3.0), ("focus", "canvas", 3.0), ("focus", "surface", 3.0),
 ]
 
 
@@ -75,11 +78,14 @@ def css(d, r, topo):
              ":root {", block(0)]
     lines += [f"  --sym-radius-{k}: {v};" for k, v in d["rounded"].items()]
     lines += [f"  --sym-space-{k}: {v};" for k, v in d["spacing"].items()]
-    lines += ['  --sym-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif;',
+    lines += ['  --sym-font: "Google Sans Flex", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;',
               '  --sym-font-mono: ui-monospace, "SF Mono", Menlo, monospace;',
               "  --sym-icon-stroke: 2;",
               "  --sym-shadow-float: 0 1px 2px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.10);",
-              "  color-scheme: light;", "}"]
+              "  color-scheme: light;", "}",
+              "/* Feste optische Größe: automatisch wird kleine Schrift 5–8 % breiter. Jede font-Kurzschreibweise setzt",
+              "   beides zurück und schlägt über Spezifität jede normale Regel. Daher bewusst !important (DESIGN.md › Typography). */",
+              "body, body * { font-optical-sizing: none !important; font-variation-settings: 'opsz' 18 !important; }"]
     for k, t in d["typography"].items():
         lines.append(f".sym-type-{k} {{ font: {t['fontWeight']} {t['fontSize']}/{t['lineHeight']} "
                      f"{'var(--sym-font-mono)' if k == 'mono' else 'var(--sym-font)'};"

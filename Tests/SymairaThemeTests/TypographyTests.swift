@@ -1,3 +1,4 @@
+import CoreText
 import XCTest
 import SwiftUI
 @testable import SymairaTheme
@@ -56,11 +57,49 @@ final class TypographyTests: XCTestCase {
         )
     }
 
-    func testOnlyTheSectionLabelCarriesTracking() {
+    func testTrackingTightensLargeRolesAndOpensOnlyTheSectionLabel() {
         XCTAssertEqual(SymairaTextRole.sectionLabel.tracking, 0.6)
-        for role in [SymairaTextRole.display, .title, .body, .caption, .mono] {
+        XCTAssertLessThan(SymairaTextRole.display.tracking, 0)
+        XCTAssertLessThan(SymairaTextRole.title.tracking, 0)
+        for role in [SymairaTextRole.body, .callout, .caption, .mono] {
             XCTAssertEqual(role.tracking, 0, "\(role) must not add tracking")
         }
+    }
+
+    func testBundledGoogleSansFlexRegistersWithFixedOpticalSize() throws {
+        XCTAssertTrue(SymairaFont.register(), "GoogleSansFlex.ttf must ship in the SymairaTheme bundle")
+        let license = try XCTUnwrap(Bundle.module.url(forResource: "GoogleSansFlex-OFL", withExtension: "txt"),
+                                    "OFL must ship next to the font")
+        XCTAssertTrue(try String(contentsOf: license, encoding: .utf8).contains("SIL OPEN FONT LICENSE"))
+        XCTAssertNotNil(Bundle.module.url(forResource: "GoogleSansFlex-TRADEMARKS", withExtension: "md"))
+        for size in [11.5, 13.5, 26] as [CGFloat] {
+            let font = SymairaFont.ctFont(size: size, weight: 600)
+            XCTAssertEqual(CTFontCopyFamilyName(font) as String, "Google Sans Flex")
+            let variation = CTFontCopyVariation(font) as? [NSNumber: Double] ?? [:]
+            XCTAssertEqual(variation[SymairaFont.axis("wght")], 600)
+            // opsz is either reported as the fixed value or omitted; it must never follow the point size.
+            if let opsz = variation[SymairaFont.axis("opsz")] { XCTAssertEqual(opsz, 18) }
+        }
+    }
+
+    /// Automatic optical sizing widened 13.5 pt text by about 6 %; the fixed size must not.
+    func testFixedOpticalSizeKeepsSmallTextNarrow() {
+        SymairaFont.register()
+        func width(_ font: CTFont) -> Double {
+            let text = NSAttributedString(string: "Energie & Kühlung · Lüfterprofil Standard",
+                                          attributes: [NSAttributedString.Key(kCTFontAttributeName as String): font])
+            return CTLineGetTypographicBounds(CTLineCreateWithAttributedString(text), nil, nil, nil)
+        }
+        func explicit(opsz: Double) -> CTFont {
+            let variation: [NSNumber: Double] = [SymairaFont.axis("wght"): 400, SymairaFont.axis("opsz"): opsz]
+            let attributes: [CFString: Any] = [kCTFontFamilyNameAttribute: SymairaFont.familyName,
+                                               kCTFontVariationAttribute: variation]
+            return CTFontCreateWithFontDescriptor(CTFontDescriptorCreateWithAttributes(attributes as CFDictionary), 13.5, nil)
+        }
+        let fixed = SymairaFont.ctFont(size: 13.5, weight: 400)
+        // Optical size following the point size is what made small UI text look letter-spaced.
+        XCTAssertLessThan(width(explicit(opsz: 18)), width(explicit(opsz: 13.5)) * 0.97, "opsz must affect width")
+        XCTAssertEqual(width(fixed), width(explicit(opsz: 18)), accuracy: 0.01)
     }
 
     func testEmptyStateSymbolSizeIsAToken() {

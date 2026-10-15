@@ -8,7 +8,7 @@ Gemeinsame Designquelle für alle Symaira-Apps (macOS, iOS) und symaira.com.
 |---|---|---|
 | `DESIGN.md` | Farben, Schrift, Radien, Abstände, Komponenten und Regeln (Google-DESIGN.md-Format) | ✅ Quelle |
 | `topo.json` | Parameter der Topografie: Linien, Deckkraft, Zustände, fps | ✅ Quelle |
-| `build.py` | erzeugt `dist/` und prüft 34 Kontrastpaare (hell und dunkel) | – |
+| `build.py` | erzeugt `dist/` und prüft 52 Kontrastpaare (hell und dunkel) | – |
 | `dist/tokens.css` | CSS-Variablen `--sym-*`, hell/dunkel über `prefers-color-scheme` oder `data-theme` | ❌ generiert |
 | `../../Sources/SymairaTheme/SymairaTokens.swift` | adaptive SwiftUI-Farben, Radien, Abstände, Topo-Parameter (auch in `dist/`) | ❌ generiert |
 | `dist/tokens.json` | flache Token-Liste für andere Tools | ❌ generiert |
@@ -18,6 +18,7 @@ Gemeinsame Designquelle für alle Symaira-Apps (macOS, iOS) und symaira.com.
 | `web/test_catalog.py` | Browser-Checks für Desktop, Touch, Tastatur, Kontraste und reduzierte Bewegung | ✅ |
 | `../../Sources/SymairaTheme/Resources/SymairaTopo.metal` | dieselbe Topografie als Metal-Shader | ✅ |
 | `../../Sources/SymairaTheme/SymairaTopoView.swift` | SwiftUI-View und `.topoProtected()`-Modifier | ✅ |
+| `../../Sources/SymairaTheme/Resources/Fonts/` | Google Sans Flex (unveränderte Originaldatei, OFL, Markenhinweis) | ❌ nur durch neuere Originalversion ersetzen |
 
 ## Ablauf nach Änderungen
 

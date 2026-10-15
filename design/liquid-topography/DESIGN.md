@@ -4,76 +4,100 @@ name: Symaira Liquid Topography
 description: Graue, ruhige Arbeitsflächen im Codex-Stil. Champagner nur als Akzent. Eine fluide, reaktive Topografie als einziges Markenornament.
 colors:
   # Hell (Standardwerte) und Dunkel (Suffix -dark). Jede Rolle existiert in beiden Modi.
-  primary: "#76664C"
-  primary-dark: "#C7B89E"
-  on-primary: "#FFFFFF"
+  # Freigegeben im Cockpit-Designpiloten (Revision 08, 2026-10-15).
+  primary: "#E0D2BA"
+  primary-dark: "#E0D2BA"
+  on-primary: "#1A1814"
   on-primary-dark: "#1A1814"
   primary-soft: "#E2DED5"
   primary-soft-dark: "#312F2B"
-  canvas: "#ECECEA"
+  selected: "#141413"
+  selected-dark: "#E0D2BA"
+  on-selected: "#E1E0DA"
+  on-selected-dark: "#1A1814"
+  focus: "#141413"
+  focus-dark: "#E0D2BA"
+  canvas: "#EEEDEA"
   canvas-dark: "#1C1C1B"
-  sidebar: "#E4E4E1"
+  sidebar: "#E1E0DA"
   sidebar-dark: "#171716"
-  surface: "#F7F7F5"
-  surface-dark: "#242423"
-  raised: "#E6E6E3"
+  surface: "#E1E0DA"
+  surface-dark: "#141413"
+  raised: "#EEEDEA"
   raised-dark: "#2B2B2A"
-  selection: "#DADAD6"
+  selection: "#B0AEA9"
   selection-dark: "#2D2D2C"
-  line: "#D3D2CE"
-  line-dark: "#363634"
-  ink: "#1C1C1A"
+  line: "#B0AEA9"
+  line-dark: "#30302E"
+  ink: "#141413"
   ink-dark: "#EEEDEA"
-  ink-2: "#4E4D49"
+  ink-2: "#2B2B2A"
   ink-2-dark: "#B0AEA9"
   ink-3: "#62615D"
   ink-3-dark: "#97958F"
-  positive: "#3A7550"
+  positive: "#34694A"
   positive-dark: "#93C49F"
+  warning: "#7E5310"
+  warning-dark: "#E9BC73"
   critical: "#9A4634"
   critical-dark: "#E39C8A"
+  on-critical: "#E1E0DA"
+  on-critical-dark: "#141413"
   critical-soft: "#F2DED8"
   critical-soft-dark: "#3A2925"
-  topo: "#282824"
+  topo: "#2B2B2A"
   topo-dark: "#E1E0DA"
 typography:
-  body:
-    fontFamily: SF Pro Text
-    fontSize: 13.5px
-    fontWeight: 500
-    lineHeight: 1.5
-  body-lg:
-    fontFamily: SF Pro Text
-    fontSize: 14.5px
-    fontWeight: 500
-    lineHeight: 1.5
-  label:
-    fontFamily: SF Pro Text
-    fontSize: 12.5px
-    fontWeight: 600
-    lineHeight: 1.4
-  caption:
-    fontFamily: SF Pro Text
-    fontSize: 11.5px
-    fontWeight: 600
-    lineHeight: 1.4
-  title:
-    fontFamily: SF Pro Text
-    fontSize: 14px
-    fontWeight: 650
-    lineHeight: 1.35
+  # Google Sans Flex mit fester optischer Größe opsz 18 (siehe Abschnitt Typography).
+  display:
+    fontFamily: Google Sans Flex
+    fontSize: 26px
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.025em"
+  stat:
+    fontFamily: Google Sans Flex
+    fontSize: 27px
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.025em"
+  readout:
+    fontFamily: Google Sans Flex
+    fontSize: 18px
+    fontWeight: 700
+    lineHeight: 1.3
+    letterSpacing: "-0.015em"
   headline:
-    fontFamily: SF Pro Display
+    fontFamily: Google Sans Flex
     fontSize: 16px
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: "-0.01em"
-  stat:
-    fontFamily: SF Pro Display
-    fontSize: 22px
-    fontWeight: 700
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
+  title:
+    fontFamily: Google Sans Flex
+    fontSize: 14px
+    fontWeight: 650
+    lineHeight: 1.35
+  body-lg:
+    fontFamily: Google Sans Flex
+    fontSize: 14.5px
+    fontWeight: 500
+    lineHeight: 1.5
+  body:
+    fontFamily: Google Sans Flex
+    fontSize: 13.5px
+    fontWeight: 500
+    lineHeight: 1.5
+  label:
+    fontFamily: Google Sans Flex
+    fontSize: 12.5px
+    fontWeight: 600
+    lineHeight: 1.4
+  caption:
+    fontFamily: Google Sans Flex
+    fontSize: 11.5px
+    fontWeight: 600
+    lineHeight: 1.4
   mono:
     fontFamily: SF Mono
     fontSize: 12.5px
@@ -94,24 +118,47 @@ spacing:
   xxl: 32px
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.surface}"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    padding: 8px 16px
+    rounded: "{rounded.lg}"
+    padding: 12px 20px
   button-primary-dark:
-    backgroundColor: "{colors.primary-dark}"
-    textColor: "{colors.on-primary-dark}"
-    rounded: "{rounded.md}"
+    backgroundColor: "{colors.ink-dark}"
+    textColor: "{colors.surface-dark}"
+    rounded: "{rounded.lg}"
   button-secondary:
-    backgroundColor: "{colors.surface}"
+    backgroundColor: "{colors.raised}"
     textColor: "{colors.ink}"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    padding: 7px 15px
+    rounded: "{rounded.lg}"
+    padding: 9px 16px
   button-secondary-dark:
-    backgroundColor: "{colors.surface-dark}"
+    backgroundColor: "{colors.raised-dark}"
     textColor: "{colors.ink-dark}"
+  segment-selected:
+    backgroundColor: "{colors.selected}"
+    textColor: "{colors.on-selected}"
+    typography: "{typography.label}"
+    rounded: "{rounded.md}"
+  segment-selected-dark:
+    backgroundColor: "{colors.selected-dark}"
+    textColor: "{colors.on-selected-dark}"
+  segment-rail:
+    backgroundColor: "{colors.raised}"
+    textColor: "{colors.ink-2}"
+    rounded: "{rounded.lg}"
+    padding: 4px
+  segment-rail-dark:
+    backgroundColor: "{colors.raised-dark}"
+    textColor: "{colors.ink-2-dark}"
+  switch-on:
+    backgroundColor: "{colors.selected}"
+    textColor: "{colors.on-selected}"
+    rounded: "{rounded.pill}"
+  switch-on-dark:
+    backgroundColor: "{colors.selected-dark}"
+    textColor: "{colors.on-selected-dark}"
   pill:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink-2}"
@@ -208,6 +255,37 @@ components:
   alert-critical-dark:
     backgroundColor: "{colors.critical-soft-dark}"
     textColor: "{colors.critical-dark}"
+  button-danger:
+    backgroundColor: "{colors.critical}"
+    textColor: "{colors.on-critical}"
+    typography: "{typography.label}"
+    rounded: "{rounded.lg}"
+    padding: 9px 16px
+  button-danger-dark:
+    backgroundColor: "{colors.critical-dark}"
+    textColor: "{colors.on-critical-dark}"
+  brand-mark:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+    rounded: "{rounded.md}"
+  brand-mark-dark:
+    backgroundColor: "{colors.primary-dark}"
+    textColor: "{colors.on-primary-dark}"
+  focus-ring:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.focus}"
+  focus-ring-dark:
+    backgroundColor: "{colors.canvas-dark}"
+    textColor: "{colors.focus-dark}"
+  alert-warning:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.warning}"
+    typography: "{typography.title}"
+    rounded: "{rounded.lg}"
+    padding: 16px 18px
+  alert-warning-dark:
+    backgroundColor: "{colors.surface-dark}"
+    textColor: "{colors.warning-dark}"
   divider:
     backgroundColor: "{colors.line}"
     textColor: "{colors.ink}"
@@ -237,15 +315,24 @@ Jede Rolle gibt es hell (Standardwert) und dunkel (Suffix `-dark`). Code nutzt i
 
 - **canvas / sidebar / surface / raised:** Graustufen mit minimaler Wärme. Von hinten nach vorne: canvas, sidebar, surface (Karten, Eingabebox), raised (Nutzer-Blase, Hover).
 - **ink / ink-2 / ink-3:** Haupttext, Sekundärtext, Metadaten. Selbst `ink-3` erreicht auf canvas mindestens 4.5:1. Noch blasseren Text gibt es nicht.
-- **primary (Champagner):** nur für Primäraktion, Senden-Knopf, Fokusring, Avatar, aktiven Status. Höchstens eine Primäraktion pro Ansicht.
-- **critical / positive:** nur für Status und Diff-Zeilen, immer zusätzlich mit Text oder Symbol, nie allein über die Farbe.
+- **primary (Champagner `#E0D2BA`):** Markenakzent, in beiden Modi derselbe Wert. Auf hellen Flächen erreicht er nur 1,1 bis 1,3:1 und ist dort **nie** ein Zustandsmerkmal.
+- **selected / on-selected:** Auswahlzustand für Segmente, Schalter (an), Häkchen und Reglergriffe. Dunkel: Champagner mit dunkler Schrift. Hell: Tinte `#141413` mit heller Schrift (Variante A, 15,7:1 gegen die Schiene). Code nutzt immer `selected`, nie `primary`, für Zustände.
+- **focus:** 2px-Fokusring. Dunkel Champagner, hell Tinte.
+- **Primäraktion:** gefüllte Tinte mit Flächenfarbe als Schrift (`button-primary`), in beiden Modi. Höchstens eine Primäraktion pro Ansicht.
+- **critical / warning / positive:** nur für Status, immer zusätzlich mit Text oder Symbol, nie allein über die Farbe. Der helle Modus hat eigene, dunklere Töne (mindestens 4,5:1 auf `surface`). Grün nur für echte Live-Messwerte; Beispiel- oder Testdaten bekommen ein neutrales Symbol und den Text „Beispiel“.
+- **Gesperrte Bedienelemente:** zusätzlich zum ausgegrauten Zustand den Text „Gesperrt“ zeigen. Reine Transparenz ist kein Sperrsignal.
 - **topo:** Farbe der Höhenlinien. Sie wird nur mit sehr geringer Deckkraft verwendet (siehe Liquid Topography).
 
 ## Typography
 
-Systemschrift von Apple: SF Pro Text für UI, SF Pro Display ab 16px, SF Mono für Code. Im Web lautet die Kette `-apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif`. Inter (selbst gehostet, Variable Font) ist der Ersatz für Nicht-Apple-Geräte.
+**Google Sans Flex** ist die Marken- und UI-Schrift auf allen Plattformen, SF Mono bleibt für Code. Die Schrift wird als unveränderte Originaldatei mitgeliefert (SIL Open Font License 1.1, Lizenz- und Markenhinweis liegen neben der Datei). Kein Google-Fonts-CDN, keine Teilmengen oder Umbenennungen: eine veränderte Fassung darf den Namen nicht tragen.
 
-Die Schrift ist bewusst kräftiger als üblich. Fließtext hat 500, Labels und Buttons 600, Titel 650, Überschriften 700. Auf Plattformen ohne variable Gewichte wird 650 als Semibold dargestellt.
+- **Feste optische Größe `opsz 18`**, keine automatische Anpassung. Automatisch wird Text unter 14px um 5 bis 8 % breiter und wirkt gesperrt. Web: `tokens.css` setzt `font-optical-sizing: none; font-variation-settings: 'opsz' 18` bewusst mit `!important`, weil jede `font`-Kurzschreibweise beide Werte zurücksetzt und über Spezifität sonst gewinnt. Weitere Variationsachsen nur über `font-weight`/`font-stretch` steuern, nicht über eigene `font-variation-settings`. Apple: Variationsachse `opsz` explizit setzen (`SymairaFont`).
+- **Gewichte:** Fließtext 500, Labels und Buttons 600, Titel 650, Überschriften und Messwerte 700.
+- **Ziffern** in Messwerten tabellarisch (`tnum` bzw. `.monospacedDigit()`).
+- **Dynamic Type:** Größen skalieren relativ zum zugehörigen Textstil.
+- **Keine Symbole als Schriftzeichen.** Google Sans Flex enthält unter anderem ⓘ → ✓ ✕ ⌥ nicht; der Browser würde eine Ersatzschrift einsetzen. Symbole sind SVG bzw. SF Symbols.
+- Web-Fallback-Kette: `"Google Sans Flex", -apple-system, BlinkMacSystemFont, system-ui, sans-serif`.
 
 ## Layout
 
@@ -273,7 +360,13 @@ Radien: 6px für Code-Inline, 10px für Buttons und Einträge, 14px für Karten,
 
 ## Components
 
-Siehe `components:` oben. Varianten sind eigene Einträge (`button-primary-dark`). Fokus wird immer mit einem 2px-Ring in `primary` und 2px Abstand dargestellt (`:focus-visible`), nie nur durch eine Farbänderung.
+Siehe `components:` oben. Varianten sind eigene Einträge (`button-primary-dark`). Fokus wird immer mit einem 2px-Ring in `focus` und 2px Abstand dargestellt (`:focus-visible`), nie nur durch eine Farbänderung.
+
+- **Auswahl** über Füllung (`selected`) plus Gewicht 700, ohne Rahmen oder Schatten. Segmentschiene `raised`, 14px Radius, 4px Innenabstand.
+- **Navigation:** Auswahl über `selection`-Fläche und Gewicht 700 in beiden Modi; die Fläche allein ist kein Zustandsmerkmal.
+- **Schalter:** 56 × 32px Spur, 24px Knopf, an = `selected`. Trefferfläche mindestens 44px auf Touch-Geräten.
+- **Messwerte** in `ink`, unabhängig davon, ob sie sich ändern. Champagner gehört zu Auswahl, aktiven Bedienelementen und Fokus.
+- **Karten:** `surface` mit 1px `line`, 14px Radius. Die Fläche hebt sich nur schwach vom Hintergrund ab (1,1:1); die Linie trägt die Abgrenzung.
 
 ## Liquid Topography (Topografie-Ebene)
 
@@ -326,4 +419,5 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 - iOS-Simulator: läuft (`build-ios.sh`). Metal für den Simulator muss mit `-target air64-apple-ios26.0-simulator` kompiliert werden, sonst ignoriert SwiftUI den Shader stillschweigend. Echtes Gerät nicht getestet.
 - Tabellen, Menüs, Dialoge, Formulare, Einstellungen und Leer-/Fehlerzustände sind als interaktive Web-Referenz in `web/catalog.html` gestaltet. Native Umsetzung, VoiceOver-Abnahme und vollständiges Onboarding bleiben offen.
 - Logo und App-Icons (A3 „Verzahnt“) sind noch nicht an die graue Palette angepasst.
-- Inter ist als Web-Ersatz festgelegt, aber noch nicht als Datei eingebunden.
+- Google Sans Flex ist in SwiftUI und im Web nur in Chrome (Pilot) geprüft. Safari/WebKit-Darstellung und VoiceOver bleiben offen.
+- Die Navigationsauswahl erreicht als Fläche weniger als 3:1 und wird zusätzlich über Fettdruck markiert.

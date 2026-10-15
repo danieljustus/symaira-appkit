@@ -44,38 +44,74 @@ public enum SymairaTheme {
 
     // MARK: Adaptive semantic colors (Liquid Topography)
     //
-    // Since 0.3.0 these map to the Liquid Topography palette (`SymairaTokens`,
-    // generated from the design kit). The fixed brand constants above stay as
-    // legacy API for clients that have not migrated yet.
+    // These map to the Liquid Topography palette approved in the Cockpit design
+    // pilot (mirrors `SymairaTokens`, generated from the design kit). The fixed
+    // brand constants above stay as legacy API for clients that have not
+    // migrated yet; new code uses only these adaptive roles.
 
-    /// Gray Symaira canvas that follows the system appearance.
+    /// Page canvas. Liquid Topography `canvas`.
     public static func backgroundPrimary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "1C1C1B") : Color(hex: "ECECEA")
+        colorScheme == .dark ? Color(hex: "1C1C1B") : Color(hex: "EEEDEA")
     }
 
+    /// Sidebar. Liquid Topography `sidebar`.
     public static func backgroundSecondary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "171716") : Color(hex: "E4E4E1")
+        colorScheme == .dark ? Color(hex: "171716") : Color(hex: "E1E0DA")
     }
 
+    /// Cards and panels. Liquid Topography `surface`.
     public static func surfaceOpaque(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "242423") : Color(hex: "F7F7F5")
+        colorScheme == .dark ? Color(hex: "141413") : Color(hex: "E1E0DA")
+    }
+
+    /// Segment rails, secondary buttons, hover. Liquid Topography `raised`.
+    public static func surfaceRaised(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "2B2B2A") : Color(hex: "EEEDEA")
+    }
+
+    /// 1 px separators and card outlines. Liquid Topography `line`.
+    public static func line(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "30302E") : Color(hex: "B0AEA9")
+    }
+
+    /// Selected navigation row. Liquid Topography `selection`. Pair it with bold text:
+    /// the fill alone is below 3:1 and is not a state cue.
+    public static func navigationSelection(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "2D2D2C") : Color(hex: "B0AEA9")
     }
 
     public static func foregroundPrimary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "EEEDEA") : Color(hex: "1C1C1A")
+        colorScheme == .dark ? Color(hex: "EEEDEA") : Color(hex: "141413")
     }
 
     public static func foregroundSecondary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "B0AEA9") : Color(hex: "4E4D49")
+        colorScheme == .dark ? Color(hex: "B0AEA9") : Color(hex: "2B2B2A")
     }
 
     public static func foregroundMuted(for colorScheme: ColorScheme) -> Color {
         colorScheme == .dark ? Color(hex: "97958F") : Color(hex: "62615D")
     }
 
-    /// Champagne accent: primary action, focus ring, active status only.
+    /// Champagne brand accent, identical in both appearances. Never a state cue on
+    /// light surfaces (about 1.2:1); use ``selected(for:)`` for selection.
     public static func accent(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "C7B89E") : Color(hex: "76664C")
+        Color(hex: "E0D2BA")
+    }
+
+    /// Selected state: segments, switch on, checkmarks, slider thumbs.
+    /// Dark: champagne. Light: ink (design decision A, 15.7:1 against the rail).
+    public static func selected(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "E0D2BA") : Color(hex: "141413")
+    }
+
+    /// Text and glyphs on ``selected(for:)``.
+    public static func onSelected(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "1A1814") : Color(hex: "E1E0DA")
+    }
+
+    /// 2 px keyboard focus ring.
+    public static func focus(for colorScheme: ColorScheme) -> Color {
+        selected(for: colorScheme)
     }
 
     // Motion
