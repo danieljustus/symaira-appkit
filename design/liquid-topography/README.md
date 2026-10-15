@@ -34,7 +34,9 @@ Nach `python3 build.py` den Kit-Ordner lokal per HTTP bereitstellen und
 `web/catalog.html` öffnen. Der Katalog enthält Formulare, Tabellen mit Suche
 und Sortierung, Menüs, Dialoge, Einstellungen sowie Leer- und Fehlerzustände.
 Alle Aktionen sind ausschließlich Vorschau, ohne Backend oder Speicherung.
-Hinter diesen dichten Inhaltsflächen wird bewusst keine Topografie animiert.
+Die Topografie animiert in freien Zwischenräumen und Randflächen. Karten,
+Tabellen, Texte und Navigation bleiben geschützt und deckend. Der Schalter
+„Bewegung reduzieren“ pausiert auch den Hintergrund.
 
 ```sh
 # From this kit directory; requires an already installed Playwright/Chromium.
@@ -43,7 +45,7 @@ CATALOG_URL=http://127.0.0.1:8765/web/catalog.html python3 web/test_catalog.py
 python3 web/export_catalog.py /path/to/Liquid-Topography-Katalog.html
 ```
 
-Der Offline-Export bettet die generierten Tokens ein und braucht keinen Server.
+Der Offline-Export bettet Tokens, Shader-Engine und Parameter ein und braucht keinen Server.
 Er ist keine zweite Designquelle. Native SwiftUI-Komponenten und VoiceOver
 müssen im jeweiligen App-Piloten separat geprüft werden.
 

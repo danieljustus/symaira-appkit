@@ -23,7 +23,8 @@ h4{font:650 14px/1.35 var(--sym-font)}
 .skip:focus{left:16px}
 
 /* Layout */
-.layout{display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100vh}
+.topo-background{position:fixed;inset:0;pointer-events:none;z-index:0}
+.layout{position:relative;z-index:1;display:grid;grid-template-columns:272px minmax(0,1fr);min-height:100vh}
 .sidebar{background:var(--sym-sidebar);border-right:1px solid var(--sym-line);padding:24px 16px;position:sticky;top:0;height:100vh;overflow:auto}
 .brand{font:650 12px/1.4 var(--sym-font);color:var(--sym-ink-3);text-transform:uppercase;letter-spacing:.06em;padding:0 12px 12px}
 .navlist{list-style:none;padding:0;display:grid;gap:2px}
@@ -166,6 +167,7 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
 </style>
 </head>
 <body>
+<div id="topo-background" class="topo-background" aria-hidden="true"></div>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <div class="layout">
   <aside class="sidebar" aria-label="Katalog-Navigation">
@@ -193,7 +195,8 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
       <button class="btn" id="theme-toggle" type="button" aria-pressed="false">Dunkelmodus</button>
     </header>
 
-    <div class="demo-banner" role="note"><strong>DEMO.</strong> Alle Daten sind Beispiele. Keine Schaltfläche speichert, sendet, löscht oder verbindet sich mit einem Dienst.</div>
+    <div class="demo-banner" role="note"><strong>DEMO.</strong> Alle Daten sind Beispiele. Keine Schaltfläche speichert, sendet, löscht oder verbindet sich mit einem Dienst. Die Topografie fließt nur in den freien Flächen; Inhalte bleiben geschützt.</div>
+    <p id="topo-status" class="caption" role="status">Topografie wird vorbereitet …</p>
 
     <div class="content">
 
@@ -780,6 +783,24 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
     }, 1000);
   });
 })();
+</script>
+<script type="module" id="topo-preview">
+import { mountTopo } from './symaira-topo.js';
+const topoParams = await (await fetch('../topo.json')).json();
+const topo = mountTopo(document.getElementById('topo-background'), {
+  params: topoParams, pointerTarget: window, root: document,
+  protect: '.sidebar, .pagehead, .demo-banner, #topo-status, section > h2, section > p',
+  hill: '.card, .notice, .empty',
+});
+document.documentElement.dataset.topography = topo.supported ? 'ready' : 'unavailable';
+document.getElementById('topo-status').textContent = topo.supported
+  ? 'Liquid Topography · Maus bewegen, klicken oder ziehen. Texte und Bedienelemente bleiben frei.'
+  : 'Topografie ist in diesem Browser nicht verfügbar. Der Katalog bleibt vollständig bedienbar.';
+const motion = document.getElementById('s-motion');
+const syncTopoMotion = () => topo.setMotionEnabled(!motion.checked);
+motion.addEventListener('change', syncTopoMotion);
+document.getElementById('settings').addEventListener('reset', () => setTimeout(syncTopoMotion, 0));
+syncTopoMotion();
 </script>
 </body>
 </html>

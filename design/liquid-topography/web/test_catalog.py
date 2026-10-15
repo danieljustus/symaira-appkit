@@ -15,18 +15,26 @@ def check(name, ok, detail=""):
     print(("PASS " if ok else "FAIL ") + name + (f" :: {detail}" if detail else ""), flush=True)
 
 def run(p):
-    browser = p.chromium.launch(executable_path=os.environ.get("CHROMIUM_EXECUTABLE"))
+    browser = p.chromium.launch(executable_path=os.environ.get("CHROMIUM_EXECUTABLE"),
+                                args=['--use-angle=swiftshader', '--enable-unsafe-swiftshader'])
     errors = []
 
     # ---------- Desktop ----------
     ctx = browser.new_context(viewport={"width": 1280, "height": 900}, color_scheme="light")
     page = ctx.new_page()
+    page.add_init_script("""window.topoDraws=0;
+        const draw=WebGL2RenderingContext.prototype.drawArrays;
+        WebGL2RenderingContext.prototype.drawArrays=function(...args){
+            window.topoDraws++; return draw.apply(this,args);
+        };""")
     page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
     page.on("console", lambda m: errors.append(f"console.{m.type}: {m.text}") if m.type in ("error", "warning") else None)
     page.goto(URL, wait_until="load")
     page.wait_for_timeout(300)
 
     check("desktop: page title DEMO", "DEMO" in page.title())
+    check("topography: real WebGL renderer ready", page.get_attribute('html', 'data-topography') == 'ready')
+    check("topography: canvas has rendered", page.evaluate('topoDraws > 0'))
     check("desktop: tokens.css loaded (canvas var set)",
           page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--sym-canvas').trim()") == "#ECECEA")
     check("desktop: body type from .sym-type-* not required; body font resolves",
@@ -194,8 +202,14 @@ def run(p):
     check("settings: motion switch -> force-reduce class",
           page.evaluate("document.documentElement.classList.contains('force-reduce')"))
     check("settings: switch state text Ein", page.inner_text("#s-motion-state") == "Ein")
+    page.wait_for_timeout(250)
+    draws = page.evaluate('topoDraws')
+    page.wait_for_timeout(400)
+    check("settings: reduced motion also pauses topography", page.evaluate('topoDraws') == draws)
     page.click("label.setting:has-text('Bewegung reduzieren')")
     check("settings: motion off -> class removed", not page.evaluate("document.documentElement.classList.contains('force-reduce')"))
+    page.wait_for_timeout(250)
+    check("settings: topography resumes", page.evaluate('topoDraws') > draws)
     page.click("label.choice:has-text('Kompakt')")
     check("settings: density kompakt -> table class", page.evaluate("document.getElementById('t-wrap').classList.contains('is-compact')"))
 
