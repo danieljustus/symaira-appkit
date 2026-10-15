@@ -128,7 +128,18 @@ export function mountTopo(host, {
     let left = Infinity, topmost = Infinity, right = -Infinity, bottom = -Infinity;
     const limit = Math.min(20, params.maxProtectedRects);
     for (const el of root.querySelectorAll(`${protect}, ${hill}`)) {
-      const r = el.getBoundingClientRect();
+      const isHill = el.matches(hill);
+      let r = el.getBoundingClientRect();
+      if (!isHill && el.matches('p,h1,h2,h3,h4,h5,h6,[data-topo="text"]')) {
+        // Protect rendered text, not the block's full layout width or margins.
+        // Multi-line text keeps one conservative bounding rectangle to avoid
+        // exhausting the bounded shader budget with individual glyph fragments.
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const text = range.getBoundingClientRect();
+        if (!text.width || !text.height) continue;
+        r = new DOMRect(text.x - 4, text.y - 4, text.width + 8, text.height + 8);
+      }
       const an = anchors.get(el);
       if (!an) anchors.set(el, r);
       else if (Math.abs(an.x - r.x) + Math.abs(an.y - r.y) + Math.abs(an.width - r.width) + Math.abs(an.height - r.height) > params.layout.moveThreshold) {
@@ -139,7 +150,7 @@ export function mountTopo(host, {
       right = Math.max(right, r.right); bottom = Math.max(bottom, r.bottom);
       if (n < limit) {
         RB.set([r.left - hr.left, r.top - hr.top, r.width, r.height], n * 4);
-        KB[n] = el.matches(hill) ? 1 : 0;
+        KB[n] = isHill ? 1 : 0;
       }
       n++;
     }

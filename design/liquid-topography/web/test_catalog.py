@@ -23,6 +23,18 @@ def run(p):
     ctx = browser.new_context(viewport={"width": 1280, "height": 900}, color_scheme="light")
     page = ctx.new_page()
     page.add_init_script("""window.topoDraws=0;
+        const locations=new WeakMap();
+        const locate=WebGL2RenderingContext.prototype.getUniformLocation;
+        WebGL2RenderingContext.prototype.getUniformLocation=function(program,name){
+            const location=locate.call(this,program,name);
+            if(location) locations.set(location,name);
+            return location;
+        };
+        const setRects=WebGL2RenderingContext.prototype.uniform4fv;
+        WebGL2RenderingContext.prototype.uniform4fv=function(location,values,...rest){
+            if(locations.get(location)==='R') window.topoRects=Array.from(values);
+            return setRects.call(this,location,values,...rest);
+        };
         const draw=WebGL2RenderingContext.prototype.drawArrays;
         WebGL2RenderingContext.prototype.drawArrays=function(...args){
             window.topoDraws++; return draw.apply(this,args);
@@ -35,6 +47,20 @@ def run(p):
     check("desktop: page title DEMO", "DEMO" in page.title())
     check("topography: real WebGL renderer ready", page.get_attribute('html', 'data-topography') == 'ready')
     check("topography: canvas has rendered", page.evaluate('topoDraws > 0'))
+    text_mask = page.evaluate("""(() => {
+        const element=document.getElementById('topo-status');
+        const range=document.createRange(); range.selectNodeContents(element);
+        const text=range.getBoundingClientRect(), block=element.getBoundingClientRect();
+        const host=document.getElementById('topo-background').getBoundingClientRect();
+        const expected=[text.x-host.x-4,text.y-host.y-4,text.width+8,text.height+8];
+        const values=window.topoRects || [];
+        let found=false;
+        for(let i=0;i<values.length;i+=4)
+            if(expected.every((value,j)=>Math.abs(value-values[i+j])<0.1)) found=true;
+        return {found,maskWidth:expected[2],blockWidth:block.width};
+    })()""")
+    check("topography: status mask follows text, not full paragraph width",
+          text_mask['found'] and text_mask['maskWidth'] < text_mask['blockWidth'], json.dumps(text_mask))
     check("desktop: tokens.css loaded (canvas var set)",
           page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--sym-canvas').trim()") == "#ECECEA")
     check("desktop: body type from .sym-type-* not required; body font resolves",

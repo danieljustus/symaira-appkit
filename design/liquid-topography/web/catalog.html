@@ -789,7 +789,7 @@ import { mountTopo } from './symaira-topo.js';
 const topoParams = await (await fetch('../topo.json')).json();
 const topo = mountTopo(document.getElementById('topo-background'), {
   params: topoParams, pointerTarget: window, root: document,
-  protect: '.sidebar, .pagehead, .demo-banner, #topo-status, section > h2, section > p',
+  protect: '.sidebar, .pagehead h1, .pagehead p, .pagehead button, .demo-banner, #topo-status, section > h2, section > p',
   hill: '.card, .notice, .empty',
 });
 document.documentElement.dataset.topography = topo.supported ? 'ready' : 'unavailable';
