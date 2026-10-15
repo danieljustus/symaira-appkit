@@ -324,6 +324,6 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 - Energie: Die erste Instruments-Stichprobe war kein Vorher/Nachher-Vergleich. Der reproduzierbare CPU-Vergleich und seine Grenzen stehen in `VERIFICATION.md`. Das Unsichtbar-Pausieren senkt die CPU-Last deutlich; eine Einsparung bei sichtbarer Animation ist bisher nicht belegt. GPU-Last, Watt und reale iPhone-Akkulaufzeit bleiben ungemessen. Die freigegebene Bildrate bleibt vorerst unverändert.
 - iOS-Simulator: läuft (`build-ios.sh`). Metal für den Simulator muss mit `-target air64-apple-ios26.0-simulator` kompiliert werden, sonst ignoriert SwiftUI den Shader stillschweigend. Echtes Gerät nicht getestet.
-- Tabellen, Menüs, Einstellungen, Onboarding und Fehlerseiten sind noch nicht gestaltet.
+- Tabellen, Menüs, Dialoge, Formulare, Einstellungen und Leer-/Fehlerzustände sind als interaktive Web-Referenz in `web/catalog.html` gestaltet. Native Umsetzung, VoiceOver-Abnahme und vollständiges Onboarding bleiben offen.
 - Logo und App-Icons (A3 „Verzahnt“) sind noch nicht an die graue Palette angepasst.
 - Inter ist als Web-Ersatz festgelegt, aber noch nicht als Datei eingebunden.

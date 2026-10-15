@@ -14,6 +14,8 @@ Gemeinsame Designquelle für alle Symaira-Apps (macOS, iOS) und symaira.com.
 | `dist/tokens.json` | flache Token-Liste für andere Tools | ❌ generiert |
 | `web/symaira-topo.js` | reaktive Topografie für das Web (WebGL2, ohne Abhängigkeiten) | ✅ |
 | `web/demo.html` | Demo, die nur Kit-Dateien nutzt | – |
+| `web/catalog.html` | interaktiver Komponenten-Katalog mit klar markierten Demo-Daten | ✅ |
+| `web/test_catalog.py` | Browser-Checks für Desktop, Touch, Tastatur, Kontraste und reduzierte Bewegung | ✅ |
 | `../../Sources/SymairaTheme/Resources/SymairaTopo.metal` | dieselbe Topografie als Metal-Shader | ✅ |
 | `../../Sources/SymairaTheme/SymairaTopoView.swift` | SwiftUI-View und `.topoProtected()`-Modifier | ✅ |
 
@@ -25,6 +27,25 @@ npx -y @google/design.md lint DESIGN.md       # Struktur + Referenzen + WCAG
 ```
 
 ## Web
+
+### Komponenten-Katalog
+
+Nach `python3 build.py` den Kit-Ordner lokal per HTTP bereitstellen und
+`web/catalog.html` öffnen. Der Katalog enthält Formulare, Tabellen mit Suche
+und Sortierung, Menüs, Dialoge, Einstellungen sowie Leer- und Fehlerzustände.
+Alle Aktionen sind ausschließlich Vorschau, ohne Backend oder Speicherung.
+Hinter diesen dichten Inhaltsflächen wird bewusst keine Topografie animiert.
+
+```sh
+# From this kit directory; requires an already installed Playwright/Chromium.
+CATALOG_URL=http://127.0.0.1:8765/web/catalog.html python3 web/test_catalog.py
+# Optional existing Chromium binary: CHROMIUM_EXECUTABLE=/path/to/chrome
+python3 web/export_catalog.py /path/to/Liquid-Topography-Katalog.html
+```
+
+Der Offline-Export bettet die generierten Tokens ein und braucht keinen Server.
+Er ist keine zweite Designquelle. Native SwiftUI-Komponenten und VoiceOver
+müssen im jeweiligen App-Piloten separat geprüft werden.
 
 ```html
 <link rel="stylesheet" href="dist/tokens.css">
