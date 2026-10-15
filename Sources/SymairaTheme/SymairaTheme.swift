@@ -42,31 +42,40 @@ public enum SymairaTheme {
     public static let critical = Color(hex: "FF8A80")
     public static let informative = Color(hex: "8CC8F2")
 
-    // MARK: Adaptive semantic colors
+    // MARK: Adaptive semantic colors (Liquid Topography)
+    //
+    // Since 0.3.0 these map to the Liquid Topography palette (`SymairaTokens`,
+    // generated from the design kit). The fixed brand constants above stay as
+    // legacy API for clients that have not migrated yet.
 
-    /// Warm Symaira canvas that follows the system appearance.
+    /// Gray Symaira canvas that follows the system appearance.
     public static func backgroundPrimary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? bgDark : Color(hex: "F7F3EC")
+        colorScheme == .dark ? Color(hex: "1C1C1B") : Color(hex: "ECECEA")
     }
 
     public static func backgroundSecondary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? bgDarker : Color(hex: "EEE7DC")
+        colorScheme == .dark ? Color(hex: "171716") : Color(hex: "E4E4E1")
     }
 
     public static func surfaceOpaque(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(hex: "171510") : Color(hex: "FFFCF7")
+        colorScheme == .dark ? Color(hex: "242423") : Color(hex: "F7F7F5")
     }
 
     public static func foregroundPrimary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? textPrimary : Color(hex: "211D17")
+        colorScheme == .dark ? Color(hex: "EEEDEA") : Color(hex: "1C1C1A")
     }
 
     public static func foregroundSecondary(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? textSecondary : Color(hex: "5F584F")
+        colorScheme == .dark ? Color(hex: "B0AEA9") : Color(hex: "4E4D49")
     }
 
     public static func foregroundMuted(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? textMuted : Color(hex: "756D63")
+        colorScheme == .dark ? Color(hex: "97958F") : Color(hex: "62615D")
+    }
+
+    /// Champagne accent: primary action, focus ring, active status only.
+    public static func accent(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(hex: "C7B89E") : Color(hex: "76664C")
     }
 
     // Motion

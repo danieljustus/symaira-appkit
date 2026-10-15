@@ -45,7 +45,7 @@ final class TypographyTests: XCTestCase {
     }
 
     func testForegroundsFollowTheAdaptivePalette() {
-        XCTAssertEqual(SymairaTextRole.title.foreground(for: .dark), SymairaTheme.textPrimary)
+        XCTAssertEqual(SymairaTextRole.title.foreground(for: .dark), SymairaTheme.foregroundPrimary(for: .dark))
         XCTAssertEqual(
             SymairaTextRole.secondary.foreground(for: .dark),
             SymairaTheme.foregroundSecondary(for: .dark)

@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Liquid Topography** design system: `design/liquid-topography/` holds the
+  source of truth (`DESIGN.md`, `topo.json`), the token generator
+  (`build.py`, 34 WCAG contrast checks in light and dark), the WebGL2 web
+  component and a native macOS demo.
+- `SymairaTokens`: generated adaptive colors, radii, spacing and topography
+  parameters.
+- `SymairaTopoView` + `SymairaTopoModel`: reactive topography background
+  (Metal shader bundled as `default.metallib`). Reacts to app state
+  (`idle`/`thinking`/`problem`/`input`), pointer hover/click/press/drag, layout
+  changes and sidebar toggles. `.topoProtected(in:)` keeps text and controls
+  line-free. Respects Reduce Motion and Low Power Mode.
+
+### Changed
+- **Breaking (visual):** `SymairaTheme.backgroundPrimary/Secondary`,
+  `surfaceOpaque` and `foreground*` now return the gray Liquid Topography
+  palette instead of the warm champagne/black palette. Fixed legacy constants
+  (`bgDark`, `goldPrimary`, …) are unchanged.
+- New `SymairaTheme.accent(for:)` for the champagne accent.
+
 ## [0.14.2] - 2026-08-30
 
 ### Added

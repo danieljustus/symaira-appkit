@@ -27,11 +27,12 @@ final class ThemeTests: XCTestCase {
         XCTAssertEqual(SymairaTheme.textMuted, Color(hex: "837D74"))
     }
 
-    func testAdaptivePalettePreservesDarkBrandAndAddsWarmLightAppearance() {
-        XCTAssertEqual(SymairaTheme.backgroundPrimary(for: .dark), SymairaTheme.bgDark)
-        XCTAssertEqual(SymairaTheme.foregroundPrimary(for: .dark), SymairaTheme.textPrimary)
-        XCTAssertEqual(SymairaTheme.backgroundPrimary(for: .light), Color(hex: "F7F3EC"))
-        XCTAssertEqual(SymairaTheme.foregroundPrimary(for: .light), Color(hex: "211D17"))
+    func testAdaptivePaletteFollowsLiquidTopography() {
+        XCTAssertEqual(SymairaTheme.backgroundPrimary(for: .dark), Color(hex: "1C1C1B"))
+        XCTAssertEqual(SymairaTheme.foregroundPrimary(for: .dark), Color(hex: "EEEDEA"))
+        XCTAssertEqual(SymairaTheme.backgroundPrimary(for: .light), Color(hex: "ECECEA"))
+        XCTAssertEqual(SymairaTheme.foregroundPrimary(for: .light), Color(hex: "1C1C1A"))
+        XCTAssertEqual(SymairaTheme.accent(for: .dark), Color(hex: "C7B89E"))
     }
 
     func testSemanticTonesAdaptForLightAppearance() {
