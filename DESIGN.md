@@ -71,3 +71,13 @@ The intended mappings are:
 
 Legacy token aliases and button styles remain source-compatible so each client
 can migrate deliberately after a tagged AppKit release.
+
+## Icons
+
+Use `SymairaIcon` instead of raw SF Symbol strings: one semantic case per
+meaning (`.delete`, `.sync`, `.productVault` …). Express fill/circle/slash with
+`.symbolVariant`, not new cases. `SymairaIconView(icon, trigger:)` and
+`SymairaIconButton` add the shared micro-interactions — slight grow on hover,
+and on click a motion picked per icon (bounce, rotate, wiggle, pulse, slide).
+Reduce Motion renders static glyphs. New icons go into the catalogue here,
+never into an app.
