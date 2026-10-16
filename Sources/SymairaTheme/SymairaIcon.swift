@@ -2,205 +2,224 @@ import SwiftUI
 
 /// The shared Symaira icon vocabulary.
 ///
-/// Every case names a *meaning*, not a picture, and maps to one SF Symbol so all
-/// clients draw the same glyph for the same concept. Fill, circle and slash
-/// variants are not separate cases: apply `.symbolVariant(.fill)` /
-/// `.symbolVariant(.circle)` / `.symbolVariant(.slash)` at the call site.
+/// Every case names a *meaning*, not a picture, so all clients draw the same
+/// glyph for the same concept. Glyphs are vendored Phosphor Icons (MIT, see
+/// `Resources/PHOSPHOR-LICENSE`) and may be used on any platform and
+/// commercially. Non-Swift clients read `Resources/icons.json` for the SVGs.
+/// Every icon ships a regular and a filled weight.
 ///
-/// Catalogue derived from every `systemName:`/`systemImage:` used across the
-/// Symaira client repos (2026-10, ~230 raw symbols, consolidated by meaning).
+/// Catalogue derived from every SF Symbol used across the Symaira client repos
+/// (2026-10, ~230 raw symbols, consolidated by meaning). Regenerate the assets
+/// with `scripts/vendor-phosphor-icons.py`.
 public enum SymairaIcon: String, CaseIterable, Sendable {
     // MARK: Products
-    case productVault = "lock.shield"
-    case productBrain = "brain"
-    case productBrowse = "globe"
-    case productCockpit = "gauge.with.needle"
-    case productDesk = "desktopcomputer"
-    case productEraseMe = "person.crop.circle.badge.xmark"
-    case productFritz = "network"
-    case productWatch = "waveform.path.ecg"
+    case productVault
+    case productBrain
+    case productBrowse
+    case productCockpit
+    case productDesk
+    case productEraseMe
+    case productFritz
+    case productWatch
 
     // MARK: Navigation
-    case back = "chevron.left"
-    case forward = "chevron.right"
-    case expand = "chevron.down"
-    case collapse = "chevron.up"
-    case sidebarLeft = "sidebar.left"
-    case sidebarRight = "sidebar.right"
-    case home = "house"
-    case dashboard = "square.grid.2x2"
-    case list = "list.bullet.rectangle"
-    case grid = "rectangle.grid.2x2"
-    case fullscreen = "arrow.up.left.and.arrow.down.right"
-    case openExternal = "arrow.up.right.square"
-    case openApp = "arrow.up.forward.app"
-    case more = "ellipsis.circle"
-    case menu = "line.3.horizontal"
+    case back
+    case forward
+    case expand
+    case collapse
+    case sidebarLeft
+    case sidebarRight
+    case home
+    case dashboard
+    case list
+    case grid
+    case fullscreen
+    case openExternal
+    case openApp
+    case more
+    case menu
 
     // MARK: Actions
-    case add = "plus"
-    case remove = "minus"
-    case close = "xmark"
-    case confirm = "checkmark"
-    case edit = "pencil"
-    case compose = "square.and.pencil"
-    case delete = "trash"
-    case copy = "doc.on.doc"
-    case paste = "clipboard"
-    case share = "square.and.arrow.up"
-    case importItem = "square.and.arrow.down"
-    case download = "arrow.down.to.line"
-    case upload = "arrow.up.to.line"
-    case refresh = "arrow.clockwise"
-    case sync = "arrow.triangle.2.circlepath"
-    case undo = "arrow.uturn.backward"
-    case restore = "clock.arrow.circlepath"
-    case merge = "arrow.triangle.merge"
-    case branch = "arrow.triangle.branch"
-    case send = "paperplane"
-    case search = "magnifyingglass"
-    case filter = "line.3.horizontal.decrease.circle"
-    case sort = "arrow.up.arrow.down"
-    case zoomIn = "plus.magnifyingglass"
-    case zoomOut = "minus.magnifyingglass"
-    case scan = "doc.viewfinder"
-    case qrScan = "qrcode.viewfinder"
-    case link = "link"
-    case unlink = "personalhotspot.slash"
-    case pin = "pin"
-    case bookmark = "bookmark"
-    case favorite = "star"
-    case like = "heart"
-    case tag = "tag"
-    case highlight = "highlighter"
-    case magic = "wand.and.stars"
-    case ai = "sparkles"
-    case logout = "rectangle.portrait.and.arrow.right"
-    case exit = "door.left.hand.open"
+    case add
+    case remove
+    case close
+    case confirm
+    case edit
+    case compose
+    case delete
+    case copy
+    case paste
+    case share
+    case importItem
+    case download
+    case upload
+    case refresh
+    case sync
+    case undo
+    case restore
+    case merge
+    case branch
+    case send
+    case search
+    case filter
+    case sort
+    case zoomIn
+    case zoomOut
+    case scan
+    case qrScan
+    case link
+    case unlink
+    case pin
+    case bookmark
+    case favorite
+    case like
+    case tag
+    case highlight
+    case magic
+    case ai
+    case logout
+    case exit
 
     // MARK: Media / process control
-    case play = "play"
-    case pause = "pause"
-    case stop = "stop"
-    case record = "record.circle"
-    case restart = "restart.circle"
-    case run = "bolt"
+    case play
+    case pause
+    case stop
+    case record
+    case restart
+    case run
 
     // MARK: Status / feedback
-    case success = "checkmark.circle"
-    case failure = "xmark.circle"
-    case warning = "exclamationmark.triangle"
-    case error = "exclamationmark.circle"
-    case info = "info.circle"
-    case help = "questionmark.circle"
-    case verified = "checkmark.seal"
-    case pending = "hourglass"
-    case loading = "progress.indicator"
-    case notification = "bell"
-    case announcement = "megaphone"
-    case live = "dot.radiowaves.left.and.right"
-    case blocked = "hand.raised"
+    case success
+    case failure
+    case warning
+    case error
+    case info
+    case help
+    case verified
+    case pending
+    case loading
+    case notification
+    case announcement
+    case live
+    case blocked
 
     // MARK: Security & identity
-    case lock = "lock"
-    case unlock = "lock.open"
-    case shield = "shield"
-    case shieldCheck = "checkmark.shield"
-    case shieldAlert = "exclamationmark.shield"
-    case key = "key.horizontal"
-    case passkey = "person.badge.key"
-    case faceID = "faceid"
-    case visible = "eye"
-    case hidden = "eye.slash"
-    case privacy = "hand.raised.square"
-    case user = "person.crop.circle"
-    case userAdd = "person.badge.plus"
-    case userUnknown = "person.crop.circle.badge.questionmark"
-    case team = "person.2"
-    case group = "person.3"
-    case contact = "person.wave.2"
+    case lock
+    case unlock
+    case shield
+    case shieldCheck
+    case shieldAlert
+    case key
+    case passkey
+    case faceID
+    case visible
+    case hidden
+    case privacy
+    case user
+    case userAdd
+    case userUnknown
+    case team
+    case group
+    case contact
 
     // MARK: Documents & data
-    case document = "doc"
-    case documentText = "doc.text"
-    case documentSearch = "doc.text.magnifyingglass"
-    case documentImage = "doc.text.image"
-    case documentRich = "doc.richtext"
-    case documentAdd = "doc.badge.plus"
-    case documentUpload = "doc.badge.arrow.up"
-    case documentDownload = "arrow.down.doc"
-    case documentSettings = "doc.badge.gearshape"
-    case note = "note.text"
-    case folder = "folder"
-    case folderAdd = "folder.badge.plus"
-    case folderSettings = "folder.badge.gearshape"
-    case inbox = "tray"
-    case inboxImport = "tray.and.arrow.down"
-    case archive = "archivebox"
-    case library = "books.vertical"
-    case book = "book"
-    case stack = "square.stack.3d.up"
-    case table = "tablecells"
-    case checklist = "checklist"
-    case chart = "chart.bar"
-    case report = "chart.bar.doc.horizontal"
-    case calendar = "calendar"
-    case schedule = "calendar.badge.clock"
-    case time = "clock"
-    case history = "clock.arrow.2.circlepath"
-    case number = "number"
-    case image = "photo"
-    case film = "film"
-    case music = "music.note"
-    case audio = "waveform"
-    case microphone = "mic"
-    case camera = "camera"
-    case package = "shippingbox"
+    case document
+    case documentText
+    case documentSearch
+    case documentImage
+    case documentRich
+    case documentAdd
+    case documentUpload
+    case documentDownload
+    case documentSettings
+    case note
+    case folder
+    case folderAdd
+    case folderSettings
+    case inbox
+    case inboxImport
+    case archive
+    case library
+    case book
+    case stack
+    case table
+    case checklist
+    case chart
+    case report
+    case calendar
+    case schedule
+    case time
+    case history
+    case number
+    case image
+    case film
+    case music
+    case audio
+    case microphone
+    case camera
+    case package
 
     // MARK: Communication
-    case chat = "bubble.left.and.bubble.right"
-    case message = "bubble.left"
-    case mail = "envelope"
-    case mailUnread = "envelope.badge"
-    case phone = "phone"
+    case chat
+    case message
+    case mail
+    case mailUnread
+    case phone
 
     // MARK: System & infrastructure
-    case settings = "gearshape"
-    case advancedSettings = "gearshape.2"
-    case tune = "slider.horizontal.3"
-    case tools = "wrench.and.screwdriver"
-    case build = "hammer"
-    case diagnose = "stethoscope"
-    case terminal = "terminal"
-    case code = "chevron.left.forwardslash.chevron.right"
-    case server = "server.rack"
-    case cpu = "cpu"
-    case memory = "memorychip"
-    case storage = "internaldrive"
-    case network = "point.3.connected.trianglepath.dotted"
-    case offline = "network.slash"
-    case wifi = "wifi"
-    case cloud = "icloud"
-    case cloudUpload = "icloud.and.arrow.up"
-    case cloudDownload = "icloud.and.arrow.down"
-    case window = "macwindow"
-    case device = "iphone"
-    case handoff = "iphone.and.arrow.forward"
-    case keyboard = "keyboard"
-    case tap = "hand.tap"
-    case workflow = "flowchart"
-    case integration = "puzzlepiece.extension"
-    case fan = "fanblades"
-    case temperature = "thermometer.medium"
-    case power = "power"
-    case battery = "battery.75percent"
-    case appearance = "circle.lefthalf.filled"
-    case lightMode = "sun.max"
-    case darkMode = "moon"
-    case energy = "flame"
+    case settings
+    case advancedSettings
+    case tune
+    case tools
+    case build
+    case diagnose
+    case terminal
+    case code
+    case server
+    case cpu
+    case memory
+    case storage
+    case network
+    case offline
+    case wifi
+    case cloud
+    case cloudUpload
+    case cloudDownload
+    case window
+    case device
+    case handoff
+    case keyboard
+    case tap
+    case workflow
+    case integration
+    case fan
+    case temperature
+    case power
+    case battery
+    case appearance
+    case lightMode
+    case darkMode
+    case energy
 
-    /// SF Symbol name for `Image(systemName:)` / `Label(_:systemImage:)`.
-    public var systemName: String { rawValue }
+    /// Asset name inside SymairaTheme's bundle.
+    public func assetName(filled: Bool = false) -> String {
+        filled ? rawValue + ".fill" : rawValue
+    }
+
+    /// Template image, tinted by `foregroundStyle`, sized like text.
+    public func image(filled: Bool = false) -> Image {
+        Image(assetName(filled: filled), bundle: .module).renderingMode(.template)
+    }
+
+    /// Direction `.slide` nudges towards.
+    var slideOffset: CGSize {
+        switch self {
+        case .back, .undo, .logout: CGSize(width: -3, height: 0)
+        case .collapse, .upload, .cloudUpload, .documentUpload, .share, .send: CGSize(width: 0, height: -3)
+        case .expand, .download, .cloudDownload, .documentDownload, .importItem: CGSize(width: 0, height: 3)
+        default: CGSize(width: 3, height: 0)
+        }
+    }
 
     /// The micro-animation this icon plays on click / when its trigger changes.
     public var motion: SymairaIconMotion {
@@ -246,28 +265,48 @@ public enum SymairaIconMotion: Sendable {
 /// Honours Reduce Motion by rendering a static glyph.
 public struct SymairaIconView<Trigger: Equatable>: View {
     private let icon: SymairaIcon
+    private let filled: Bool
+    private let size: CGFloat
     private let trigger: Trigger
     @State private var isHovered = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    public init(_ icon: SymairaIcon, trigger: Trigger) {
+    public init(_ icon: SymairaIcon, filled: Bool = false, size: CGFloat = 18, trigger: Trigger) {
         self.icon = icon
+        self.filled = filled
+        self.size = size
         self.trigger = trigger
     }
 
     public var body: some View {
-        Image(systemName: icon.systemName)
-            .symbolEffect(.scale.up, isActive: isHovered && !reduceMotion)
-            .modifier(SymairaIconMotionEffect(motion: icon.motion, trigger: trigger, enabled: !reduceMotion))
+        let glyph = icon.image(filled: filled)
+            .resizable()
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .scaleEffect(isHovered && !reduceMotion ? 1.1 : 1)
+            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: isHovered)
             .onHover { isHovered = $0 }
             .accessibilityHidden(true)
+        if reduceMotion {
+            glyph
+        } else {
+            glyph.keyframeAnimator(initialValue: IconPose(), trigger: trigger) { view, pose in
+                view
+                    .scaleEffect(pose.scale)
+                    .rotationEffect(.degrees(pose.angle))
+                    .offset(x: icon.slideOffset.width * pose.shift, y: icon.slideOffset.height * pose.shift)
+                    .opacity(pose.opacity)
+            } keyframes: { _ in
+                IconPose.keyframes(for: icon.motion)
+            }
+        }
     }
 }
 
 extension SymairaIconView where Trigger == Int {
     /// Hover-only icon (no click trigger).
-    public init(_ icon: SymairaIcon) {
-        self.init(icon, trigger: 0)
+    public init(_ icon: SymairaIcon, filled: Bool = false, size: CGFloat = 18) {
+        self.init(icon, filled: filled, size: size, trigger: 0)
     }
 }
 
@@ -275,12 +314,14 @@ extension SymairaIconView where Trigger == Int {
 public struct SymairaIconButton: View {
     private let title: LocalizedStringKey
     private let icon: SymairaIcon
+    private let filled: Bool
     private let action: () -> Void
     @State private var taps = 0
 
-    public init(_ title: LocalizedStringKey, icon: SymairaIcon, action: @escaping () -> Void) {
+    public init(_ title: LocalizedStringKey, icon: SymairaIcon, filled: Bool = false, action: @escaping () -> Void) {
         self.title = title
         self.icon = icon
+        self.filled = filled
         self.action = action
     }
 
@@ -289,7 +330,7 @@ public struct SymairaIconButton: View {
             taps += 1
             action()
         } label: {
-            SymairaIconView(icon, trigger: taps)
+            SymairaIconView(icon, filled: filled, trigger: taps)
         }
         .buttonStyle(.borderless)
         .accessibilityLabel(Text(title))
@@ -299,39 +340,65 @@ public struct SymairaIconButton: View {
 
 extension Label where Title == Text, Icon == Image {
     /// `Label("Delete", symairaIcon: .delete)`
-    public init(_ title: LocalizedStringKey, symairaIcon icon: SymairaIcon) {
-        self.init(title, systemImage: icon.systemName)
+    public init(_ title: LocalizedStringKey, symairaIcon icon: SymairaIcon, filled: Bool = false) {
+        self.init { Text(title) } icon: { icon.image(filled: filled) }
     }
 }
 
 extension Image {
-    /// `Image(symairaIcon: .vault)`
-    public init(symairaIcon icon: SymairaIcon) {
-        self.init(systemName: icon.systemName)
+    /// `Image(symairaIcon: .productVault)`
+    public init(symairaIcon icon: SymairaIcon, filled: Bool = false) {
+        self = icon.image(filled: filled)
     }
 }
 
-struct SymairaIconMotionEffect<Trigger: Equatable>: ViewModifier {
-    let motion: SymairaIconMotion
-    let trigger: Trigger
-    let enabled: Bool
+struct IconPose {
+    var scale = 1.0
+    var angle = 0.0
+    var shift = 0.0
+    var opacity = 1.0
 
-    func body(content: Content) -> some View {
-        if !enabled {
-            content
-        } else if #available(macOS 15, iOS 18, *) {
-            switch motion {
-            case .bounce: content.symbolEffect(.bounce, value: trigger)
-            case .rotate: content.symbolEffect(.rotate.byLayer, value: trigger)
-            case .wiggle: content.symbolEffect(.wiggle, value: trigger)
-            case .pulse: content.symbolEffect(.pulse, value: trigger)
-            case .slide: content.symbolEffect(.wiggle.forward, value: trigger)
+    @KeyframesBuilder<IconPose>
+    static func keyframes(for motion: SymairaIconMotion) -> some Keyframes<IconPose> {
+        KeyframeTrack(\IconPose.scale) {
+            if motion == .bounce {
+                SpringKeyframe(0.82, duration: 0.08)
+                SpringKeyframe(1.15, duration: 0.14)
+                SpringKeyframe(1.0, duration: 0.2)
+            } else {
+                LinearKeyframe(1.0, duration: 0.01)
             }
-        } else {
-            // ponytail: macOS 14 lacks rotate/wiggle; everything bounces/pulses there.
+        }
+        KeyframeTrack(\IconPose.angle) {
             switch motion {
-            case .pulse: content.symbolEffect(.pulse, value: trigger)
-            default: content.symbolEffect(.bounce, value: trigger)
+            case .rotate:
+                CubicKeyframe(360, duration: 0.5)
+                LinearKeyframe(0, duration: 0.001)
+            case .wiggle:
+                CubicKeyframe(-14, duration: 0.07)
+                CubicKeyframe(12, duration: 0.09)
+                CubicKeyframe(-7, duration: 0.08)
+                CubicKeyframe(0, duration: 0.08)
+            default:
+                LinearKeyframe(0, duration: 0.01)
+            }
+        }
+        KeyframeTrack(\IconPose.shift) {
+            if motion == .slide {
+                SpringKeyframe(1, duration: 0.12)
+                SpringKeyframe(0, duration: 0.22)
+            } else {
+                LinearKeyframe(0, duration: 0.01)
+            }
+        }
+        KeyframeTrack(\IconPose.opacity) {
+            if motion == .pulse {
+                CubicKeyframe(0.35, duration: 0.18)
+                CubicKeyframe(1, duration: 0.18)
+                CubicKeyframe(0.35, duration: 0.18)
+                CubicKeyframe(1, duration: 0.18)
+            } else {
+                LinearKeyframe(1, duration: 0.01)
             }
         }
     }

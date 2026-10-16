@@ -1,0 +1,857 @@
+{
+  "add": {
+    "fill": "SymairaIcons.xcassets/add.fill.imageset/add.fill.svg",
+    "phosphor": "plus",
+    "regular": "SymairaIcons.xcassets/add.imageset/add.svg"
+  },
+  "advancedSettings": {
+    "fill": "SymairaIcons.xcassets/advancedSettings.fill.imageset/advancedSettings.fill.svg",
+    "phosphor": "gear-six",
+    "regular": "SymairaIcons.xcassets/advancedSettings.imageset/advancedSettings.svg"
+  },
+  "ai": {
+    "fill": "SymairaIcons.xcassets/ai.fill.imageset/ai.fill.svg",
+    "phosphor": "sparkle",
+    "regular": "SymairaIcons.xcassets/ai.imageset/ai.svg"
+  },
+  "announcement": {
+    "fill": "SymairaIcons.xcassets/announcement.fill.imageset/announcement.fill.svg",
+    "phosphor": "megaphone",
+    "regular": "SymairaIcons.xcassets/announcement.imageset/announcement.svg"
+  },
+  "appearance": {
+    "fill": "SymairaIcons.xcassets/appearance.fill.imageset/appearance.fill.svg",
+    "phosphor": "circle-half",
+    "regular": "SymairaIcons.xcassets/appearance.imageset/appearance.svg"
+  },
+  "archive": {
+    "fill": "SymairaIcons.xcassets/archive.fill.imageset/archive.fill.svg",
+    "phosphor": "archive",
+    "regular": "SymairaIcons.xcassets/archive.imageset/archive.svg"
+  },
+  "audio": {
+    "fill": "SymairaIcons.xcassets/audio.fill.imageset/audio.fill.svg",
+    "phosphor": "waveform",
+    "regular": "SymairaIcons.xcassets/audio.imageset/audio.svg"
+  },
+  "back": {
+    "fill": "SymairaIcons.xcassets/back.fill.imageset/back.fill.svg",
+    "phosphor": "caret-left",
+    "regular": "SymairaIcons.xcassets/back.imageset/back.svg"
+  },
+  "battery": {
+    "fill": "SymairaIcons.xcassets/battery.fill.imageset/battery.fill.svg",
+    "phosphor": "battery-high",
+    "regular": "SymairaIcons.xcassets/battery.imageset/battery.svg"
+  },
+  "blocked": {
+    "fill": "SymairaIcons.xcassets/blocked.fill.imageset/blocked.fill.svg",
+    "phosphor": "hand",
+    "regular": "SymairaIcons.xcassets/blocked.imageset/blocked.svg"
+  },
+  "book": {
+    "fill": "SymairaIcons.xcassets/book.fill.imageset/book.fill.svg",
+    "phosphor": "book",
+    "regular": "SymairaIcons.xcassets/book.imageset/book.svg"
+  },
+  "bookmark": {
+    "fill": "SymairaIcons.xcassets/bookmark.fill.imageset/bookmark.fill.svg",
+    "phosphor": "bookmark-simple",
+    "regular": "SymairaIcons.xcassets/bookmark.imageset/bookmark.svg"
+  },
+  "branch": {
+    "fill": "SymairaIcons.xcassets/branch.fill.imageset/branch.fill.svg",
+    "phosphor": "git-branch",
+    "regular": "SymairaIcons.xcassets/branch.imageset/branch.svg"
+  },
+  "build": {
+    "fill": "SymairaIcons.xcassets/build.fill.imageset/build.fill.svg",
+    "phosphor": "hammer",
+    "regular": "SymairaIcons.xcassets/build.imageset/build.svg"
+  },
+  "calendar": {
+    "fill": "SymairaIcons.xcassets/calendar.fill.imageset/calendar.fill.svg",
+    "phosphor": "calendar",
+    "regular": "SymairaIcons.xcassets/calendar.imageset/calendar.svg"
+  },
+  "camera": {
+    "fill": "SymairaIcons.xcassets/camera.fill.imageset/camera.fill.svg",
+    "phosphor": "camera",
+    "regular": "SymairaIcons.xcassets/camera.imageset/camera.svg"
+  },
+  "chart": {
+    "fill": "SymairaIcons.xcassets/chart.fill.imageset/chart.fill.svg",
+    "phosphor": "chart-bar",
+    "regular": "SymairaIcons.xcassets/chart.imageset/chart.svg"
+  },
+  "chat": {
+    "fill": "SymairaIcons.xcassets/chat.fill.imageset/chat.fill.svg",
+    "phosphor": "chats",
+    "regular": "SymairaIcons.xcassets/chat.imageset/chat.svg"
+  },
+  "checklist": {
+    "fill": "SymairaIcons.xcassets/checklist.fill.imageset/checklist.fill.svg",
+    "phosphor": "list-checks",
+    "regular": "SymairaIcons.xcassets/checklist.imageset/checklist.svg"
+  },
+  "close": {
+    "fill": "SymairaIcons.xcassets/close.fill.imageset/close.fill.svg",
+    "phosphor": "x",
+    "regular": "SymairaIcons.xcassets/close.imageset/close.svg"
+  },
+  "cloud": {
+    "fill": "SymairaIcons.xcassets/cloud.fill.imageset/cloud.fill.svg",
+    "phosphor": "cloud",
+    "regular": "SymairaIcons.xcassets/cloud.imageset/cloud.svg"
+  },
+  "cloudDownload": {
+    "fill": "SymairaIcons.xcassets/cloudDownload.fill.imageset/cloudDownload.fill.svg",
+    "phosphor": "cloud-arrow-down",
+    "regular": "SymairaIcons.xcassets/cloudDownload.imageset/cloudDownload.svg"
+  },
+  "cloudUpload": {
+    "fill": "SymairaIcons.xcassets/cloudUpload.fill.imageset/cloudUpload.fill.svg",
+    "phosphor": "cloud-arrow-up",
+    "regular": "SymairaIcons.xcassets/cloudUpload.imageset/cloudUpload.svg"
+  },
+  "code": {
+    "fill": "SymairaIcons.xcassets/code.fill.imageset/code.fill.svg",
+    "phosphor": "code",
+    "regular": "SymairaIcons.xcassets/code.imageset/code.svg"
+  },
+  "collapse": {
+    "fill": "SymairaIcons.xcassets/collapse.fill.imageset/collapse.fill.svg",
+    "phosphor": "caret-up",
+    "regular": "SymairaIcons.xcassets/collapse.imageset/collapse.svg"
+  },
+  "compose": {
+    "fill": "SymairaIcons.xcassets/compose.fill.imageset/compose.fill.svg",
+    "phosphor": "note-pencil",
+    "regular": "SymairaIcons.xcassets/compose.imageset/compose.svg"
+  },
+  "confirm": {
+    "fill": "SymairaIcons.xcassets/confirm.fill.imageset/confirm.fill.svg",
+    "phosphor": "check",
+    "regular": "SymairaIcons.xcassets/confirm.imageset/confirm.svg"
+  },
+  "contact": {
+    "fill": "SymairaIcons.xcassets/contact.fill.imageset/contact.fill.svg",
+    "phosphor": "address-book",
+    "regular": "SymairaIcons.xcassets/contact.imageset/contact.svg"
+  },
+  "copy": {
+    "fill": "SymairaIcons.xcassets/copy.fill.imageset/copy.fill.svg",
+    "phosphor": "copy",
+    "regular": "SymairaIcons.xcassets/copy.imageset/copy.svg"
+  },
+  "cpu": {
+    "fill": "SymairaIcons.xcassets/cpu.fill.imageset/cpu.fill.svg",
+    "phosphor": "cpu",
+    "regular": "SymairaIcons.xcassets/cpu.imageset/cpu.svg"
+  },
+  "darkMode": {
+    "fill": "SymairaIcons.xcassets/darkMode.fill.imageset/darkMode.fill.svg",
+    "phosphor": "moon",
+    "regular": "SymairaIcons.xcassets/darkMode.imageset/darkMode.svg"
+  },
+  "dashboard": {
+    "fill": "SymairaIcons.xcassets/dashboard.fill.imageset/dashboard.fill.svg",
+    "phosphor": "squares-four",
+    "regular": "SymairaIcons.xcassets/dashboard.imageset/dashboard.svg"
+  },
+  "delete": {
+    "fill": "SymairaIcons.xcassets/delete.fill.imageset/delete.fill.svg",
+    "phosphor": "trash",
+    "regular": "SymairaIcons.xcassets/delete.imageset/delete.svg"
+  },
+  "device": {
+    "fill": "SymairaIcons.xcassets/device.fill.imageset/device.fill.svg",
+    "phosphor": "device-mobile",
+    "regular": "SymairaIcons.xcassets/device.imageset/device.svg"
+  },
+  "diagnose": {
+    "fill": "SymairaIcons.xcassets/diagnose.fill.imageset/diagnose.fill.svg",
+    "phosphor": "stethoscope",
+    "regular": "SymairaIcons.xcassets/diagnose.imageset/diagnose.svg"
+  },
+  "document": {
+    "fill": "SymairaIcons.xcassets/document.fill.imageset/document.fill.svg",
+    "phosphor": "file",
+    "regular": "SymairaIcons.xcassets/document.imageset/document.svg"
+  },
+  "documentAdd": {
+    "fill": "SymairaIcons.xcassets/documentAdd.fill.imageset/documentAdd.fill.svg",
+    "phosphor": "file-plus",
+    "regular": "SymairaIcons.xcassets/documentAdd.imageset/documentAdd.svg"
+  },
+  "documentDownload": {
+    "fill": "SymairaIcons.xcassets/documentDownload.fill.imageset/documentDownload.fill.svg",
+    "phosphor": "file-arrow-down",
+    "regular": "SymairaIcons.xcassets/documentDownload.imageset/documentDownload.svg"
+  },
+  "documentImage": {
+    "fill": "SymairaIcons.xcassets/documentImage.fill.imageset/documentImage.fill.svg",
+    "phosphor": "file-image",
+    "regular": "SymairaIcons.xcassets/documentImage.imageset/documentImage.svg"
+  },
+  "documentRich": {
+    "fill": "SymairaIcons.xcassets/documentRich.fill.imageset/documentRich.fill.svg",
+    "phosphor": "article",
+    "regular": "SymairaIcons.xcassets/documentRich.imageset/documentRich.svg"
+  },
+  "documentSearch": {
+    "fill": "SymairaIcons.xcassets/documentSearch.fill.imageset/documentSearch.fill.svg",
+    "phosphor": "file-magnifying-glass",
+    "regular": "SymairaIcons.xcassets/documentSearch.imageset/documentSearch.svg"
+  },
+  "documentSettings": {
+    "fill": "SymairaIcons.xcassets/documentSettings.fill.imageset/documentSettings.fill.svg",
+    "phosphor": "file-dashed",
+    "regular": "SymairaIcons.xcassets/documentSettings.imageset/documentSettings.svg"
+  },
+  "documentText": {
+    "fill": "SymairaIcons.xcassets/documentText.fill.imageset/documentText.fill.svg",
+    "phosphor": "file-text",
+    "regular": "SymairaIcons.xcassets/documentText.imageset/documentText.svg"
+  },
+  "documentUpload": {
+    "fill": "SymairaIcons.xcassets/documentUpload.fill.imageset/documentUpload.fill.svg",
+    "phosphor": "file-arrow-up",
+    "regular": "SymairaIcons.xcassets/documentUpload.imageset/documentUpload.svg"
+  },
+  "download": {
+    "fill": "SymairaIcons.xcassets/download.fill.imageset/download.fill.svg",
+    "phosphor": "download",
+    "regular": "SymairaIcons.xcassets/download.imageset/download.svg"
+  },
+  "edit": {
+    "fill": "SymairaIcons.xcassets/edit.fill.imageset/edit.fill.svg",
+    "phosphor": "pencil-simple",
+    "regular": "SymairaIcons.xcassets/edit.imageset/edit.svg"
+  },
+  "energy": {
+    "fill": "SymairaIcons.xcassets/energy.fill.imageset/energy.fill.svg",
+    "phosphor": "flame",
+    "regular": "SymairaIcons.xcassets/energy.imageset/energy.svg"
+  },
+  "error": {
+    "fill": "SymairaIcons.xcassets/error.fill.imageset/error.fill.svg",
+    "phosphor": "warning-circle",
+    "regular": "SymairaIcons.xcassets/error.imageset/error.svg"
+  },
+  "exit": {
+    "fill": "SymairaIcons.xcassets/exit.fill.imageset/exit.fill.svg",
+    "phosphor": "door-open",
+    "regular": "SymairaIcons.xcassets/exit.imageset/exit.svg"
+  },
+  "expand": {
+    "fill": "SymairaIcons.xcassets/expand.fill.imageset/expand.fill.svg",
+    "phosphor": "caret-down",
+    "regular": "SymairaIcons.xcassets/expand.imageset/expand.svg"
+  },
+  "faceID": {
+    "fill": "SymairaIcons.xcassets/faceID.fill.imageset/faceID.fill.svg",
+    "phosphor": "scan-smiley",
+    "regular": "SymairaIcons.xcassets/faceID.imageset/faceID.svg"
+  },
+  "failure": {
+    "fill": "SymairaIcons.xcassets/failure.fill.imageset/failure.fill.svg",
+    "phosphor": "x-circle",
+    "regular": "SymairaIcons.xcassets/failure.imageset/failure.svg"
+  },
+  "fan": {
+    "fill": "SymairaIcons.xcassets/fan.fill.imageset/fan.fill.svg",
+    "phosphor": "fan",
+    "regular": "SymairaIcons.xcassets/fan.imageset/fan.svg"
+  },
+  "favorite": {
+    "fill": "SymairaIcons.xcassets/favorite.fill.imageset/favorite.fill.svg",
+    "phosphor": "star",
+    "regular": "SymairaIcons.xcassets/favorite.imageset/favorite.svg"
+  },
+  "film": {
+    "fill": "SymairaIcons.xcassets/film.fill.imageset/film.fill.svg",
+    "phosphor": "film-strip",
+    "regular": "SymairaIcons.xcassets/film.imageset/film.svg"
+  },
+  "filter": {
+    "fill": "SymairaIcons.xcassets/filter.fill.imageset/filter.fill.svg",
+    "phosphor": "funnel",
+    "regular": "SymairaIcons.xcassets/filter.imageset/filter.svg"
+  },
+  "folder": {
+    "fill": "SymairaIcons.xcassets/folder.fill.imageset/folder.fill.svg",
+    "phosphor": "folder",
+    "regular": "SymairaIcons.xcassets/folder.imageset/folder.svg"
+  },
+  "folderAdd": {
+    "fill": "SymairaIcons.xcassets/folderAdd.fill.imageset/folderAdd.fill.svg",
+    "phosphor": "folder-plus",
+    "regular": "SymairaIcons.xcassets/folderAdd.imageset/folderAdd.svg"
+  },
+  "folderSettings": {
+    "fill": "SymairaIcons.xcassets/folderSettings.fill.imageset/folderSettings.fill.svg",
+    "phosphor": "folder-user",
+    "regular": "SymairaIcons.xcassets/folderSettings.imageset/folderSettings.svg"
+  },
+  "forward": {
+    "fill": "SymairaIcons.xcassets/forward.fill.imageset/forward.fill.svg",
+    "phosphor": "caret-right",
+    "regular": "SymairaIcons.xcassets/forward.imageset/forward.svg"
+  },
+  "fullscreen": {
+    "fill": "SymairaIcons.xcassets/fullscreen.fill.imageset/fullscreen.fill.svg",
+    "phosphor": "arrows-out",
+    "regular": "SymairaIcons.xcassets/fullscreen.imageset/fullscreen.svg"
+  },
+  "grid": {
+    "fill": "SymairaIcons.xcassets/grid.fill.imageset/grid.fill.svg",
+    "phosphor": "grid-four",
+    "regular": "SymairaIcons.xcassets/grid.imageset/grid.svg"
+  },
+  "group": {
+    "fill": "SymairaIcons.xcassets/group.fill.imageset/group.fill.svg",
+    "phosphor": "users-three",
+    "regular": "SymairaIcons.xcassets/group.imageset/group.svg"
+  },
+  "handoff": {
+    "fill": "SymairaIcons.xcassets/handoff.fill.imageset/handoff.fill.svg",
+    "phosphor": "device-mobile-speaker",
+    "regular": "SymairaIcons.xcassets/handoff.imageset/handoff.svg"
+  },
+  "help": {
+    "fill": "SymairaIcons.xcassets/help.fill.imageset/help.fill.svg",
+    "phosphor": "question",
+    "regular": "SymairaIcons.xcassets/help.imageset/help.svg"
+  },
+  "hidden": {
+    "fill": "SymairaIcons.xcassets/hidden.fill.imageset/hidden.fill.svg",
+    "phosphor": "eye-slash",
+    "regular": "SymairaIcons.xcassets/hidden.imageset/hidden.svg"
+  },
+  "highlight": {
+    "fill": "SymairaIcons.xcassets/highlight.fill.imageset/highlight.fill.svg",
+    "phosphor": "highlighter",
+    "regular": "SymairaIcons.xcassets/highlight.imageset/highlight.svg"
+  },
+  "history": {
+    "fill": "SymairaIcons.xcassets/history.fill.imageset/history.fill.svg",
+    "phosphor": "clock-clockwise",
+    "regular": "SymairaIcons.xcassets/history.imageset/history.svg"
+  },
+  "home": {
+    "fill": "SymairaIcons.xcassets/home.fill.imageset/home.fill.svg",
+    "phosphor": "house",
+    "regular": "SymairaIcons.xcassets/home.imageset/home.svg"
+  },
+  "image": {
+    "fill": "SymairaIcons.xcassets/image.fill.imageset/image.fill.svg",
+    "phosphor": "image",
+    "regular": "SymairaIcons.xcassets/image.imageset/image.svg"
+  },
+  "importItem": {
+    "fill": "SymairaIcons.xcassets/importItem.fill.imageset/importItem.fill.svg",
+    "phosphor": "download-simple",
+    "regular": "SymairaIcons.xcassets/importItem.imageset/importItem.svg"
+  },
+  "inbox": {
+    "fill": "SymairaIcons.xcassets/inbox.fill.imageset/inbox.fill.svg",
+    "phosphor": "tray",
+    "regular": "SymairaIcons.xcassets/inbox.imageset/inbox.svg"
+  },
+  "inboxImport": {
+    "fill": "SymairaIcons.xcassets/inboxImport.fill.imageset/inboxImport.fill.svg",
+    "phosphor": "tray-arrow-down",
+    "regular": "SymairaIcons.xcassets/inboxImport.imageset/inboxImport.svg"
+  },
+  "info": {
+    "fill": "SymairaIcons.xcassets/info.fill.imageset/info.fill.svg",
+    "phosphor": "info",
+    "regular": "SymairaIcons.xcassets/info.imageset/info.svg"
+  },
+  "integration": {
+    "fill": "SymairaIcons.xcassets/integration.fill.imageset/integration.fill.svg",
+    "phosphor": "puzzle-piece",
+    "regular": "SymairaIcons.xcassets/integration.imageset/integration.svg"
+  },
+  "key": {
+    "fill": "SymairaIcons.xcassets/key.fill.imageset/key.fill.svg",
+    "phosphor": "key",
+    "regular": "SymairaIcons.xcassets/key.imageset/key.svg"
+  },
+  "keyboard": {
+    "fill": "SymairaIcons.xcassets/keyboard.fill.imageset/keyboard.fill.svg",
+    "phosphor": "keyboard",
+    "regular": "SymairaIcons.xcassets/keyboard.imageset/keyboard.svg"
+  },
+  "library": {
+    "fill": "SymairaIcons.xcassets/library.fill.imageset/library.fill.svg",
+    "phosphor": "books",
+    "regular": "SymairaIcons.xcassets/library.imageset/library.svg"
+  },
+  "lightMode": {
+    "fill": "SymairaIcons.xcassets/lightMode.fill.imageset/lightMode.fill.svg",
+    "phosphor": "sun",
+    "regular": "SymairaIcons.xcassets/lightMode.imageset/lightMode.svg"
+  },
+  "like": {
+    "fill": "SymairaIcons.xcassets/like.fill.imageset/like.fill.svg",
+    "phosphor": "heart",
+    "regular": "SymairaIcons.xcassets/like.imageset/like.svg"
+  },
+  "link": {
+    "fill": "SymairaIcons.xcassets/link.fill.imageset/link.fill.svg",
+    "phosphor": "link",
+    "regular": "SymairaIcons.xcassets/link.imageset/link.svg"
+  },
+  "list": {
+    "fill": "SymairaIcons.xcassets/list.fill.imageset/list.fill.svg",
+    "phosphor": "list-bullets",
+    "regular": "SymairaIcons.xcassets/list.imageset/list.svg"
+  },
+  "live": {
+    "fill": "SymairaIcons.xcassets/live.fill.imageset/live.fill.svg",
+    "phosphor": "broadcast",
+    "regular": "SymairaIcons.xcassets/live.imageset/live.svg"
+  },
+  "loading": {
+    "fill": "SymairaIcons.xcassets/loading.fill.imageset/loading.fill.svg",
+    "phosphor": "spinner",
+    "regular": "SymairaIcons.xcassets/loading.imageset/loading.svg"
+  },
+  "lock": {
+    "fill": "SymairaIcons.xcassets/lock.fill.imageset/lock.fill.svg",
+    "phosphor": "lock",
+    "regular": "SymairaIcons.xcassets/lock.imageset/lock.svg"
+  },
+  "logout": {
+    "fill": "SymairaIcons.xcassets/logout.fill.imageset/logout.fill.svg",
+    "phosphor": "sign-out",
+    "regular": "SymairaIcons.xcassets/logout.imageset/logout.svg"
+  },
+  "magic": {
+    "fill": "SymairaIcons.xcassets/magic.fill.imageset/magic.fill.svg",
+    "phosphor": "magic-wand",
+    "regular": "SymairaIcons.xcassets/magic.imageset/magic.svg"
+  },
+  "mail": {
+    "fill": "SymairaIcons.xcassets/mail.fill.imageset/mail.fill.svg",
+    "phosphor": "envelope",
+    "regular": "SymairaIcons.xcassets/mail.imageset/mail.svg"
+  },
+  "mailUnread": {
+    "fill": "SymairaIcons.xcassets/mailUnread.fill.imageset/mailUnread.fill.svg",
+    "phosphor": "envelope-open",
+    "regular": "SymairaIcons.xcassets/mailUnread.imageset/mailUnread.svg"
+  },
+  "memory": {
+    "fill": "SymairaIcons.xcassets/memory.fill.imageset/memory.fill.svg",
+    "phosphor": "memory",
+    "regular": "SymairaIcons.xcassets/memory.imageset/memory.svg"
+  },
+  "menu": {
+    "fill": "SymairaIcons.xcassets/menu.fill.imageset/menu.fill.svg",
+    "phosphor": "list",
+    "regular": "SymairaIcons.xcassets/menu.imageset/menu.svg"
+  },
+  "merge": {
+    "fill": "SymairaIcons.xcassets/merge.fill.imageset/merge.fill.svg",
+    "phosphor": "git-merge",
+    "regular": "SymairaIcons.xcassets/merge.imageset/merge.svg"
+  },
+  "message": {
+    "fill": "SymairaIcons.xcassets/message.fill.imageset/message.fill.svg",
+    "phosphor": "chat",
+    "regular": "SymairaIcons.xcassets/message.imageset/message.svg"
+  },
+  "microphone": {
+    "fill": "SymairaIcons.xcassets/microphone.fill.imageset/microphone.fill.svg",
+    "phosphor": "microphone",
+    "regular": "SymairaIcons.xcassets/microphone.imageset/microphone.svg"
+  },
+  "more": {
+    "fill": "SymairaIcons.xcassets/more.fill.imageset/more.fill.svg",
+    "phosphor": "dots-three-circle",
+    "regular": "SymairaIcons.xcassets/more.imageset/more.svg"
+  },
+  "music": {
+    "fill": "SymairaIcons.xcassets/music.fill.imageset/music.fill.svg",
+    "phosphor": "music-note",
+    "regular": "SymairaIcons.xcassets/music.imageset/music.svg"
+  },
+  "network": {
+    "fill": "SymairaIcons.xcassets/network.fill.imageset/network.fill.svg",
+    "phosphor": "network",
+    "regular": "SymairaIcons.xcassets/network.imageset/network.svg"
+  },
+  "note": {
+    "fill": "SymairaIcons.xcassets/note.fill.imageset/note.fill.svg",
+    "phosphor": "note",
+    "regular": "SymairaIcons.xcassets/note.imageset/note.svg"
+  },
+  "notification": {
+    "fill": "SymairaIcons.xcassets/notification.fill.imageset/notification.fill.svg",
+    "phosphor": "bell",
+    "regular": "SymairaIcons.xcassets/notification.imageset/notification.svg"
+  },
+  "number": {
+    "fill": "SymairaIcons.xcassets/number.fill.imageset/number.fill.svg",
+    "phosphor": "hash",
+    "regular": "SymairaIcons.xcassets/number.imageset/number.svg"
+  },
+  "offline": {
+    "fill": "SymairaIcons.xcassets/offline.fill.imageset/offline.fill.svg",
+    "phosphor": "wifi-slash",
+    "regular": "SymairaIcons.xcassets/offline.imageset/offline.svg"
+  },
+  "openApp": {
+    "fill": "SymairaIcons.xcassets/openApp.fill.imageset/openApp.fill.svg",
+    "phosphor": "app-window",
+    "regular": "SymairaIcons.xcassets/openApp.imageset/openApp.svg"
+  },
+  "openExternal": {
+    "fill": "SymairaIcons.xcassets/openExternal.fill.imageset/openExternal.fill.svg",
+    "phosphor": "arrow-square-out",
+    "regular": "SymairaIcons.xcassets/openExternal.imageset/openExternal.svg"
+  },
+  "package": {
+    "fill": "SymairaIcons.xcassets/package.fill.imageset/package.fill.svg",
+    "phosphor": "package",
+    "regular": "SymairaIcons.xcassets/package.imageset/package.svg"
+  },
+  "passkey": {
+    "fill": "SymairaIcons.xcassets/passkey.fill.imageset/passkey.fill.svg",
+    "phosphor": "password",
+    "regular": "SymairaIcons.xcassets/passkey.imageset/passkey.svg"
+  },
+  "paste": {
+    "fill": "SymairaIcons.xcassets/paste.fill.imageset/paste.fill.svg",
+    "phosphor": "clipboard",
+    "regular": "SymairaIcons.xcassets/paste.imageset/paste.svg"
+  },
+  "pause": {
+    "fill": "SymairaIcons.xcassets/pause.fill.imageset/pause.fill.svg",
+    "phosphor": "pause",
+    "regular": "SymairaIcons.xcassets/pause.imageset/pause.svg"
+  },
+  "pending": {
+    "fill": "SymairaIcons.xcassets/pending.fill.imageset/pending.fill.svg",
+    "phosphor": "hourglass",
+    "regular": "SymairaIcons.xcassets/pending.imageset/pending.svg"
+  },
+  "phone": {
+    "fill": "SymairaIcons.xcassets/phone.fill.imageset/phone.fill.svg",
+    "phosphor": "phone",
+    "regular": "SymairaIcons.xcassets/phone.imageset/phone.svg"
+  },
+  "pin": {
+    "fill": "SymairaIcons.xcassets/pin.fill.imageset/pin.fill.svg",
+    "phosphor": "push-pin",
+    "regular": "SymairaIcons.xcassets/pin.imageset/pin.svg"
+  },
+  "play": {
+    "fill": "SymairaIcons.xcassets/play.fill.imageset/play.fill.svg",
+    "phosphor": "play",
+    "regular": "SymairaIcons.xcassets/play.imageset/play.svg"
+  },
+  "power": {
+    "fill": "SymairaIcons.xcassets/power.fill.imageset/power.fill.svg",
+    "phosphor": "power",
+    "regular": "SymairaIcons.xcassets/power.imageset/power.svg"
+  },
+  "privacy": {
+    "fill": "SymairaIcons.xcassets/privacy.fill.imageset/privacy.fill.svg",
+    "phosphor": "fingerprint",
+    "regular": "SymairaIcons.xcassets/privacy.imageset/privacy.svg"
+  },
+  "productBrain": {
+    "fill": "SymairaIcons.xcassets/productBrain.fill.imageset/productBrain.fill.svg",
+    "phosphor": "brain",
+    "regular": "SymairaIcons.xcassets/productBrain.imageset/productBrain.svg"
+  },
+  "productBrowse": {
+    "fill": "SymairaIcons.xcassets/productBrowse.fill.imageset/productBrowse.fill.svg",
+    "phosphor": "globe",
+    "regular": "SymairaIcons.xcassets/productBrowse.imageset/productBrowse.svg"
+  },
+  "productCockpit": {
+    "fill": "SymairaIcons.xcassets/productCockpit.fill.imageset/productCockpit.fill.svg",
+    "phosphor": "gauge",
+    "regular": "SymairaIcons.xcassets/productCockpit.imageset/productCockpit.svg"
+  },
+  "productDesk": {
+    "fill": "SymairaIcons.xcassets/productDesk.fill.imageset/productDesk.fill.svg",
+    "phosphor": "desktop",
+    "regular": "SymairaIcons.xcassets/productDesk.imageset/productDesk.svg"
+  },
+  "productEraseMe": {
+    "fill": "SymairaIcons.xcassets/productEraseMe.fill.imageset/productEraseMe.fill.svg",
+    "phosphor": "user-circle-minus",
+    "regular": "SymairaIcons.xcassets/productEraseMe.imageset/productEraseMe.svg"
+  },
+  "productFritz": {
+    "fill": "SymairaIcons.xcassets/productFritz.fill.imageset/productFritz.fill.svg",
+    "phosphor": "cell-tower",
+    "regular": "SymairaIcons.xcassets/productFritz.imageset/productFritz.svg"
+  },
+  "productVault": {
+    "fill": "SymairaIcons.xcassets/productVault.fill.imageset/productVault.fill.svg",
+    "phosphor": "vault",
+    "regular": "SymairaIcons.xcassets/productVault.imageset/productVault.svg"
+  },
+  "productWatch": {
+    "fill": "SymairaIcons.xcassets/productWatch.fill.imageset/productWatch.fill.svg",
+    "phosphor": "heartbeat",
+    "regular": "SymairaIcons.xcassets/productWatch.imageset/productWatch.svg"
+  },
+  "qrScan": {
+    "fill": "SymairaIcons.xcassets/qrScan.fill.imageset/qrScan.fill.svg",
+    "phosphor": "qr-code",
+    "regular": "SymairaIcons.xcassets/qrScan.imageset/qrScan.svg"
+  },
+  "record": {
+    "fill": "SymairaIcons.xcassets/record.fill.imageset/record.fill.svg",
+    "phosphor": "record",
+    "regular": "SymairaIcons.xcassets/record.imageset/record.svg"
+  },
+  "refresh": {
+    "fill": "SymairaIcons.xcassets/refresh.fill.imageset/refresh.fill.svg",
+    "phosphor": "arrow-clockwise",
+    "regular": "SymairaIcons.xcassets/refresh.imageset/refresh.svg"
+  },
+  "remove": {
+    "fill": "SymairaIcons.xcassets/remove.fill.imageset/remove.fill.svg",
+    "phosphor": "minus",
+    "regular": "SymairaIcons.xcassets/remove.imageset/remove.svg"
+  },
+  "report": {
+    "fill": "SymairaIcons.xcassets/report.fill.imageset/report.fill.svg",
+    "phosphor": "chart-line",
+    "regular": "SymairaIcons.xcassets/report.imageset/report.svg"
+  },
+  "restart": {
+    "fill": "SymairaIcons.xcassets/restart.fill.imageset/restart.fill.svg",
+    "phosphor": "arrow-counter-clockwise",
+    "regular": "SymairaIcons.xcassets/restart.imageset/restart.svg"
+  },
+  "restore": {
+    "fill": "SymairaIcons.xcassets/restore.fill.imageset/restore.fill.svg",
+    "phosphor": "clock-counter-clockwise",
+    "regular": "SymairaIcons.xcassets/restore.imageset/restore.svg"
+  },
+  "run": {
+    "fill": "SymairaIcons.xcassets/run.fill.imageset/run.fill.svg",
+    "phosphor": "lightning",
+    "regular": "SymairaIcons.xcassets/run.imageset/run.svg"
+  },
+  "scan": {
+    "fill": "SymairaIcons.xcassets/scan.fill.imageset/scan.fill.svg",
+    "phosphor": "scan",
+    "regular": "SymairaIcons.xcassets/scan.imageset/scan.svg"
+  },
+  "schedule": {
+    "fill": "SymairaIcons.xcassets/schedule.fill.imageset/schedule.fill.svg",
+    "phosphor": "calendar-dots",
+    "regular": "SymairaIcons.xcassets/schedule.imageset/schedule.svg"
+  },
+  "search": {
+    "fill": "SymairaIcons.xcassets/search.fill.imageset/search.fill.svg",
+    "phosphor": "magnifying-glass",
+    "regular": "SymairaIcons.xcassets/search.imageset/search.svg"
+  },
+  "send": {
+    "fill": "SymairaIcons.xcassets/send.fill.imageset/send.fill.svg",
+    "phosphor": "paper-plane-tilt",
+    "regular": "SymairaIcons.xcassets/send.imageset/send.svg"
+  },
+  "server": {
+    "fill": "SymairaIcons.xcassets/server.fill.imageset/server.fill.svg",
+    "phosphor": "hard-drives",
+    "regular": "SymairaIcons.xcassets/server.imageset/server.svg"
+  },
+  "settings": {
+    "fill": "SymairaIcons.xcassets/settings.fill.imageset/settings.fill.svg",
+    "phosphor": "gear",
+    "regular": "SymairaIcons.xcassets/settings.imageset/settings.svg"
+  },
+  "share": {
+    "fill": "SymairaIcons.xcassets/share.fill.imageset/share.fill.svg",
+    "phosphor": "share",
+    "regular": "SymairaIcons.xcassets/share.imageset/share.svg"
+  },
+  "shield": {
+    "fill": "SymairaIcons.xcassets/shield.fill.imageset/shield.fill.svg",
+    "phosphor": "shield",
+    "regular": "SymairaIcons.xcassets/shield.imageset/shield.svg"
+  },
+  "shieldAlert": {
+    "fill": "SymairaIcons.xcassets/shieldAlert.fill.imageset/shieldAlert.fill.svg",
+    "phosphor": "shield-warning",
+    "regular": "SymairaIcons.xcassets/shieldAlert.imageset/shieldAlert.svg"
+  },
+  "shieldCheck": {
+    "fill": "SymairaIcons.xcassets/shieldCheck.fill.imageset/shieldCheck.fill.svg",
+    "phosphor": "shield-check",
+    "regular": "SymairaIcons.xcassets/shieldCheck.imageset/shieldCheck.svg"
+  },
+  "sidebarLeft": {
+    "fill": "SymairaIcons.xcassets/sidebarLeft.fill.imageset/sidebarLeft.fill.svg",
+    "phosphor": "sidebar-simple",
+    "regular": "SymairaIcons.xcassets/sidebarLeft.imageset/sidebarLeft.svg"
+  },
+  "sidebarRight": {
+    "fill": "SymairaIcons.xcassets/sidebarRight.fill.imageset/sidebarRight.fill.svg",
+    "phosphor": "sidebar",
+    "regular": "SymairaIcons.xcassets/sidebarRight.imageset/sidebarRight.svg"
+  },
+  "sort": {
+    "fill": "SymairaIcons.xcassets/sort.fill.imageset/sort.fill.svg",
+    "phosphor": "sort-ascending",
+    "regular": "SymairaIcons.xcassets/sort.imageset/sort.svg"
+  },
+  "stack": {
+    "fill": "SymairaIcons.xcassets/stack.fill.imageset/stack.fill.svg",
+    "phosphor": "stack",
+    "regular": "SymairaIcons.xcassets/stack.imageset/stack.svg"
+  },
+  "stop": {
+    "fill": "SymairaIcons.xcassets/stop.fill.imageset/stop.fill.svg",
+    "phosphor": "stop",
+    "regular": "SymairaIcons.xcassets/stop.imageset/stop.svg"
+  },
+  "storage": {
+    "fill": "SymairaIcons.xcassets/storage.fill.imageset/storage.fill.svg",
+    "phosphor": "hard-drive",
+    "regular": "SymairaIcons.xcassets/storage.imageset/storage.svg"
+  },
+  "success": {
+    "fill": "SymairaIcons.xcassets/success.fill.imageset/success.fill.svg",
+    "phosphor": "check-circle",
+    "regular": "SymairaIcons.xcassets/success.imageset/success.svg"
+  },
+  "sync": {
+    "fill": "SymairaIcons.xcassets/sync.fill.imageset/sync.fill.svg",
+    "phosphor": "arrows-clockwise",
+    "regular": "SymairaIcons.xcassets/sync.imageset/sync.svg"
+  },
+  "table": {
+    "fill": "SymairaIcons.xcassets/table.fill.imageset/table.fill.svg",
+    "phosphor": "table",
+    "regular": "SymairaIcons.xcassets/table.imageset/table.svg"
+  },
+  "tag": {
+    "fill": "SymairaIcons.xcassets/tag.fill.imageset/tag.fill.svg",
+    "phosphor": "tag",
+    "regular": "SymairaIcons.xcassets/tag.imageset/tag.svg"
+  },
+  "tap": {
+    "fill": "SymairaIcons.xcassets/tap.fill.imageset/tap.fill.svg",
+    "phosphor": "hand-tap",
+    "regular": "SymairaIcons.xcassets/tap.imageset/tap.svg"
+  },
+  "team": {
+    "fill": "SymairaIcons.xcassets/team.fill.imageset/team.fill.svg",
+    "phosphor": "users",
+    "regular": "SymairaIcons.xcassets/team.imageset/team.svg"
+  },
+  "temperature": {
+    "fill": "SymairaIcons.xcassets/temperature.fill.imageset/temperature.fill.svg",
+    "phosphor": "thermometer",
+    "regular": "SymairaIcons.xcassets/temperature.imageset/temperature.svg"
+  },
+  "terminal": {
+    "fill": "SymairaIcons.xcassets/terminal.fill.imageset/terminal.fill.svg",
+    "phosphor": "terminal-window",
+    "regular": "SymairaIcons.xcassets/terminal.imageset/terminal.svg"
+  },
+  "time": {
+    "fill": "SymairaIcons.xcassets/time.fill.imageset/time.fill.svg",
+    "phosphor": "clock",
+    "regular": "SymairaIcons.xcassets/time.imageset/time.svg"
+  },
+  "tools": {
+    "fill": "SymairaIcons.xcassets/tools.fill.imageset/tools.fill.svg",
+    "phosphor": "wrench",
+    "regular": "SymairaIcons.xcassets/tools.imageset/tools.svg"
+  },
+  "tune": {
+    "fill": "SymairaIcons.xcassets/tune.fill.imageset/tune.fill.svg",
+    "phosphor": "sliders-horizontal",
+    "regular": "SymairaIcons.xcassets/tune.imageset/tune.svg"
+  },
+  "undo": {
+    "fill": "SymairaIcons.xcassets/undo.fill.imageset/undo.fill.svg",
+    "phosphor": "arrow-u-up-left",
+    "regular": "SymairaIcons.xcassets/undo.imageset/undo.svg"
+  },
+  "unlink": {
+    "fill": "SymairaIcons.xcassets/unlink.fill.imageset/unlink.fill.svg",
+    "phosphor": "link-break",
+    "regular": "SymairaIcons.xcassets/unlink.imageset/unlink.svg"
+  },
+  "unlock": {
+    "fill": "SymairaIcons.xcassets/unlock.fill.imageset/unlock.fill.svg",
+    "phosphor": "lock-open",
+    "regular": "SymairaIcons.xcassets/unlock.imageset/unlock.svg"
+  },
+  "upload": {
+    "fill": "SymairaIcons.xcassets/upload.fill.imageset/upload.fill.svg",
+    "phosphor": "upload",
+    "regular": "SymairaIcons.xcassets/upload.imageset/upload.svg"
+  },
+  "user": {
+    "fill": "SymairaIcons.xcassets/user.fill.imageset/user.fill.svg",
+    "phosphor": "user-circle",
+    "regular": "SymairaIcons.xcassets/user.imageset/user.svg"
+  },
+  "userAdd": {
+    "fill": "SymairaIcons.xcassets/userAdd.fill.imageset/userAdd.fill.svg",
+    "phosphor": "user-plus",
+    "regular": "SymairaIcons.xcassets/userAdd.imageset/userAdd.svg"
+  },
+  "userUnknown": {
+    "fill": "SymairaIcons.xcassets/userUnknown.fill.imageset/userUnknown.fill.svg",
+    "phosphor": "user-circle-dashed",
+    "regular": "SymairaIcons.xcassets/userUnknown.imageset/userUnknown.svg"
+  },
+  "verified": {
+    "fill": "SymairaIcons.xcassets/verified.fill.imageset/verified.fill.svg",
+    "phosphor": "seal-check",
+    "regular": "SymairaIcons.xcassets/verified.imageset/verified.svg"
+  },
+  "visible": {
+    "fill": "SymairaIcons.xcassets/visible.fill.imageset/visible.fill.svg",
+    "phosphor": "eye",
+    "regular": "SymairaIcons.xcassets/visible.imageset/visible.svg"
+  },
+  "warning": {
+    "fill": "SymairaIcons.xcassets/warning.fill.imageset/warning.fill.svg",
+    "phosphor": "warning",
+    "regular": "SymairaIcons.xcassets/warning.imageset/warning.svg"
+  },
+  "wifi": {
+    "fill": "SymairaIcons.xcassets/wifi.fill.imageset/wifi.fill.svg",
+    "phosphor": "wifi-high",
+    "regular": "SymairaIcons.xcassets/wifi.imageset/wifi.svg"
+  },
+  "window": {
+    "fill": "SymairaIcons.xcassets/window.fill.imageset/window.fill.svg",
+    "phosphor": "browser",
+    "regular": "SymairaIcons.xcassets/window.imageset/window.svg"
+  },
+  "workflow": {
+    "fill": "SymairaIcons.xcassets/workflow.fill.imageset/workflow.fill.svg",
+    "phosphor": "flow-arrow",
+    "regular": "SymairaIcons.xcassets/workflow.imageset/workflow.svg"
+  },
+  "zoomIn": {
+    "fill": "SymairaIcons.xcassets/zoomIn.fill.imageset/zoomIn.fill.svg",
+    "phosphor": "magnifying-glass-plus",
+    "regular": "SymairaIcons.xcassets/zoomIn.imageset/zoomIn.svg"
+  },
+  "zoomOut": {
+    "fill": "SymairaIcons.xcassets/zoomOut.fill.imageset/zoomOut.fill.svg",
+    "phosphor": "magnifying-glass-minus",
+    "regular": "SymairaIcons.xcassets/zoomOut.imageset/zoomOut.svg"
+  }
+}

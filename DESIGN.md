@@ -75,9 +75,16 @@ can migrate deliberately after a tagged AppKit release.
 ## Icons
 
 Use `SymairaIcon` instead of raw SF Symbol strings: one semantic case per
-meaning (`.delete`, `.sync`, `.productVault` …). Express fill/circle/slash with
-`.symbolVariant`, not new cases. `SymairaIconView(icon, trigger:)` and
-`SymairaIconButton` add the shared micro-interactions — slight grow on hover,
-and on click a motion picked per icon (bounce, rotate, wiggle, pulse, slide).
-Reduce Motion renders static glyphs. New icons go into the catalogue here,
-never into an app.
+meaning (`.delete`, `.sync`, `.productVault` …), each with a regular and a
+filled weight (`filled: true`). Glyphs are vendored
+[Phosphor Icons](https://phosphoricons.com) under MIT, so they are licensed for
+every platform and for commercial use (SF Symbols are restricted to Apple
+platforms and must not be used in logos). Web, Android or other clients read
+`Sources/SymairaTheme/Resources/icons.json` for the SVG paths.
+
+`SymairaIconView(icon, trigger:)` and `SymairaIconButton` add the shared
+micro-interactions: a slight grow on hover and, on click, one motion chosen per
+icon (bounce, rotate, wiggle, pulse or slide). Reduce Motion renders static
+glyphs. New icons go into `scripts/phosphor-icon-map.txt`, then run
+`scripts/vendor-phosphor-icons.py <unpacked @phosphor-icons/core> scripts/phosphor-icon-map.txt`.
+Never add icons inside an app.
