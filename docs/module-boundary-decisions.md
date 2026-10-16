@@ -13,6 +13,31 @@ repeated. This file records each one — including the ones that ended in "no".
 A decision recorded here is not permanent. It is a snapshot of the evidence at a
 point in time; a new consumer is a reason to reopen it.
 
+## Shared workspace and pilot interaction rules
+
+**Verdict: shared design primitives belong in `SymairaTheme`; product screens do not.**
+The Cockpit pilot established rounded inset content, draggable sidebar chrome,
+stable content-action geometry, neutral meter roles and System/Light/Dark controls.
+Daniel explicitly designated AppKit as the owner of these rules for Symaira products.
+
+There are genuine needs in independent products: Cockpit's tuning workspace,
+Brain's `Sources/SymBrainApp/ContentView.swift`, and Desktop's
+`Sources/SymDeskApp/ContentView.swift` all compose sidebar/detail native windows.
+Brain's Skills/Sync views and Desktop's editor/onboarding/meeting views already
+consume AppKit primary/secondary actions. This adds primitives to the existing
+theme module, not a new single-consumer product module or dependency.
+
+The shared workspace owns geometry, native drag/cursor behavior, panel clipping,
+chrome and protection context. The product owns destinations, actions, content
+width, models and persistence identity. `KeepAwakeCard` and hardware/power behavior
+stay in Cockpit. Appearance vocabulary, mapping and menu are shared; Cockpit keeps
+its grandfathered `com.symaira.symtune.appearance` key and preview isolation.
+
+Cockpit is wired to these APIs locally. Brain/Desktop adoption is still a separate
+consumer integration after an exact tagged pin is available; inspecting their
+need is not evidence of migration. The [rule inventory](workspace-foundation.md)
+records the concrete shared owners and exclusions.
+
 ---
 
 ## 2026-08-06 — `SymairaMCP` is built in-house, not a dependency on `swift-sdk`
