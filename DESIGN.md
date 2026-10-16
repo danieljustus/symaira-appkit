@@ -74,17 +74,12 @@ can migrate deliberately after a tagged AppKit release.
 
 ## Icons
 
-Use `SymairaIcon` instead of raw SF Symbol strings: one semantic case per
-meaning (`.delete`, `.sync`, `.productVault` …), each with a regular and a
-filled weight (`filled: true`). Glyphs are vendored
-[Phosphor Icons](https://phosphoricons.com) under MIT, so they are licensed for
-every platform and for commercial use (SF Symbols are restricted to Apple
-platforms and must not be used in logos). Web, Android or other clients read
-`Sources/SymairaTheme/Resources/icons.json` for the SVG paths.
-
-`SymairaIconView(icon, trigger:)` and `SymairaIconButton` add the shared
-micro-interactions: a slight grow on hover and, on click, one motion chosen per
-icon (bounce, rotate, wiggle, pulse or slide). Reduce Motion renders static
-glyphs. New icons go into `scripts/phosphor-icon-map.txt`, then run
-`scripts/vendor-phosphor-icons.py <unpacked @phosphor-icons/core> scripts/phosphor-icon-map.txt`.
-Never add icons inside an app.
+Use `SymairaIcon` instead of raw SF Symbol strings. It has one semantic case per
+meaning, such as `.delete`, `.refresh` or `.productVault`. The glyphs are drawn
+in-house: rounded, with a 2 pt stroke, and licensed for every platform. Hovering
+over an icon moves its parts into a small preview pose, and clicking plays a
+motion that matches its meaning. For example, the trash lid lifts, the bell
+rings, the check mark draws itself and the vault dial turns. When Reduce Motion
+is on, the icons are drawn static. To add or change an icon, edit
+[`Brand/Icons/icons.svg`](Brand/Icons/README.md) and regenerate. Never add icons
+inside an app.
