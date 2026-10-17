@@ -150,7 +150,7 @@ private struct Animated {
 public struct SymairaTopoView: View {
     /// SPM: Shader liegt im Modul-Bundle. Direkter swiftc-Build (Demo): App-Bundle.
     #if SWIFT_PACKAGE
-    private static let library = ShaderLibrary.bundle(.module)
+    private static let library = ShaderLibrary.bundle(SymairaThemeResources.bundle)
     #else
     private static let library = ShaderLibrary.default
     #endif

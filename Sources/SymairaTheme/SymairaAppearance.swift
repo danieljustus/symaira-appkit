@@ -40,34 +40,51 @@ public enum SymairaAppearance: String, CaseIterable, Sendable {
     #endif
 }
 
-/// Native toolbar settings entry. Appearance is a setting, not a separate
-/// chrome control; the host supplies its existing full-settings action.
-public struct SymairaSettingsMenu: View {
-    @Binding private var selection: SymairaAppearance
+/// One click opens the host's settings window. No intermediate toolbar menu.
+public struct SymairaSettingsButton: View {
     private let openSettings: () -> Void
 
-    public init(selection: Binding<SymairaAppearance>, openSettings: @escaping () -> Void) {
-        _selection = selection
+    public init(openSettings: @escaping () -> Void) {
         self.openSettings = openSettings
     }
 
     public var body: some View {
-        Menu {
-            Picker("Appearance", selection: $selection) {
-                ForEach(SymairaAppearance.allCases, id: \.self) { option in
-                    Text(option.title).tag(option)
-                }
-            }
-            .pickerStyle(.inline)
-            Divider()
-            Button("All Settings…", action: openSettings)
-        } label: {
+        Button(action: openSettings) {
             Label("Settings", systemImage: "gearshape")
         }
         .labelStyle(.iconOnly)
-        .menuIndicator(.hidden)
         .accessibilityLabel("Settings")
+        .accessibilityIdentifier("symaira-settings-button")
         .help("Settings")
+    }
+}
+
+/// Source-compatible entry for existing consumers; the gear now opens settings directly.
+@available(*, deprecated, message: "Use SymairaSettingsButton and place SymairaAppearancePicker in settings.")
+public struct SymairaSettingsMenu: View {
+    private let openSettings: () -> Void
+
+    public init(selection _: Binding<SymairaAppearance>, openSettings: @escaping () -> Void) {
+        self.openSettings = openSettings
+    }
+
+    public var body: some View { SymairaSettingsButton(openSettings: openSettings) }
+}
+
+/// Shared appearance control for a settings form. The host retains its preference key.
+public struct SymairaAppearancePicker: View {
+    @Binding private var selection: SymairaAppearance
+
+    public init(selection: Binding<SymairaAppearance>) { _selection = selection }
+
+    public var body: some View {
+        Picker("Appearance", selection: $selection) {
+            ForEach(SymairaAppearance.allCases, id: \.self) { option in
+                Text(option.title).tag(option)
+            }
+        }
+        .pickerStyle(.segmented)
+        .accessibilityIdentifier("symaira-appearance-picker")
     }
 }
 

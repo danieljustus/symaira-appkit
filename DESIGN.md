@@ -52,8 +52,10 @@ never depend on a sibling checkout.
   `SymairaSidebarToggle` for the approved rounded workspace. It supports native
   drag resizing, collapse to an icon rail, a resize cursor and keyboard/AX
   alternatives without recreating the content.
-- Use `SymairaNavigationButtonStyle` for custom navigation rows. The host supplies
-  destinations, selection traits, clear labels and visible keyboard focus.
+- Use `SymairaNavigationButton` for workspace destinations: it owns row geometry,
+  label/icon modes, selection traits, hover/pressed styling and keyboard focus.
+  Hosts supply meaningful labels, symbols, selection and actions. Use the lower-level
+  `SymairaNavigationButtonStyle` only for genuinely custom rows.
 - Use `.symairaButtonStyle(.primary/.secondary)` for opaque content actions.
   Both roles share font, horizontal padding and minimum height (40 pt macOS,
   44 pt iOS); switching roles must not shrink the action. A stateful label uses
@@ -62,12 +64,19 @@ never depend on a sibling checkout.
   controls in `SymairaGlassEffectContainer` rather than glassing every card.
 - `SymairaBarColors` and `SymairaProgressStyle` share neutral meter/slider colors.
   Warnings remain explicit text/icons, not an unrelated meter palette.
-- `SymairaAppearance` and `SymairaAppearanceMenu` provide System/Light/Dark.
+- `SymairaAppearance` and `SymairaAppearancePicker` provide System/Light/Dark
+  inside the settings form, alongside the other preferences, never in the gear.
   macOS `.apply()` affects existing/new native surfaces; System clears the
   override. iOS uses `.preferredColorScheme(selection.colorScheme)`.
-- Workspace toolbars use one trailing `SymairaSettingsMenu`: a native gear
-  without an extra chevron, containing appearance choices and the host's full
-  settings action. Do not duplicate settings in the sidebar or parent toolbar.
+- Workspace toolbars use one trailing `SymairaSettingsButton`: clicking the
+  native gear opens the settings window directly, without any intermediate menu.
+  SwiftUI hosts use `Settings { }` and `openSettings`; native AppKit hosts open
+  their existing preferences window. Repeated clicks reuse that window. Do not
+  duplicate settings in the sidebar or replace the current workspace destination.
+- Mount `SymairaWorkspaceToolbar` and apply `.symairaWorkspaceWindow()` to the
+  scene so placement and native title-bar mode cannot drift between consumers.
+  Keep content fonts scoped to content, not the enclosing toolbar. Form sections
+  and notices are opaque reading surfaces; only navigation chrome uses glass.
 - Use native `NavigationSplitView`, `TabView`, toolbars, sheets and touch targets
   where appropriate to the platform. The drag-resizable workspace is macOS-only;
   do not impose a desktop column on phone layouts.
@@ -98,12 +107,16 @@ SPM dependencies are development state, not a published fleet upgrade.
 | --- | --- |
 | Rounded workspace, chrome and resizable sidebar | `SymairaWorkspace` + `SymairaSidebarState` |
 | Sidebar toggle/shortcut | `SymairaSidebarToggle` |
+| Toolbar placement and native title-bar mode | `SymairaWorkspaceToolbar`, `.symairaWorkspaceWindow()` |
+| Navigation row geometry, labels and focus | `SymairaNavigationButton` |
 | Navigation hover/selection palette | `SymairaNavigationButtonStyle` |
 | Text-protection environment wrapper | `.topoProtected()` in a shared workspace |
 | Stateful prominent/secondary button | `.symairaButtonStyle(.primary/.secondary)` |
 | Native slider and meter palette | `SymairaBarColors` + `SymairaProgressStyle` |
-| Appearance mapping/menu | `SymairaAppearance` + `SymairaAppearanceMenu` |
+| Direct settings-window action | `SymairaSettingsButton` |
+| Appearance mapping/control inside settings | `SymairaAppearance` + `SymairaAppearancePicker` |
 | Text-bearing content card | `.symairaCard()` |
+| Settings/form sections, rows, fields and dividers | `SymairaFormSection`, `SymairaFormRow`, `.symaira`, `SymairaFormDivider` |
 | Group of floating controls | `SymairaGlassEffectContainer` |
 | Custom toolbar glass background | `.symairaGlassChrome(isInteractive: true)` |
 | Status pill, error/info banner | `SymairaBadge`, `SymairaNotice` |
@@ -113,6 +126,10 @@ Legacy `SymairaBackdrop`, `BlueprintGrid`, `AmbientGlows`, `.glassCard()`,
 `.glassmorphicPanel()` and fixed `Color.symaira*` aliases remain source-compatible.
 They are compatibility APIs, not the current visual direction. Existing consumers
 migrate deliberately; this source update does not re-theme already released apps.
+
+`SymairaSettingsMenu` retains its old initializer for source compatibility but
+now delegates directly to the settings button. Consumers must add the shared
+appearance picker to their settings window before adopting this behavior change.
 
 ## Icons
 

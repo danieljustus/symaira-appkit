@@ -8,38 +8,42 @@ import AppKit
 
 @MainActor
 final class SettingsMenuTests: XCTestCase {
-    func testNativeSettingsMenuRoutesAppearanceAndFullSettings() async throws {
+    func testGearOpensSettingsWithOneActionAndNoSubmenu() async throws {
         guard #available(macOS 14.4, *) else { throw XCTSkip("NSHostingMenu requires macOS 14.4") }
         _ = NSApplication.shared
-        var selection = SymairaAppearance.system
-        var settingsOpened = false
-        let root = SymairaSettingsMenu(
-            selection: Binding(get: { selection }, set: { selection = $0 }),
-            openSettings: { settingsOpened = true })
-        // Exercise the production SwiftUI menu through Apple's public menu
-        // host, not a guessed private NSPopUpButton implementation or AX grant.
+        var settingsOpened = 0
+        let root = SymairaSettingsButton { settingsOpened += 1 }
+        // A native menu host executes the production button action in-process.
+        // It must expose one action, not appearance choices or another submenu.
         let menu = NSHostingMenu(rootView: root)
         menu.update()
         try await Task.sleep(for: .milliseconds(150))
+        XCTAssertEqual(menu.items.count, 1)
+        XCTAssertNil(try XCTUnwrap(menu.items.first).submenu)
+        menu.performActionForItem(at: 0)
+        XCTAssertEqual(settingsOpened, 1)
+    }
 
-        func descendants(_ menu: NSMenu) -> [NSMenuItem] {
-            menu.update()
-            return menu.items.flatMap { item in
-                [item] + (item.submenu.map(descendants) ?? [])
-            }
+    func testAppearancePickerChangesTheHostBinding() async throws {
+        _ = NSApplication.shared
+        var selection = SymairaAppearance.system
+        let host = NSHostingView(
+            rootView: SymairaAppearancePicker(
+                selection: Binding(get: { selection }, set: { selection = $0 })))
+        host.frame = NSRect(x: 0, y: 0, width: 300, height: 44)
+        host.layoutSubtreeIfNeeded()
+        try await Task.sleep(for: .milliseconds(150))
+        func controls(_ view: NSView) -> [NSSegmentedControl] {
+            (view as? NSSegmentedControl).map { [$0] } ?? view.subviews.flatMap(controls)
         }
-        let items = descendants(menu)
-        XCTAssertEqual(items.filter { $0.title == "All Settings…" }.count, 1)
-        for choice in SymairaAppearance.allCases {
-            let item = try XCTUnwrap(items.first { $0.title == choice.title }, "Items: \(items.map(\.title))")
-            let parent = try XCTUnwrap(item.menu)
-            parent.performActionForItem(at: parent.index(of: item))
+        let control = try XCTUnwrap(controls(host).first)
+        XCTAssertEqual(control.segmentCount, SymairaAppearance.allCases.count)
+        for (index, choice) in SymairaAppearance.allCases.enumerated() {
+            XCTAssertEqual(control.label(forSegment: index), choice.title)
+            control.selectedSegment = index
+            control.sendAction(control.action, to: control.target)
             XCTAssertEqual(selection, choice)
         }
-        let settings = try XCTUnwrap(items.first { $0.title == "All Settings…" })
-        let parent = try XCTUnwrap(settings.menu)
-        parent.performActionForItem(at: parent.index(of: settings))
-        XCTAssertTrue(settingsOpened)
     }
 }
 #endif

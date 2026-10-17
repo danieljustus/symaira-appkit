@@ -38,6 +38,22 @@ consumer integration after an exact tagged pin is available; inspecting their
 need is not evidence of migration. The [rule inventory](workspace-foundation.md)
 records the concrete shared owners and exclusions.
 
+### EraseMe adoption: shared chrome, navigation and forms
+
+EraseMe's independent removal workspace needs the same toolbar placement,
+native title-bar mode, destination row geometry and opaque settings surfaces as
+Cockpit. These rules belong to the existing theme module via
+`SymairaWorkspaceToolbar`, `.symairaWorkspaceWindow()` and
+`SymairaNavigationButton`, with existing forms/feedback updated in place.
+No product module or third-party dependency is added. The new composition APIs
+are locally consumed by EraseMe; Cockpit still uses the equivalent primitives.
+
+Removal status-to-tone mapping, dashboard chart/stat composition, request and
+broker models, HTTP/MCP authentication, server configuration and credential
+storage remain EraseMe-owned. Importing the MCP server, provider setup, updater
+or keychain modules solely for visual consistency would change functional/security
+contracts, so those are not part of this design migration.
+
 ---
 
 ## 2026-08-06 — `SymairaMCP` is built in-house, not a dependency on `swift-sdk`

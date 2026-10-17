@@ -150,11 +150,18 @@ effects with material or opaque accessibility fallbacks on earlier systems. See
 
 The approved desktop shell is `SymairaWorkspace` with `SymairaSidebarState`:
 rounded inset content, continuous chrome, drag resizing and a collapsible icon
-rail. `SymairaSidebarToggle`, `SymairaAppearanceMenu`, `SymairaNavigationButtonStyle`
-and `SymairaProgressStyle` keep interaction rules in the library. See
+rail. `SymairaWorkspaceToolbar` opens settings directly through its shared gear
+button, without an intermediate menu. Place `SymairaAppearancePicker` inside the
+settings window alongside other preferences. `SymairaSidebarToggle`,
+`SymairaNavigationButton` and `SymairaProgressStyle` keep interaction rules in the library. See
 [workspace usage and the shared rule inventory](docs/workspace-foundation.md).
 Product-specific screens and settings keys remain product-owned; release pins
 must be upgraded explicitly before other installed apps acquire these changes.
+
+Packaged apps must embed `symaira-appkit_SymairaTheme.bundle` in their Resources
+directory. The shared font/shader resolver prefers that shipped bundle before
+SwiftPM's development fallback. Validate the actual app without the build-cache
+resource bundle; a file-presence check alone does not prove self-contained loading.
 
 Typography uses view-resolved roles so existing mounted views respond to iOS
 Dynamic Type changes while keeping Google Sans Flex's fixed optical size.
