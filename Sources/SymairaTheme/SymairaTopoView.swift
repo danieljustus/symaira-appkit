@@ -153,13 +153,15 @@ private final class Clock {  // Referenztyp: Mutation im Render-Pfad invalidiert
 
 private struct Animated {
     // Random start slice of the noise field: every mount (window, page) shows new terrain.
-    var flowT = Double.random(in: 0..<100), rt = 0.0, last: Date?, nextThink = 0.0
+    var flowT = SymairaTopoView.startPhase(), rt = 0.0, last: Date?, nextThink = 0.0
     var cur = SymairaTopoState.idle.target, tintMix = 0.0
     var mouse = CGPoint(x: -1e4, y: -1e4), mouseAmt = 0.0, press = 0.0
     var lastOrigin: CGPoint?, lastSize: CGSize?
 }
 
 public struct SymairaTopoView: View {
+    /// Start slice per mount; tests pin it to compare renders pixel for pixel.
+    nonisolated(unsafe) static var startPhase: () -> Double = { .random(in: 0..<100) }
     /// SPM: Shader liegt im Modul-Bundle. Direkter swiftc-Build (Demo): App-Bundle.
     #if SWIFT_PACKAGE
     private static let library = ShaderLibrary.bundle(SymairaThemeResources.bundle)
