@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   scroll views, so the pointer response was dead in real apps. A
   non-consuming window event monitor now tracks movement and clicks, and a
   tracking area clears the pointer when it leaves the panel.
+- Pointer interaction is smooth: while the pointer is over the surface the
+  topography renders at the display's frame rate instead of the 20 fps idle
+  cap, which returns as soon as the pointer leaves.
 
 ## [0.15.1] - 2026-10-17
 

@@ -53,6 +53,9 @@ public final class SymairaTopoModel {
     // Geometry is written only by layout callbacks, not by the shader. Observe it
     // so paused/reduced-motion surfaces redraw after scrolling or a sidebar change.
     var rects: [String: (CGRect, Bool)] = [:]
+    // Pointer over the surface: render at display rate instead of the idle cap.
+    // Observed, but only flips on enter/exit, never per mouse move.
+    var interactive = false
     // Per-frame accumulators remain unobserved: the shader mutates them itself.
     @ObservationIgnored var ripples: [(CGPoint, Date, Double)] = []
     @ObservationIgnored var pointer: CGPoint?
@@ -114,6 +117,7 @@ public final class SymairaTopoModel {
             pointerVelocity = min(1, pointerVelocity + Double(hypot(p.x - old.x, p.y - old.y)) / 120)
         }
         pointer = p
+        if interactive != (p != nil) { interactive = p != nil }
     }
     /// Klick, Halten und Ziehen. Beim Ziehen pausiert Hover, daher Position über Deltas fortschreiben.
     func handle(_ e: NSEvent) {
@@ -189,7 +193,9 @@ public struct SymairaTopoView: View {
 
     public var body: some View {
         GeometryReader { geo in
-            TimelineView(.animation(minimumInterval: 1 / SymairaTokens.Topo.fps, paused: paused)) { ctx in
+            TimelineView(
+                .animation(minimumInterval: model.interactive ? nil : 1 / SymairaTokens.Topo.fps, paused: paused)
+            ) { ctx in
                 Rectangle().fill(SymairaTokens.canvas)  // Shader zeichnet die Linien über die Canvas-Farbe
                     .colorEffect(
                         // A paused timeline keeps its last date while layout still redraws;
@@ -211,6 +217,7 @@ public struct SymairaTopoView: View {
             clock.a.last = nil
             model.pressed = false
             model.pointer = nil
+            model.interactive = false
             model.ripples.removeAll()
         }
     }

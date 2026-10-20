@@ -42,12 +42,14 @@ final class TopographyPointerTests: XCTestCase {
         let sidebar = SymairaSidebarState().width
         XCTAssertEqual(pointer.x, 700 - sidebar, accuracy: 1)
         XCTAssertEqual(pointer.y, 150, accuracy: 1)
+        XCTAssertTrue(model.interactive, "Pointer over the surface renders at display rate")
 
         try move(to: NSPoint(x: 710, y: 440))
         XCTAssertGreaterThan(model.pointerVelocity, 0, "Movement drives the pointer response")
 
         try move(to: NSPoint(x: sidebar / 2, y: 300))
         XCTAssertNil(model.pointer, "The sidebar is outside the topography")
+        XCTAssertFalse(model.interactive, "Without the pointer the idle frame cap applies again")
     }
 }
 #endif
