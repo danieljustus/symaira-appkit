@@ -100,9 +100,11 @@ static float topoHeight(float2 pos, thread const TopoIn &in){
     float vis = mix(1., clamp((length(e) - .78) / .42, 0., 1.), p5.z);
     float pulse = 1. + think * .08 * sin(rt * 1.5);
     float a = min(max(line * p4.z, idx * p4.w) * vis * pulse, p5.y) * mask * k;
-    // Depth: valleys of the same height field sit slightly darker and flow with it.
-    // Continuous in height; a stepped per-level tint drew visible edges along contours.
-    float shade = p6.w * smoothstep(.62, .30, v / p4.y) * calm;
+    // Depth: one broad, slow noise octave (2.5x the contour scale) gives one or two soft
+    // basins per window that drift with time. Following the full height field made many
+    // small dark patches; a stepped per-level tint drew edges along single contours.
+    float broad = n3(float3(pos / (p4.x * 2.5), p0.z * .25));
+    float shade = p6.w * smoothstep(.62, .25, broad) * calm;
     half3 c = mix(col4.rgb, tint4.rgb, half(tintA));
     // über die Eingangsfarbe (Canvas) komponieren: SwiftUI überspringt vollständig transparente Layer
     return half4(mix(color.rgb * half(1. - shade), c, half(a)), color.a);

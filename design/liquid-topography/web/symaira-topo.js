@@ -50,7 +50,7 @@ void main(){
  float vis=mix(1.,clamp((length(e)-.78)/.42,0.,1.),basin);
  float pulse=1.+think*.08*sin(rt*1.5);
  float a=min(max(line*lineA,idx*idxA)*vis*pulse,maxA)*mask*k;
- float shade=depth*smoothstep(.62,.30,v/levels)*calm;
+ float shade=depth*smoothstep(.62,.25,n3(vec3(px/(scale*2.5),t*.25)))*calm;
  vec3 c=mix(col,tint,tintA);
  o=vec4(c*a,a+shade*(1.-a));
 }`;

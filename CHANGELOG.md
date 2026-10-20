@@ -18,9 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   visible steps; it is removed.
 
 ### Changed
-- Liquid Topography depth: valleys of the height field sit slightly darker
-  than the canvas (10 % dark, 5 % light) and move with the terrain and the
-  pointer. Depth fades out over 60 pt around protected content, so text keeps
+- Liquid Topography depth: one or two broad, soft basins per window sit
+  slightly darker than the canvas (6 % dark, 3 % light) and drift slowly with
+  time. They come from a single large-scale noise octave, not the detailed
+  height field, so the surface stays calm. Depth fades out over 60 pt around protected content, so text keeps
   its contrast and no light boxes appear. Apple and web share the change;
   tokens `depthDark` and `depthLight` replace `bandAlpha`.
 

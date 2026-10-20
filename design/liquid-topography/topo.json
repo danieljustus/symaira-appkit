@@ -5,8 +5,8 @@
   "lineAlpha": 0.13,
   "indexAlpha": 0.165,
   "depth": {
-    "dark": 0.1,
-    "light": 0.05
+    "dark": 0.06,
+    "light": 0.03
   },
   "maxAlpha": 0.26,
   "basinOpen": 0.7,
