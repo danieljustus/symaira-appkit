@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   topography renders at the display's frame rate instead of the 20 fps idle
   cap, which returns as soon as the pointer leaves.
 
+### Changed
+- Every topography mount (new window, returning to a page) starts at a random
+  slice of the noise field, so the terrain differs each time (Apple and web).
+
 ## [0.15.1] - 2026-10-17
 
 ### Fixed

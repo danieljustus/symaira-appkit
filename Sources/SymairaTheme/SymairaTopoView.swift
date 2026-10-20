@@ -152,7 +152,8 @@ private final class Clock {  // Referenztyp: Mutation im Render-Pfad invalidiert
 }
 
 private struct Animated {
-    var flowT = 0.0, rt = 0.0, last: Date?, nextThink = 0.0
+    // Random start slice of the noise field: every mount (window, page) shows new terrain.
+    var flowT = Double.random(in: 0..<100), rt = 0.0, last: Date?, nextThink = 0.0
     var cur = SymairaTopoState.idle.target, tintMix = 0.0
     var mouse = CGPoint(x: -1e4, y: -1e4), mouseAmt = 0.0, press = 0.0
     var lastOrigin: CGPoint?, lastSize: CGSize?
