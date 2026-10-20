@@ -29,7 +29,7 @@ static float sdBox(float2 p, float4 r, float rad){
 // p0: size.x, size.y, t, rt     p1: mouse.x, mouse.y, mouseAmt, k
 // p2: warp, think, problem, ask p3: tintAmount, askX, askY, displayScale
 // p4: scale, levels, lineA, idxA p5: unused, maxA, basinOpen, press
-// p6: pointerRadius, pointerStrength, pressDepth, depth
+// p6: pointerRadius, pointerStrength, pressDepth, unused
 struct TopoIn {
     float2 mouse; float mAmt; float t, rt, warp, prob, ask, press;
     float2 askP; float4 p4, p6;
@@ -67,7 +67,7 @@ static float topoHeight(float2 pos, thread const TopoIn &in){
 // p0: size.x, size.y, t, rt     p1: mouse.x, mouse.y, mouseAmt, k
 // p2: warp, think, problem, ask p3: tintAmount, askX, askY, displayScale
 // p4: scale, levels, lineA, idxA p5: unused, maxA, basinOpen, press
-// p6: pointerRadius, pointerStrength, pressDepth, depth
+// p6: pointerRadius, pointerStrength, pressDepth, unused
 [[ stitchable ]] half4 symairaTopo(float2 pos, half4 color,
     float4 p0, float4 p1, float4 p2, float4 p3, float4 p4, float4 p5, float4 p6,
     half4 col4, half4 tint4, device const float *rects, int rectCount, device const float *ripples, int rippleCount)
@@ -78,13 +78,10 @@ static float topoHeight(float2 pos, thread const TopoIn &in){
                   rects, rectCount, ripples, rippleCount };
 
     // Schutzzonen: keine Linien unter Text/Karten, weicher Rand von 2–8 pt.
-    // Depth fades out over 60 pt around protected content: no light boxes, no contrast loss.
-    float mask = 1., calm = 1.;
+    float mask = 1.;
     for (int i = 0; i < rectCount / 5; i++) {
         float4 r = float4(rects[i*5], rects[i*5+1], rects[i*5+2], rects[i*5+3]);
-        float sd = sdBox(pos, r, 12.);
-        mask = min(mask, smoothstep(2., 8., sd));
-        calm = min(calm, smoothstep(0., 60., sd));
+        mask = min(mask, smoothstep(2., 8., sdBox(pos, r, 12.)));
     }
     if (mask <= 0.) { return color; }
 
@@ -99,13 +96,10 @@ static float topoHeight(float2 pos, thread const TopoIn &in){
     float2 e = (pos - float2(res.x * .6, res.y * .55)) / float2(res.x * .36, res.y * .5);
     float vis = mix(1., clamp((length(e) - .78) / .42, 0., 1.), p5.z);
     float pulse = 1. + think * .08 * sin(rt * 1.5);
+    // Only lines: a per-level tint (floor(height)) brightened the surface in steps and drew
+    // faint shading edges along single contours.
     float a = min(max(line * p4.z, idx * p4.w) * vis * pulse, p5.y) * mask * k;
-    // Depth: one broad, slow noise octave (2.5x the contour scale) gives one or two soft
-    // basins per window that drift with time. Following the full height field made many
-    // small dark patches; a stepped per-level tint drew edges along single contours.
-    float broad = n3(float3(pos / (p4.x * 2.5), p0.z * .25));
-    float shade = p6.w * smoothstep(.62, .25, broad) * calm;
     half3 c = mix(col4.rgb, tint4.rgb, half(tintA));
     // über die Eingangsfarbe (Canvas) komponieren: SwiftUI überspringt vollständig transparente Layer
-    return half4(mix(color.rgb * half(1. - shade), c, half(a)), color.a);
+    return half4(mix(color.rgb, c, half(a)), color.a);
 }

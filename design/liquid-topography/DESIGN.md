@@ -384,7 +384,7 @@ Siehe `components:` oben. Varianten sind eigene Einträge (`button-primary-dark`
 
 Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira-topo.js`), auf macOS und iOS über Metal (`apple/SymairaTopo.metal`). Beide nutzen denselben Algorithmus. Parameter stehen in `topo.json`.
 
-**Bild:** 16 Höhenstufen aus Rauschen mit Domain-Warp. Jede fünfte Linie ist eine weiche Zähllinie. Tiefe entsteht stufenlos aus einer einzelnen, großräumigen Rauschoktave (2,5-fache Linienskala): ein bis zwei weiche Senken pro Fenster liegen leicht dunkler als die Fläche (dunkel 6 %, hell 3 %) und driften langsam mit der Zeit. Kleinteilige Abdunklung entlang des vollen Höhenfelds lenkt ab und ist ausgeschlossen. Der Talkessel um den Inhalt wird zu 70 % freigestellt.
+**Bild:** 16 Höhenstufen aus Rauschen mit Domain-Warp. Jede fünfte Linie ist eine weiche Zähllinie. Zwischen den Linien bleibt die Fläche reines `canvas`, ohne Tönung pro Höhenstufe und ohne Abdunklung; der Talkessel um den Inhalt wird zu 70 % freigestellt.
 
 **Reaktionen:**
 
@@ -402,7 +402,7 @@ Die Hintergrundebene ist ein Shader. Im Web läuft er über WebGL2 (`web/symaira
 
 **Lesbarkeitsgarantien (nicht verhandelbar):**
 
-1. Jedes Element mit Text oder Bedienfunktion ist eine Schutzzone. Dort wird keine Linie gezeichnet. Ein schmaler 2–8px-Übergang ersetzt den früheren breiten Halo. Überlappende Masken und Konturverformungen werden nicht aufsummiert; sie dürfen keine künstlichen Schatten bilden. Die Tiefenabdunklung klingt rund um Schutzzonen über 60px weich aus, damit weder helle Kästen um Text entstehen noch Kontrast verloren geht. Eine stufige Tönung pro Höhenstufe ist ausgeschlossen: Sie zeichnet sichtbare Kanten entlang einzelner Höhenlinien.
+1. Jedes Element mit Text oder Bedienfunktion ist eine Schutzzone. Dort wird keine Linie gezeichnet. Ein schmaler 2–8px-Übergang ersetzt den früheren breiten Halo. Überlappende Masken und Konturverformungen werden nicht aufsummiert; sie dürfen keine künstlichen Schatten bilden. Eine Tönung pro Höhenstufe ist ausgeschlossen: Sie zeichnet sichtbare Kanten entlang einzelner Höhenlinien.
 2. Die Deckkraft der Linien ist hart auf 0.26 begrenzt. Zustände, Wellen und Zeiger können sie nicht überschreiten.
 3. Zustände ändern Tempo, Form und Tönung, aber keine Information. Die Information steht immer im Text (`role="status"` / `role="alert"`).
 4. Bei `prefers-reduced-motion` bzw. „Bewegung reduzieren“ bleibt das Bild statisch, ohne Wellen und ohne Zeigerreaktion. Gleiches gilt für den Stromsparmodus unter iOS.

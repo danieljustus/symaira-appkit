@@ -10,20 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.17.0] - 2026-10-20
 
 ### Breaking
-- `SymairaTokens.Topo.bandAlpha` is removed; use `depthDark` / `depthLight`.
+- `SymairaTokens.Topo.bandAlpha` is removed.
 
 ### Fixed
 - The topography no longer draws faint shading edges along single contour
-  lines. A stepped per-level tint (`floor(height)`) brightened the surface in
-  visible steps; it is removed.
-
-### Changed
-- Liquid Topography depth: one or two broad, soft basins per window sit
-  slightly darker than the canvas (6 % dark, 3 % light) and drift slowly with
-  time. They come from a single large-scale noise octave, not the detailed
-  height field, so the surface stays calm. Depth fades out over 60 pt around protected content, so text keeps
-  its contrast and no light boxes appear. Apple and web share the change;
-  tokens `depthDark` and `depthLight` replace `bandAlpha`.
+  lines. A per-level tint (`floor(height) * bandAlpha`) brightened the surface
+  in steps, also cut by the protection mask and basin ellipse. Between the
+  lines the surface is now plain `canvas` (Apple and web).
 
 ## [0.16.1] - 2026-10-20
 

@@ -73,8 +73,6 @@ public enum SymairaTokens {
         public static let basinOpen: Double = 0.7
         public static let lightModeFactor: Double = 0.9
         public static let transitionSeconds: Double = 0.9
-        public static let depthDark: Double = 0.06
-        public static let depthLight: Double = 0.03
         public static let fps: Double = 20.0
         public static let maxProtectedRects = 20
         public static let pointerRadius: Double = 70.0
