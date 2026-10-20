@@ -124,8 +124,10 @@ def swift(d, r, topo):
     out += [f"        public static let {k}: CGFloat = {float(v[:-2])}" for k, v in d["spacing"].items()]
     out += ["    }", "    public static let iconWeight: Font.Weight = .semibold", "",
             "    /// Parameter der Hochebene, 1:1 aus topo.json", "    public enum Topo {"]
-    for k in ("levels", "scale", "lineAlpha", "indexAlpha", "bandAlpha", "maxAlpha", "basinOpen", "lightModeFactor", "transitionSeconds"):
+    for k in ("levels", "scale", "lineAlpha", "indexAlpha", "maxAlpha", "basinOpen", "lightModeFactor", "transitionSeconds"):
         out.append(f"        public static let {k}: Double = {float(topo[k])}")
+    out.append(f"        public static let depthDark: Double = {float(topo['depth']['dark'])}")
+    out.append(f"        public static let depthLight: Double = {float(topo['depth']['light'])}")
     out.append(f"        public static let fps: Double = {float(topo['fps']['apple'])}")
     out.append(f"        public static let maxProtectedRects = {topo['maxProtectedRects']}")
     out.append(f"        public static let pointerRadius: Double = {float(topo['pointer']['radius'])}")

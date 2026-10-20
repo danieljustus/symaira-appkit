@@ -289,8 +289,10 @@ public struct SymairaTopoView: View {
             .float4(a.cur.warp, a.cur.think, a.cur.problem, a.cur.ask),
             .float4(a.cur.tintAmount, ask.x, ask.y, displayScale),
             .float4(tokens.scale, tokens.levels, tokens.lineAlpha, tokens.indexAlpha),
-            .float4(tokens.bandAlpha, tokens.maxAlpha, tokens.basinOpen, a.press),
-            .float4(tokens.pointerRadius, tokens.pointerStrength, tokens.pressDepth, 0),
+            .float4(0, tokens.maxAlpha, tokens.basinOpen, a.press),
+            .float4(
+                tokens.pointerRadius, tokens.pointerStrength, tokens.pressDepth,
+                dark ? tokens.depthDark : tokens.depthLight),
             .color(SymairaTokens.topo),
             .color(
                 a.cur.tintIsCritical

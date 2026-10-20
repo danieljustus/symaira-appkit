@@ -91,6 +91,9 @@ final class LiquidTopographyTests: XCTestCase {
 
     /// Rendert die echte View offscreen: Linien sichtbar außerhalb, keine Linien in der Schutzzone.
     func testShaderRendersLinesAndKeepsProtectedZoneClear() throws {
+        let startPhase = SymairaTopoView.startPhase
+        SymairaTopoView.startPhase = { 0 }
+        defer { SymairaTopoView.startPhase = startPhase }
         let model = SymairaTopoModel()
         let size = CGSize(width: 480, height: 320)
         let zone = CGRect(x: 160, y: 110, width: 160, height: 100)
@@ -104,9 +107,10 @@ final class LiquidTopographyTests: XCTestCase {
         let cg = try XCTUnwrap(renderer.cgImage, "ImageRenderer lieferte kein Bild")
         let px = try pixels(cg)
         let canvas = (r: 0x1C, g: 0x1C, b: 0x1B)
+        // Lines are lighter than the dark canvas; depth only darkens, so count brighter pixels.
         func deviates(_ x: Int, _ y: Int) -> Bool {
             let i = (y * cg.width + x) * 4
-            return abs(Int(px[i]) - canvas.r) + abs(Int(px[i + 1]) - canvas.g) + abs(Int(px[i + 2]) - canvas.b) > 6
+            return (Int(px[i]) - canvas.r) + (Int(px[i + 1]) - canvas.g) + (Int(px[i + 2]) - canvas.b) > 6
         }
         var outside = 0
         var inside = 0
@@ -145,6 +149,39 @@ final class LiquidTopographyTests: XCTestCase {
             deviating += 1
         }
         XCTAssertLessThan(Double(deviating) / Double(cg.width * cg.height), 0.5, "Ripple sättigt die Fläche (NaN)")
+    }
+
+    /// Valleys sit below the canvas tone; text keeps the plain canvas around it.
+    func testDepthDarkensValleysButNotProtectedContent() throws {
+        let startPhase = SymairaTopoView.startPhase
+        SymairaTopoView.startPhase = { 0 }
+        defer { SymairaTopoView.startPhase = startPhase }
+        let model = SymairaTopoModel()
+        let zone = CGRect(x: 160, y: 110, width: 160, height: 100)
+        model.rects["zone"] = (zone, false)
+        let view = SymairaTopoView(model: model, animationEnabled: false)
+            .frame(width: 480, height: 320)
+            .coordinateSpace(name: SymairaTopo.space)
+            .environment(\.colorScheme, .dark)
+        let renderer = ImageRenderer(content: view)
+        renderer.scale = 1
+        let cg = try XCTUnwrap(renderer.cgImage)
+        let px = try pixels(cg)
+        func luminance(_ x: Int, _ y: Int) -> Int {
+            let i = (y * cg.width + x) * 4
+            return Int(px[i]) + Int(px[i + 1]) + Int(px[i + 2])
+        }
+        let canvas = 0x1C + 0x1C + 0x1B
+        var darker = 0
+        var darkerNearText = 0
+        for y in 0..<cg.height {
+            for x in 0..<cg.width where luminance(x, y) < canvas - 3 {
+                darker += 1
+                if zone.insetBy(dx: -8, dy: -8).contains(CGPoint(x: x, y: y)) { darkerNearText += 1 }
+            }
+        }
+        XCTAssertGreaterThan(darker, cg.width * cg.height / 20, "no depth: valleys must sit below the canvas")
+        XCTAssertEqual(darkerNearText, 0, "depth must fade out around protected content")
     }
 
     private func pixels(_ cg: CGImage) throws -> [UInt8] {

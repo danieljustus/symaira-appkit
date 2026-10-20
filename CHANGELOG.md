@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-10-20
+
+### Breaking
+- `SymairaTokens.Topo.bandAlpha` is removed; use `depthDark` / `depthLight`.
+
+### Fixed
+- The topography no longer draws faint shading edges along single contour
+  lines. A stepped per-level tint (`floor(height)`) brightened the surface in
+  visible steps; it is removed.
+
+### Changed
+- Liquid Topography depth: valleys of the height field sit slightly darker
+  than the canvas (10 % dark, 5 % light) and move with the terrain and the
+  pointer. Depth fades out over 60 pt around protected content, so text keeps
+  its contrast and no light boxes appear. Apple and web share the change;
+  tokens `depthDark` and `depthLight` replace `bandAlpha`.
+
 ## [0.16.1] - 2026-10-20
 
 ### Changed
@@ -511,7 +528,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.9.2]: https://github.com/danieljustus/symaira-appkit/compare/0.9.1...0.9.2
 [0.10.0]: https://github.com/danieljustus/symaira-appkit/compare/0.9.2...0.10.0
 [0.11.0]: https://github.com/danieljustus/symaira-appkit/compare/0.10.0...0.11.0
-[Unreleased]: https://github.com/danieljustus/symaira-appkit/compare/0.16.1...HEAD
+[Unreleased]: https://github.com/danieljustus/symaira-appkit/compare/0.17.0...HEAD
+[0.17.0]: https://github.com/danieljustus/symaira-appkit/compare/0.16.1...0.17.0
 [0.16.1]: https://github.com/danieljustus/symaira-appkit/compare/0.16.0...0.16.1
 [0.16.0]: https://github.com/danieljustus/symaira-appkit/compare/0.15.2...0.16.0
 [0.15.2]: https://github.com/danieljustus/symaira-appkit/compare/0.15.1...0.15.2
