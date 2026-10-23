@@ -1,0 +1,2162 @@
+{
+  "colors": {
+    "dark": {
+      "canvas": "#1C1C1B",
+      "ink": "#EEEDEA",
+      "ink2": "#B0AEA9",
+      "ink3": "#97958F",
+      "topo": "#E1E0DA"
+    },
+    "dmg_gray": "#767572",
+    "light": {
+      "canvas": "#EEEDEA",
+      "ink": "#141413",
+      "ink2": "#2B2B2A",
+      "ink3": "#62615D",
+      "topo": "#2B2B2A"
+    },
+    "primary": "#E0D2BA"
+  },
+  "design_system": "Liquid Topography (design/liquid-topography/DESIGN.md)",
+  "dmg": {
+    "arrow": {
+      "head": 14,
+      "stroke": 3.0,
+      "x0": 268,
+      "x1": 392,
+      "y": 216
+    },
+    "gray": "#767572",
+    "icon_centers": [
+      [
+        180,
+        220
+      ],
+      [
+        480,
+        220
+      ]
+    ],
+    "size": [
+      660,
+      420
+    ]
+  },
+  "generator": "scripts/generate-marketing-assets.py",
+  "generator_sha256": "c68e409a1126498f3d211ac3bc5f24bc217afa03aab20a071ba7f43ab370a94d",
+  "generator_version": 1,
+  "identities": {
+    "appkit": {
+      "kind": "library",
+      "name": [
+        "AppKit"
+      ],
+      "role": "Swift UI foundations",
+      "source": "appkit"
+    },
+    "brain": {
+      "kind": "product",
+      "name": [
+        "Brain"
+      ],
+      "role": "Agent context and control",
+      "source": "brain"
+    },
+    "cockpit": {
+      "kind": "product",
+      "name": [
+        "Cockpit"
+      ],
+      "role": "Mac system control",
+      "source": "cockpit"
+    },
+    "corekit": {
+      "kind": "library",
+      "name": [
+        "CoreKit"
+      ],
+      "role": "Shared backend foundations",
+      "source": "corekit"
+    },
+    "desktop": {
+      "kind": "product",
+      "name": [
+        "Desktop"
+      ],
+      "role": "Document and knowledge workspace",
+      "source": "desktop"
+    },
+    "eraseme": {
+      "kind": "product",
+      "name": [
+        "EraseMe"
+      ],
+      "role": "Data-broker removal",
+      "source": "eraseme"
+    },
+    "fritz": {
+      "formats": [
+        "social-preview",
+        "og",
+        "square-1080",
+        "portrait-1080x1350",
+        "story-1080x1920",
+        "release-1600x900"
+      ],
+      "kind": "product",
+      "name": [
+        "Fritz"
+      ],
+      "role": "FRITZ!Box tools",
+      "source": "fritz"
+    },
+    "homebrew-tap": {
+      "kind": "distribution",
+      "name": [
+        "Homebrew",
+        "Tap"
+      ],
+      "role": "Homebrew tap for Symaira tools",
+      "source": "homebrew-tap"
+    },
+    "router": {
+      "formats": [
+        "social-preview",
+        "og",
+        "square-1080",
+        "portrait-1080x1350",
+        "story-1080x1920",
+        "release-1600x900"
+      ],
+      "kind": "product-alias",
+      "name": [
+        "Router"
+      ],
+      "note": "Separate family for the documented public-kit wordmark 'Symaira Router'; reuses the Fritz A3 signet. Does not replace Symaira Fritz.",
+      "role": "Independent FRITZ!Box tools",
+      "source": "fritz"
+    },
+    "scoop-bucket": {
+      "kind": "distribution",
+      "name": [
+        "Scoop",
+        "Bucket"
+      ],
+      "note": "No approved A3 icon exists for the Scoop bucket; uses the unchanged Symaira S only.",
+      "provisional": true,
+      "role": "Scoop bucket for Symaira tools",
+      "source": "umbrella"
+    },
+    "symaira-com": {
+      "eyebrow": "",
+      "kind": "website",
+      "name": [
+        "symaira.com"
+      ],
+      "role": "The Symaira product family",
+      "source": "symaira-com"
+    },
+    "vault": {
+      "kind": "product",
+      "name": [
+        "Vault"
+      ],
+      "role": "Credential service",
+      "source": "vault"
+    }
+  },
+  "inputs": {
+    "Brand/Marketing/identities.json": "45d0d9a4877306bd680ffae15e5bbfea8b83b074ffeb35ccbe99eef019c8d281",
+    "Brand/Marketing/source/identities-provenance.json": "f581844d2383e06a25e36e2eadfb91ea4b816da4e45b5a526bfb141a5476e110",
+    "Brand/Marketing/source/identities/appkit/macOS-Dark-512.png": "636b956ed558bf5020dab06159a70788ed98fe6284193cdbc9c457186dc31535",
+    "Brand/Marketing/source/identities/appkit/macOS-Default-512.png": "a59eda0e58aaad49247d257789352392d6b2360ec7e601d14a504dbcfd26f11f",
+    "Brand/Marketing/source/identities/brain/macOS-Dark-512.png": "f3ba5d1b73d8871d80862fc7515db364a021d4828150f68a3dfa877d4d562205",
+    "Brand/Marketing/source/identities/brain/macOS-Default-512.png": "9ec59383e4d1dd4a784db2db0a6260f3a2d17dff8015e78c8574881e968a590c",
+    "Brand/Marketing/source/identities/cockpit/macOS-Dark-512.png": "ecf8856eea37c833bf5cab41f534c669049e4bb86928fb3d8f54786477aa0f97",
+    "Brand/Marketing/source/identities/cockpit/macOS-Default-512.png": "d4de372b332cafd0787de89a86efd815454cecbdf26b0a119dfc33cda831f13c",
+    "Brand/Marketing/source/identities/corekit/macOS-Dark-512.png": "6a5d535a0c35fa6e638f9db7f39cb7ed899889c57c22934d90608a5009a488e1",
+    "Brand/Marketing/source/identities/corekit/macOS-Default-512.png": "70c8be07f0a368aebf6dc4523f9db00d80e1600b721bd2abb393fe1a5ccf955b",
+    "Brand/Marketing/source/identities/desktop/macOS-Dark-512.png": "0d7f93bd94c4298b95b15fefb59500b8e358f31bbb9a3d7a67e65aa6da8176d7",
+    "Brand/Marketing/source/identities/desktop/macOS-Default-512.png": "54af89f9fdf564fa405b316f2f85427f18465bb1fd725fc03aff13eba0e39e07",
+    "Brand/Marketing/source/identities/eraseme/macOS-Dark-512.png": "43574fd66bd6dba5d3262be46f798ae9ea9875863cc40e0c6d4a653752bed914",
+    "Brand/Marketing/source/identities/eraseme/macOS-Default-512.png": "ea494a313f275bd363066fc178ab026363d0a4f1bc6c241a4933a7a2a3961f47",
+    "Brand/Marketing/source/identities/fritz/macOS-Dark-512.png": "115f0605b9ba30f1264257d61a33e4212ed838fe7bc0510935a5b59c06d46a88",
+    "Brand/Marketing/source/identities/fritz/macOS-Default-512.png": "c327fb34e2a4e1b9a9d56794b6fb585fe367de65327f9a389a477da4d30fc566",
+    "Brand/Marketing/source/identities/homebrew-tap/macOS-Dark-512.png": "269ed2f63c9bc46a31a41e25401d02d53489b766ce57cb601a5478f57c02585e",
+    "Brand/Marketing/source/identities/homebrew-tap/macOS-Default-512.png": "f0b02c6b3f1273d9de753fa829c26b9997716a44843fb411091cd260c9ac40aa",
+    "Brand/Marketing/source/identities/symaira-com/macOS-Dark-512.png": "4ee285415c6a9858f8b7cb9fa70d1f2430d16c05d6406a48cf8a6669f946f074",
+    "Brand/Marketing/source/identities/symaira-com/macOS-Default-512.png": "62a0e0d9a25790ab20cf9f51d78dc07db01073e1efd0febf77659aa9f2c987e2",
+    "Brand/Marketing/source/identities/vault/macOS-Dark-512.png": "4d0eb42b2388dfea4bc1319a0e9ecce69ad70d55e33c36752e31443ddcd01837",
+    "Brand/Marketing/source/identities/vault/macOS-Default-512.png": "0a37717b015e46cbec0cb2d9cfe7962b69fc257ca126a2559771dc877459b922",
+    "Brand/Marketing/source/umbrella/PROVENANCE.json": "d44ab7fcf9b94b403a09b93a7cc3bf4a25505d11e4b47ed820583eeb3bcac66c",
+    "Brand/Marketing/source/umbrella/S-A3.png": "da7d1e2a7e5ec35663b79612d1a67ae743aba79847d6bc7d034758fd8cbc7bd1",
+    "Sources/SymairaTheme/Resources/Fonts/GoogleSansFlex.ttf": "a9ac770798857d5e8ac593ced42b22e40a7c08cec98319f92b0eccc2783a77ba",
+    "design/liquid-topography/DESIGN.md": "03f5e47f3903e5311c9f4a7f4287f619a0472d589af0f13bf492a73606730f26",
+    "design/liquid-topography/topo.json": "15d5851617bb03eed821bb9a185867ba17fdc1cda5afb115ea75b8ac4cf24736",
+    "design/liquid-topography/web/symaira-topo.js": "bc059eb665e4367168b79b5c58d01ae255e399ee91e3a136076dbe03b8253597"
+  },
+  "outputs": [
+    {
+      "bytes": 28167,
+      "identity": "dmg",
+      "mode": "RGB",
+      "path": "Brand/DMG/symaira-dmg-background.png",
+      "role": "DMG background",
+      "sha256": "35677c15a18f8a45e68f64adf8399fb5c49cd74dd42f92c341c4f37477f222bd",
+      "size": [
+        660,
+        420
+      ]
+    },
+    {
+      "bytes": 25510,
+      "identity": "dmg",
+      "mode": "svg",
+      "path": "Brand/DMG/symaira-dmg-background.svg",
+      "role": "DMG background source (vector arrow + embedded terrain raster)",
+      "sha256": "10463e684a3c2030f1d8a68745de8e841e65bf95f6aa3aa35b0ad9c7fb30807f",
+      "size": [
+        660,
+        420
+      ]
+    },
+    {
+      "bytes": 108547,
+      "identity": "dmg",
+      "mode": "RGB",
+      "path": "Brand/DMG/symaira-dmg-background@2x.png",
+      "role": "DMG background @2x",
+      "sha256": "298a631549dae8f9b5f5fc38c5096a565923a3bd93538b1ae4efdfd2a4f39862",
+      "size": [
+        1320,
+        840
+      ]
+    },
+    {
+      "bytes": 48152,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "0023e397362cfa68130d4099988210179f53f791812876950f041d32d4013904",
+      "size": [
+        722,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 42479,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "f617648d3eb1b680076632b4864a71d63b9843dfb07856eca2b348a88217da34",
+      "size": [
+        722,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 146536,
+      "format": "og",
+      "identity": "appkit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/appkit/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "944cd4a35af5dddb84e37e0a89e3f47e256a46994976b2dcd995a1ad2d401ee2",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 143268,
+      "format": "og",
+      "identity": "appkit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/appkit/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "84833fb1aeed63f2a4a9431a58817659e1bd60bb3af51caec92613568cac276c",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 126383,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "2ed347ffe9781687eb9436e32a5525623e620d5c1e6b8d287158bfc904fc0177",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 114472,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "69a8700da320aa1f59c29fd3312f4a94531b27234a19350c0030aa62bb8b2d15",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 173808,
+      "format": "social-preview",
+      "identity": "appkit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/appkit/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "9c11632ba22cdffc33b6755baf3b2a8c90e89b1223f0c0d40e5c2d1186a1546f",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 166254,
+      "format": "social-preview",
+      "identity": "appkit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/appkit/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "457976484a67db87ef859859795f4f7f3691b65fd6dbb0470f402051e7ee63bc",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 10131,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "d773562a02b78e78d0aaa90306cdfb6ac3415bbb75e924b3393b32f8262e9604",
+      "size": [
+        449,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 10077,
+      "identity": "appkit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/appkit/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "ec8cf9f5404a8e21ea1bf2be6567df44584a863edfa08ef9d3b47edcb125487f",
+      "size": [
+        449,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 48050,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "6072e36d8f0179476e2cf6377ebe94150f85b320b03fc377e7f6264d1850e221",
+      "size": [
+        634,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 42310,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "3a82f567ed34c409801d356193f20e4b528ded0dcc9bc505d67027f592b372fc",
+      "size": [
+        634,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 148328,
+      "format": "og",
+      "identity": "brain",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/brain/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "e75ba4c888d3509540f84471dcb31820823ed6256eceb152425db0082d34e553",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 144774,
+      "format": "og",
+      "identity": "brain",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/brain/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "bd63fb3cded3dd340195d34cfeb9abf22b5d338d975701d7da2b7b727eb33c10",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 129940,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "bdb69315c54ef9d144bc555b925a0fb50097f935819c6c2ec36519d8ef25568e",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 118204,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "85285ab6fecdafba8fad944922c8c23c877d7319d1ecc6cb310068838e1efd08",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 175339,
+      "format": "social-preview",
+      "identity": "brain",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/brain/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "df87f305fcbaf91f0dc234022bc7f9a64a092a7574ff3f18d4da0e574341aa80",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 167756,
+      "format": "social-preview",
+      "identity": "brain",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/brain/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "300ef88c45be97d4e630386fa9cf4381226fdbc390d5682830a9d8a33576f5a5",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 7797,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "095335474d21058599e18c0a3afa48f2a4552b2686dc113ccf51606e2a37f9f2",
+      "size": [
+        353,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 7764,
+      "identity": "brain",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/brain/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "82897f754460a47768c4ecc827ab06471b0e68d60cb2d8a7a61680a2708a7dcb",
+      "size": [
+        353,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 52522,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "55f5317ef1f4b85b10e3d7fd0c78125cd0bcecfd2d4ded8c159bcc56aeba44a7",
+      "size": [
+        769,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 47088,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "b9d1f50414016fd9c58d38ebd2416b9f109855a16bcbbd97f17601a994ddea4a",
+      "size": [
+        769,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 152412,
+      "format": "og",
+      "identity": "cockpit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/cockpit/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "62400ffb4641c2ee3a401dc371e73b8e36da4e1748931c02108b2ff0794734c4",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 149379,
+      "format": "og",
+      "identity": "cockpit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/cockpit/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "f29c7922b95d1e626fd7b4d4545533a1cbc90a488c13fb049b0b8136ff7b3924",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 133983,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "4152579b0bcaf19a620d8c49e9555c52a985b788de7049e83ec0009394e66581",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 123111,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "0a1b9daa03aeaf6b6730d62c231ddef8c8440865e012f05a7f6c39f4b619d006",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 181059,
+      "format": "social-preview",
+      "identity": "cockpit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/cockpit/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "4ac7ca1676d1c5f87885f1647c151593d8c68442c2e44aca031a4979df5ed839",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 173365,
+      "format": "social-preview",
+      "identity": "cockpit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/cockpit/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "444cf51fad035ac56d765467ca7a269a59d4d62b128ddf0f130888d3632d9de7",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 11825,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "b52070e00be75c6669dc6cef2ffde7c010068ad782504dec19964b33e3d005ea",
+      "size": [
+        498,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 11765,
+      "identity": "cockpit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/cockpit/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "354cb69d9722cdcfc9eed9e04e28bda5efc3cdc518a4a4de273d11162e663ecc",
+      "size": [
+        498,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 50855,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "45473a1cffd0d60b1dd2b1cd821134b82d3f86d4e3724bb5b2d5695bfa284519",
+      "size": [
+        756,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 45182,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "d64691b0b2ea93e7e3b42f2cee3e0e0e3d6607693cb9f9e736ccd7d7a4b11779",
+      "size": [
+        756,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 152269,
+      "format": "og",
+      "identity": "corekit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/corekit/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "5dd9f35c4ea2d26809c54b0af5cdb3afa9b7bbe4925e53dd96d17225b94070d4",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 149368,
+      "format": "og",
+      "identity": "corekit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/corekit/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "a9f0545671529569e19e0222714cf34f10863c04622e28b4cf07a19037594b26",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 131160,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "55f3cfc70c6fedc2c7aead8ac08b384a799081fc7ce85c6edc794388926e8d0e",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 119517,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "74c618b3d027a33fd654ed7aa3f0885b1614d15ca68cfc7bdd3d567240a01eb0",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 180967,
+      "format": "social-preview",
+      "identity": "corekit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/corekit/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "1858069b74db35b9dde395fba2c828b0c08cb4da6dfa3c198d139d86f1bec443",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 173371,
+      "format": "social-preview",
+      "identity": "corekit",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/corekit/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "7ad67d4047ba0235be00ebfac041861e657d8baa5a6c069509bab53f0462fd61",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 11410,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "1aab60fbcd7ed4aef2bb994520c46b3aa86550dffc391caa21c7c7e986510f58",
+      "size": [
+        485,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 11363,
+      "identity": "corekit",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/corekit/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "af14e2fe3d6212f7a219d57fea6bf0e6e83262f34fe2e4351347e7cf7d3bef0f",
+      "size": [
+        485,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 47858,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "24e56fb7f376eaae7528a1e95d7d39cf5a07ab42165f0e22d09546e6ef5eb9e4",
+      "size": [
+        798,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 42871,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "724aa8b7e0f2eb91cf376af9c2cdd531ca87747f551ce0527f128fc132295a6d",
+      "size": [
+        798,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 150767,
+      "format": "og",
+      "identity": "desktop",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/desktop/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "ab316dd7ebf48bad84c29e5b7e77b1c525cde05c79a2173bb7b5ca2bc6cb8193",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 148304,
+      "format": "og",
+      "identity": "desktop",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/desktop/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "7f1af32083db6b480c61057a3215db85c38278c5f29e2204fef2d85a4a63b8c1",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 123411,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "5fb25f17ba2237ac29088e0b5d33dad331244a8ec3372438ee2e17c32975393f",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 111630,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "19e9a52b888ddc14adc542169f1be25da62f00cd172b72ae78fa31e3f2d6bcec",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 179159,
+      "format": "social-preview",
+      "identity": "desktop",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/desktop/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "a5172ec9ff3f8b62ff0457fdaf457df04818f12f754124fc877a94f6ebee144c",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 172380,
+      "format": "social-preview",
+      "identity": "desktop",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/desktop/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "cfaddbb53db9d87fe8beb0cddcffd0ccd73a13aab444d8e43ed8e6777e6d9730",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 12280,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "c049e2bfde62dc26eedab2af11d3f3fbf542560157bd0ff0fdf8a4c4a0519df8",
+      "size": [
+        529,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 12209,
+      "identity": "desktop",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/desktop/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "ebd672bd3b0d7fb9be092ec0c32a17c87f73b98de3da2eaf5ee82b106d579dca",
+      "size": [
+        529,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 50585,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "c0c99e1d0c61dff49df52c701a9fbb5bd59a66c35cab39d67efdbda876648cab",
+      "size": [
+        816,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 45038,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "35f46de339c39af47134a778d998d2e8add1436cb4479945d989c051977d957c",
+      "size": [
+        816,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 149749,
+      "format": "og",
+      "identity": "eraseme",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/eraseme/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "28e1be910d0f9bc001d8d9592e6150adb0760980fe91c8b11ee46ac756f0acd1",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 146751,
+      "format": "og",
+      "identity": "eraseme",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/eraseme/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "b733399562adcc4f158d28173442d2989b1844e432f82f7813ebf67ad3ed63c3",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 130176,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "402549ef6ee1df40cb8b834a20fac335ff8fdf3ac321da05adaede7b145e8d74",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 118575,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "02079b0fe96a175e072d707b581d8b7bdf65a9f049edc69eb78fc53e4058f70e",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 178146,
+      "format": "social-preview",
+      "identity": "eraseme",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/eraseme/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "ef3197fdb2c7a8f863f3e6fe68b4c0d68ce933772ef0f531385528a42e82c6c2",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 170429,
+      "format": "social-preview",
+      "identity": "eraseme",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/eraseme/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "eb1ea5c3a6fc38eaa7a082c809dff9a881a9f01878a8ffa3b0a088428ff0d030",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 11808,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "ab625f5a77d46033261e26c6638a4ce8f2f2b33703a286b7ca4ed05ca7ceb530",
+      "size": [
+        549,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 11744,
+      "identity": "eraseme",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/eraseme/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "8d7c7a543ac10873d63fd4c242b9bf7a750e2a1b52229f6c863b5c02d442a902",
+      "size": [
+        549,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 44484,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "8081436f7e4b3cb25d1386366d68307a1845e420cf12a5497b217a71eaffcbc2",
+      "size": [
+        592,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 39294,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "91c0e64c388c7d075d70ec74dea0cb39d07bcc5d820483cc6fc20c4e30690d3b",
+      "size": [
+        592,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 140757,
+      "format": "og",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "b746921bdac7dcb0634ec214daa8c0fc4192da0b5e4276098ce8ac0062db596b",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 137880,
+      "format": "og",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "98825dfcf0b1f646254b33ef31742ab54fcd1d13bdfa481de520e6e5621153f4",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 271750,
+      "format": "portrait-1080x1350",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/portrait-1080x1350-dark.png",
+      "role": "Portrait social post",
+      "sha256": "a4fabb309ae738b48d336f7a2a80f43b87ea1c00c24331d4f59fd8bfb2062360",
+      "size": [
+        1080,
+        1350
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 264715,
+      "format": "portrait-1080x1350",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/portrait-1080x1350-light.png",
+      "role": "Portrait social post",
+      "sha256": "c8f3f13edf22093c55329d162e78d047b06fb72cc0f783c5431ed5d8a0a46d2a",
+      "size": [
+        1080,
+        1350
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 123295,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "cd04b377e3ac4e11f343b3b5917ab3981a561fe0a6905c86404babc5751c0d3f",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 112877,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "e0c5ac960d996d8e7c538556263c8d3c318893c333e6b912572bf9da07a28469",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 292711,
+      "format": "release-1600x900",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/release-1600x900-dark.png",
+      "role": "Release / README hero, 16:9",
+      "sha256": "0fc6aeb70bd4b2fd813492eef249e8702c4e2ccd40a7c7c4c91985ae66fb4fb1",
+      "size": [
+        1600,
+        900
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 284875,
+      "format": "release-1600x900",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/release-1600x900-light.png",
+      "role": "Release / README hero, 16:9",
+      "sha256": "257fd93cacd447113a4ccad6c5010e646b99cfb9f4c97cdb63fc42edf75a4bd2",
+      "size": [
+        1600,
+        900
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 167924,
+      "format": "social-preview",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "6795f9e7331317c50396b748feab05a1fa801894467e09f8f6c76cc0d01656dd",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 160471,
+      "format": "social-preview",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "6f0d31db74bf9ebec9c1238ab4f9f05478ffb5ed2670c580998c5a191c0001b4",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 237920,
+      "format": "square-1080",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/square-1080-dark.png",
+      "role": "Square social post",
+      "sha256": "34812abf48dffcd56d5078ddee9d199b9e7cdb8510b2b600e8b7975a023f9e7f",
+      "size": [
+        1080,
+        1080
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 232689,
+      "format": "square-1080",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/square-1080-light.png",
+      "role": "Square social post",
+      "sha256": "2b8ea3a12e2525aa89989849281b8cb431ac79c42b56490a050f109c3022cee1",
+      "size": [
+        1080,
+        1080
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 333303,
+      "format": "story-1080x1920",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/story-1080x1920-dark.png",
+      "role": "Story / vertical (top and bottom 14% kept free)",
+      "sha256": "bf9e7926a14a5749504ff41cc7a1ff78f9cdc616081c31c59f6819aff96bf4eb",
+      "size": [
+        1080,
+        1920
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 324310,
+      "format": "story-1080x1920",
+      "identity": "fritz",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/fritz/story-1080x1920-light.png",
+      "role": "Story / vertical (top and bottom 14% kept free)",
+      "sha256": "8c98c02eb73e7e257f6a629f116f83567bb7bb9ecb3d160294cfc36d11e115f9",
+      "size": [
+        1080,
+        1920
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 5820,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "8cfb23624b36aa4f020bd4bc3d82ebae87f3d6f4abccfa325bcfe9795755ae1d",
+      "size": [
+        308,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 5816,
+      "identity": "fritz",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/fritz/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "0b6d4cb2c476c8dccf7913915cc366ad457d4fee1010eb475e7943bb83d093cd",
+      "size": [
+        308,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 52277,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "566fb9ce33d4d7a6c1a23537096b48f2c32b99a563531a0e880f2d350c3562d6",
+      "size": [
+        938,
+        333
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 47738,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "848a352f80f800f74d035bca4d4e33a07d0492a966b555ac49933a511bfeabf0",
+      "size": [
+        938,
+        333
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 153808,
+      "format": "og",
+      "identity": "homebrew-tap",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/homebrew-tap/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "9e3b8eb8748e6ade09b028f9a7a7696a6dff9f2cb9bc2e5d0fbd557cb6acd855",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 151307,
+      "format": "og",
+      "identity": "homebrew-tap",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/homebrew-tap/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "a99b1dccd8f5fa2e90652a6e6519fbeea458b57f8e5743e37f96dfe86f2b54ba",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 128602,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "b717a3e94ff7b5ed1b7b0224aad3e73af4e91d3999d53d5ca1dbc5944420998c",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 117150,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "970aa0fc448e8ffafaf012e0a6746460d4f4cda24ee7dd8bb12b9a39913ff41a",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 182791,
+      "format": "social-preview",
+      "identity": "homebrew-tap",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/homebrew-tap/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "a17222e2c968c0de2a95263d3ba266de1b41b2843fef4d7828b787d6e7d599b5",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 175767,
+      "format": "social-preview",
+      "identity": "homebrew-tap",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/homebrew-tap/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "0fe219b25a2e2ffda095c446aa4d485d83f3dea2f9636099e06dea83735da517",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 16612,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "3a80266a0e1351807f7a8f6088ce84f701ac020abe6e8c19fc2db051ead2a788",
+      "size": [
+        680,
+        353
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 16530,
+      "identity": "homebrew-tap",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/homebrew-tap/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "cf7a8d30425fbdb5d00c4aac6ad7b62388970298d8d61c191c511ebda2af2b20",
+      "size": [
+        680,
+        353
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 48480,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "fbf830c4368b73f23945aa7589ade9b634c37d795cc9eee3123fcddf90f98a7f",
+      "size": [
+        714,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 43397,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "841fd426a355c4a5f7f6be43c9a503cb88be3d1b3a11bca53ddd8259b5bcb83a",
+      "size": [
+        714,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 148901,
+      "format": "og",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "8ad7aa949fa1d3c01e8838c5db0cf0401b380e116d98ea419f0f3aace1f4b18a",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 146307,
+      "format": "og",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "13b2b19074f038325ed39141bb142174c3e598ac9366fdd7ba9bec385665f31e",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 281285,
+      "format": "portrait-1080x1350",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/portrait-1080x1350-dark.png",
+      "role": "Portrait social post",
+      "sha256": "6c3656e849c5c6bfe5fa4a6350ebff94b3d3fbb092c19075e828ab2b50e9d542",
+      "size": [
+        1080,
+        1350
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 274641,
+      "format": "portrait-1080x1350",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/portrait-1080x1350-light.png",
+      "role": "Portrait social post",
+      "sha256": "63a678c00461e898a43eed4dcd2d407747dd653e374def9f02fa147885ecdb7c",
+      "size": [
+        1080,
+        1350
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 128120,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "2c0545e514b8056417688c7a3604ecd7e2adcbf6df1ce0b083d48c9fe4eb9153",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 117678,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "981c82f3982ecf87042acfb2eefc030313f8f98ab0f2641e2b3c11e5d3c87db6",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 303500,
+      "format": "release-1600x900",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/release-1600x900-dark.png",
+      "role": "Release / README hero, 16:9",
+      "sha256": "6e42b9cf140daf9f69cfe749c1cbf38df7f215cff24d362bf25c852f4625e895",
+      "size": [
+        1600,
+        900
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 296205,
+      "format": "release-1600x900",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/release-1600x900-light.png",
+      "role": "Release / README hero, 16:9",
+      "sha256": "4b73c2ab8dcf7384baaf712db378bbb3d56d1f71513c545207c944a5955caf91",
+      "size": [
+        1600,
+        900
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 177465,
+      "format": "social-preview",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "91a13a44fc7e8cbf34f9c67c10d3832079ed68fdb3920f85028ad7c70468f0bf",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 170496,
+      "format": "social-preview",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "2c6ca13fe513b101777f252f4697b9a515671fa1ef10fdbf8bab0a1b5a4649a6",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 247152,
+      "format": "square-1080",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/square-1080-dark.png",
+      "role": "Square social post",
+      "sha256": "ce610550e236979acdf11170e3261a4182f57edb0e97e207efbb88b00510780f",
+      "size": [
+        1080,
+        1080
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 242267,
+      "format": "square-1080",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/square-1080-light.png",
+      "role": "Square social post",
+      "sha256": "5b5fd38c2e31eb15abfd85415bbe165d5b74f7c5f471f693d7264702d20fbf34",
+      "size": [
+        1080,
+        1080
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 343129,
+      "format": "story-1080x1920",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/story-1080x1920-dark.png",
+      "role": "Story / vertical (top and bottom 14% kept free)",
+      "sha256": "36733535b8ba2ec5594510f3d45e9b67ce21392efeceea50ec69313fb1219bf4",
+      "size": [
+        1080,
+        1920
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 334480,
+      "format": "story-1080x1920",
+      "identity": "router",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/router/story-1080x1920-light.png",
+      "role": "Story / vertical (top and bottom 14% kept free)",
+      "sha256": "fe060fa19988be1d3e33fc1ec5c96337ab4f72d90c85fb79b343a93553b9634c",
+      "size": [
+        1080,
+        1920
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 9422,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "112742391c85b022c2d7b8280e52ce0f2c9c6d1d38daebcb8f3aa59506890a2e",
+      "size": [
+        440,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 9379,
+      "identity": "router",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/router/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "26ec423095854496b22d0d5cd43b9319dc3c136c90958af39bb91e1dae874856",
+      "size": [
+        440,
+        228
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 31736,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "471df1eb3708c8b031c89142793da55ad0d0d305ad27e366401d734aac3d5a83",
+      "size": [
+        726,
+        333
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 31624,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "b0a2fbc02c84c088b87597095c62fb966ceedb0571e082253185e0185ff82984",
+      "size": [
+        726,
+        333
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 114293,
+      "format": "og",
+      "identity": "scoop-bucket",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/scoop-bucket/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "e3b1f39e83da9ecf7898fd64f77d38a61227961ac120a4a51c71ac7c28f27f98",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 109488,
+      "format": "og",
+      "identity": "scoop-bucket",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/scoop-bucket/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "d9e4fd6d0f6980853b8ae116fe799d8d136d17b59400a3241512c7c8e61a515a",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 56147,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "b58917c888b1c7cd052a8d99be8e957ec1aa9c45c870a1c9960a4f45a184b725",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 56127,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "7b088fc6bb31c3b40bbe4feca7f951b77e83aaf74fec7950a7aca39019d79e1a",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 130907,
+      "format": "social-preview",
+      "identity": "scoop-bucket",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/scoop-bucket/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "6ed1f8ea4c5faf386ba9dda9a8b7daff442bca8781e50492ea17f1c8c44252c6",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 125785,
+      "format": "social-preview",
+      "identity": "scoop-bucket",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/scoop-bucket/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "63eee7db32695c80fc35f24ca17251050ae29ae0dd04ad76602f5535cb765741",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 17403,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "42a74922f7bc3c574ed4b0bbce1b443e1c4ec3b72d6987f437ca7647dedd2772",
+      "size": [
+        452,
+        353
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 17352,
+      "identity": "scoop-bucket",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/scoop-bucket/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "4a19cd6eab3cae61cb93ac75e8d93426ba1bcda88929fb19897418cc383533ce",
+      "size": [
+        452,
+        353
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 56549,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "56a9e8f9d6b448f8d7dc349caed67061fdafda75ee753d2d1295c809df15ab42",
+      "size": [
+        1039,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 50317,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "9ee3426af262f083f7e711e4f5330af6560071c79048ad29a23acae3ac8c2446",
+      "size": [
+        1039,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 154661,
+      "format": "og",
+      "identity": "symaira-com",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/symaira-com/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "936b966c97199d073952bad330e9e7963d08f9b597350a832c0dd5c6dbb96a3f",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 151758,
+      "format": "og",
+      "identity": "symaira-com",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/symaira-com/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "94696e0935f3a664e14f66b364b4a4c52eb85dc6898cdf6cedf23118d666b510",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 137255,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "0fc58df38fab213997fba23632ec2b3d97227dc442a4a7b8362daf6d2d3fc90c",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 125193,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "f5cb3583d614a53b6074a6fd4efba5afb8c9e1453a67172c48e37d769f117b0e",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 182386,
+      "format": "social-preview",
+      "identity": "symaira-com",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/symaira-com/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "8e7b5f9971b6472ecdd03a5a3901c6c6d55754d59caf731d137fca96250e8045",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 174639,
+      "format": "social-preview",
+      "identity": "symaira-com",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/symaira-com/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "d138c90e9c47d75ca6592049559e489a7c31c4ddbb2755d0c34691a47c287923",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 11729,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "c608e69c33107a0137521bc67d76b05d32a7b720f72de35d95c0a8196e4bf0d4",
+      "size": [
+        788,
+        176
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 11650,
+      "identity": "symaira-com",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/symaira-com/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "a1450b2874836a4eabfcbe5e65f1755f22935fd2b468dd806cb4581004c39052",
+      "size": [
+        788,
+        176
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 44493,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/lockup-on-dark.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "ee326e7fde001f9d3f5fcb1880911793408426c315901fca600c1fac57fcadab",
+      "size": [
+        630,
+        312
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 39293,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/lockup-on-light.png",
+      "role": "transparent horizontal product lockup",
+      "sha256": "ea01f5d46030c04e156cc02cfb429087bb712dd14a080f185257e609198b1364",
+      "size": [
+        630,
+        312
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 142043,
+      "format": "og",
+      "identity": "vault",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/vault/og-dark.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "1746d17cbd8bf94a754eaa3f4b71ffb5235c443229e6a57e4fca18ca4ccedf67",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 139189,
+      "format": "og",
+      "identity": "vault",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/vault/og-light.png",
+      "role": "OpenGraph / Twitter large card",
+      "sha256": "eed27515d4a7c404388ba47581ceeffeb88e938724ab1a6422330d19512cf3b2",
+      "size": [
+        1200,
+        630
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 121240,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/product-logo-on-dark.png",
+      "role": "transparent 1024 vertical lockup, ink for dark surfaces",
+      "sha256": "6a2d1509417241b434c53606e38bbbab7abb3d22d20acd2103bc2c6d8c0be948",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 110072,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/product-logo.png",
+      "role": "assets/branding/product-logo.png (transparent 1024 vertical lockup, ink for light surfaces)",
+      "sha256": "d56647ebf15326454f792515aab7381121ed362c9736db2218cd595b8d69ddf6",
+      "size": [
+        1024,
+        1024
+      ],
+      "surface": "on-light"
+    },
+    {
+      "bytes": 169853,
+      "format": "social-preview",
+      "identity": "vault",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/vault/social-preview-dark.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "5b8c5793efab3251611aa8d43ec16a8b5e9c3c6fab34c0d0647a6a7f9afd2aa7",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "dark"
+    },
+    {
+      "bytes": 162802,
+      "format": "social-preview",
+      "identity": "vault",
+      "mode": "RGB",
+      "path": "Brand/Marketing/exports/vault/social-preview-light.png",
+      "role": "GitHub social preview (upload in repository settings)",
+      "sha256": "313e7daa1b39c3c3646d7f14883ed632c0a66a2801b52ef40bc195cbf07ec7cc",
+      "size": [
+        1280,
+        640
+      ],
+      "theme": "light"
+    },
+    {
+      "bytes": 7956,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/wordmark-on-dark.png",
+      "role": "transparent wordmark",
+      "sha256": "c0c775679aba6d796dbed2d2cb4f695b75820f81ccaba519a11b62e61a0ec62f",
+      "size": [
+        349,
+        228
+      ],
+      "surface": "on-dark"
+    },
+    {
+      "bytes": 7927,
+      "identity": "vault",
+      "mode": "RGBA",
+      "path": "Brand/Marketing/exports/vault/wordmark-on-light.png",
+      "role": "transparent wordmark",
+      "sha256": "f7399c250c580ce44334446fe1ed7cd020c0718e5d1e866a378e6b77d8e6787c",
+      "size": [
+        349,
+        228
+      ],
+      "surface": "on-light"
+    }
+  ],
+  "render": {
+    "card_dpr_at_1280": 1.5,
+    "flow_t": 38.0,
+    "font": "Google Sans Flex, opsz 18",
+    "state": "idle",
+    "text_supersample": 4
+  },
+  "usage": {
+    "naming": "social-preview-{dark,light}.png 1280x640; og-{dark,light}.png 1200x630; lockup-on-{light,dark}.png and wordmark-on-{light,dark}.png transparent (suffix = surface the ink is made for); product-logo.png / product-logo-on-dark.png 1024x1024 transparent vertical lockup",
+    "notes": [
+      "GitHub social preview upload: use social-preview-dark.png (1280x640).",
+      "Cards carry no version, metric or UI screenshot; roles come from Brand/Marketing/identities.json.",
+      "scoop-bucket is provisional (unchanged Symaira S, no approved A3 icon).",
+      "router reuses the Fritz A3 signet for the documented public-kit title 'Symaira Router'; it never replaces Symaira Fritz."
+    ],
+    "readme_picture": "<picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/social-preview-dark.png\"><img alt=\"Symaira <Product>\" src=\"docs/assets/social-preview-light.png\"></picture>",
+    "refresh_icons": "python3 scripts/vendor-marketing-icons.py --icons-root <dir with <key>/exports/macOS-{Default,Dark}.png + manifest.json>",
+    "regenerate": "python3 scripts/generate-marketing-assets.py",
+    "vendoring": {
+      "appkit": {
+        "assets/branding/og.png": "Brand/Marketing/exports/appkit/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/appkit/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/appkit/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/appkit/social-preview-dark.png"
+      },
+      "brain": {
+        "assets/branding/og.png": "Brand/Marketing/exports/brain/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/brain/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/brain/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/brain/social-preview-dark.png"
+      },
+      "cockpit": {
+        "assets/branding/og.png": "Brand/Marketing/exports/cockpit/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/cockpit/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/cockpit/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/cockpit/social-preview-dark.png"
+      },
+      "corekit": {
+        "assets/branding/og.png": "Brand/Marketing/exports/corekit/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/corekit/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/corekit/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/corekit/social-preview-dark.png"
+      },
+      "desktop": {
+        "assets/branding/og.png": "Brand/Marketing/exports/desktop/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/desktop/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/desktop/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/desktop/social-preview-dark.png"
+      },
+      "eraseme": {
+        "assets/branding/og.png": "Brand/Marketing/exports/eraseme/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/eraseme/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/eraseme/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/eraseme/social-preview-dark.png"
+      },
+      "fritz": {
+        "assets/branding/og.png": "Brand/Marketing/exports/fritz/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/fritz/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/fritz/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/fritz/social-preview-dark.png"
+      },
+      "homebrew-tap": {
+        "assets/branding/og.png": "Brand/Marketing/exports/homebrew-tap/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/homebrew-tap/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/homebrew-tap/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/homebrew-tap/social-preview-dark.png"
+      },
+      "router": {
+        "assets/branding/og.png": "Brand/Marketing/exports/router/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/router/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/router/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/router/social-preview-dark.png"
+      },
+      "scoop-bucket": {
+        "assets/branding/og.png": "Brand/Marketing/exports/scoop-bucket/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/scoop-bucket/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/scoop-bucket/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/scoop-bucket/social-preview-dark.png"
+      },
+      "symaira-com": {
+        "assets/branding/og.png": "Brand/Marketing/exports/symaira-com/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/symaira-com/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/symaira-com/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/symaira-com/social-preview-dark.png"
+      },
+      "vault": {
+        "assets/branding/og.png": "Brand/Marketing/exports/vault/og-dark.png",
+        "assets/branding/product-logo-on-dark.png": "Brand/Marketing/exports/vault/product-logo-on-dark.png",
+        "assets/branding/product-logo.png": "Brand/Marketing/exports/vault/product-logo.png",
+        "docs/assets/social-preview.png": "Brand/Marketing/exports/vault/social-preview-dark.png"
+      }
+    },
+    "verify": "python3 scripts/verify-marketing-assets.py [--determinism]"
+  }
+}

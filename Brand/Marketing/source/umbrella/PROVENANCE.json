@@ -1,0 +1,7 @@
+{
+  "file": "S-A3.png",
+  "description": "Unchanged champagne Symaira S (A3), cropped to its 774x793 alpha bounding box. No Scoop-specific icon is approved; used provisionally for scoop-bucket.",
+  "upstream": "Brand/AppIcon/SymairaAppKit/source/S-original-A3.png",
+  "upstream_sha256": "55fc4288d340f972acbbd22f2a11c4ba1c1c19f7faf16891b478f06b2ab26ab3",
+  "crop": [135, 119, 909, 912]
+}
