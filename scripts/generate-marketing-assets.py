@@ -61,6 +61,8 @@ PRIMARY = "#E0D2BA"
 DMG_GRAY = "#767572"
 
 FLOW_T = 38.0  # fixed idle frame (runtime picks a random start; marketing art uses this one)
+# Marketing art shows more terrain than the app: same shader and line weight, smaller features.
+TOPO_ZOOM = 1.6
 CARD_DPR = 1.5  # line weight of the shader at a 1280 px wide card
 TEXT_SS = 4  # text supersampling
 OPSZ = 18
@@ -143,10 +145,14 @@ def _iso(v, w, s):
     return np.float64(1) - _smoothstep(a * max(w - s, 0.0), a * (w + s), d)
 
 
-def _height(px, py, params, flow_t=FLOW_T):
-    """Idle-state height field at CSS-pixel coordinates (shader lines 34-36)."""
+def _height(px, py, params, flow_t=FLOW_T, zoom=1.0):
+    """Idle-state height field at CSS-pixel coordinates (shader lines 34-36).
+
+    zoom > 1 zooms out (divides topo.json `scale`); line weight is unaffected because the
+    contour width comes from the screen-space derivative in `_iso`.
+    """
     f32 = np.float64
-    scale = f32(params["scale"])
+    scale = f32(params["scale"]) / f32(zoom)
     qx, qy = px / scale, py / scale
     t = f32(flow_t)
     wx = _fbm(qx * f32(0.7), qy * f32(0.7), np.full_like(qx, t * f32(0.6)))
@@ -188,7 +194,7 @@ def topo_alpha(width, height, dpr, params, rects, dark, flow_t=FLOW_T):
     rows = (np.arange(height, dtype=f32) + f32(0.5)) / f32(dpr)
     px, py = np.meshgrid(cols, rows)
     res_x, res_y = f32(width / dpr), f32(height / dpr)
-    h = _height(px, py, params, flow_t)
+    h = _height(px, py, params, flow_t, TOPO_ZOOM)
 
     mask = np.ones_like(px)
     hill = np.zeros_like(px)
@@ -714,7 +720,7 @@ def write_manifest(outputs, dmg_info):
         "generator_version": GENERATOR_VERSION,
         "generator_sha256": sha256_file(Path(__file__)),
         "design_system": "Liquid Topography (design/liquid-topography/DESIGN.md)",
-        "render": {"state": "idle", "flow_t": FLOW_T, "card_dpr_at_1280": CARD_DPR, "font": "Google Sans Flex, opsz 18", "text_supersample": TEXT_SS},
+        "render": {"state": "idle", "flow_t": FLOW_T, "topo_zoom": TOPO_ZOOM, "card_dpr_at_1280": CARD_DPR, "font": "Google Sans Flex, opsz 18", "text_supersample": TEXT_SS},
         "colors": {"light": {k: v for k, v in THEMES["light"].items() if k != "dark"}, "dark": {k: v for k, v in THEMES["dark"].items() if k != "dark"}, "primary": PRIMARY, "dmg_gray": DMG_GRAY},
         "inputs": design_inputs(),
         "identities": {i["id"]: {k: v for k, v in i.items() if k != "id"} for i in spec["identities"]},
