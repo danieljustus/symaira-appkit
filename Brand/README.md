@@ -20,9 +20,10 @@ uv run scripts/verify-marketing-assets.py --determinism   # re-render AppKit, co
 ```
 
 * `Marketing/identities.json` – public identities, factual one-line roles, formats.
-* `Marketing/source/` – vendored inputs (512 px reviewed A3 icon renders + provenance, the
-  unchanged Symaira S for the provisional Scoop bucket). The generator reads nothing outside
-  the repository; refresh icons with `scripts/vendor-marketing-icons.py --icons-root <dir>`.
+* `Marketing/source/` – vendored inputs (512 px approved K1v2 icon renders + provenance, the
+  plate-less Symaira S in light and dark for the provisional Scoop bucket). The generator reads
+  nothing outside the repository; refresh icons with
+  `scripts/vendor-marketing-icons.py --icons-root <dir>`.
 * `Marketing/exports/<id>/` – `social-preview-{dark,light}.png` (1280×640),
   `og-{dark,light}.png` (1200×630), transparent `lockup-on-{light,dark}.png` and
   `wordmark-on-{light,dark}.png` (suffix = surface the ink is made for), and
@@ -32,11 +33,13 @@ uv run scripts/verify-marketing-assets.py --determinism   # re-render AppKit, co
 * `Marketing/manifest.json` – provenance (input hashes), roles, dimensions, output hashes and a
   `usage.vendoring` map (`target path in a product repo` → `file here`) for automated copying.
 
-Icon rule: the A3 foreground groups and artwork (the Symaira S and each product signet) are
-**frozen** – never redraw, recolour or re-interpret them. Only the document *background* fill
-may follow the neutral light/dark canvas tokens; the Tinted appearance is system-defined.
-Marketing art uses the reviewed renders of those packages on the neutral canvas and never
-rasterises glass into transparent lockups beyond what the render contains.
+Icon rule: the approved K1v2 Icon Composer packages (2026-10-23) are **frozen** – never redraw,
+recolour or re-interpret them. K1v2 is the two-part Symaira S in graphite relief with contour
+lines and one champagne index line, plus the product glyph in champagne Liquid Glass in front.
+Each package has three groups (glyph, contour lines, S); `actool` rejects more than four.
+The Tinted appearance keeps the relief readable through fixed luminance steps. Marketing art
+uses the approved renders of those packages on the neutral canvas and never rasterises glass
+into transparent lockups beyond what the render contains.
 
 Roles are labels, not claims: Brain agent context/control, Desktop document workspace, Vault
 credential service, Cockpit Mac system control, EraseMe data-broker removal, Fritz FRITZ!Box
@@ -45,7 +48,7 @@ distribution identities (Homebrew tap, Scoop bucket) and the website are not sho
 apps. `router` is a separate family for the documented public-kit title *Symaira Router*; it
 reuses the Fritz signet and never replaces *Symaira Fritz*. Brain's optional Browse/Operate/
 Scope modules have no approved mark and therefore no card here (modules are not apps).
-`scoop-bucket` is provisional: no approved Scoop icon exists, so it shows the unchanged S only.
+`scoop-bucket` is provisional: no approved Scoop icon exists, so it shows the plate-less S only.
 
 ## Product logos (legacy)
 
@@ -74,10 +77,11 @@ approved source inputs, the six macOS/iOS appearance exports, and
 `exports/AppIcon.icns`. `icon-manifest.json` records the release manifest
 checksums; `scripts/verify-approved-icon.py` is the CI guard for drift.
 
-The approved high-contrast A3 artwork is the source of truth. Do not redraw,
-recolor, or regenerate the artwork with the historical shell renderer. The
-older shell files in `Brand/AppIcon/` remain available for historical assets,
-but they are not inputs for new icon families.
+The approved K1v2 Icon Composer package is the source of truth; it replaced the
+A3 artwork on 2026-10-23. Do not redraw, recolor, or regenerate the artwork with
+the historical shell renderer. The older shell files in `Brand/AppIcon/` and the
+A3 inputs under `source/` remain available for historical assets, but they are
+not inputs for new icon families.
 
 To refresh the canonical family from the approved release directory, run:
 
@@ -91,7 +95,8 @@ Keep all layered Icon Composer inputs and rendered outputs together. Consumers
 that need a product icon should vendor the matching family into their own
 repository rather than depending on a neighbouring AppKit checkout.
 
-For a neutral-background refresh, use `scripts/render-a3-icon.py --source
+For a neutral-background refresh of historical A3 packages (two groups,
+`S.png` + `signet.png`; it rejects K1v2), use `scripts/render-a3-icon.py --source
 /path/to/AppIcon.icon --output /path/to/separate-review-directory`. It reads
 `canvas` and `canvas-dark` from the current design contract, preserves both
 foreground groups and their image bytes, renders all six macOS/iOS Default,

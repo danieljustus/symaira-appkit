@@ -14,7 +14,7 @@ for the Symaira public identities. Design inputs are read from this repository o
                                            reference shader; `topo_alpha` below is a numpy port of
                                            its fragment shader at a fixed idle frame (FLOW_T)
 * Sources/SymairaTheme/Resources/Fonts/GoogleSansFlex.ttf   original font, opsz 18
-* Brand/Marketing/source/                  vendored, reviewed A3 icon renders (see manifest.json)
+* Brand/Marketing/source/                  vendored, approved K1v2 icon renders (see manifest.json)
 
 No model, no sibling checkout. Dependencies are pinned in the inline script metadata above, so
 `uv run` renders byte-identical output on every machine:
@@ -376,7 +376,7 @@ def wrap_text(text, size, weight, tracking, max_width):
 
 
 # --- identity artwork ------------------------------------------------------------------------
-CARD_S_FILL = 674 / 1024  # bare S on cards: same height as the S inside every A3 icon
+CARD_S_FILL = 674 / 1024  # bare S on cards: same height as the S inside every K1v2 icon
 LOCKUP_S_FILL = 674 / 793  # bare S in lockups/logos: the previous visual size, now centred
 
 
@@ -384,8 +384,9 @@ def load_identity_image(ident, theme, px, s_fill=CARD_S_FILL):
     """Return (RGBA image of side px, corner-radius fraction, has_plate)."""
     src = ident["source"]
     if src == "umbrella":
-        # S-A3.png keeps transparent margin right/bottom; crop to the glyph so it centres.
-        s = Image.open(MARKETING / "source" / "umbrella" / "S-A3.png").convert("RGBA")
+        # Plate-less R1 S: the light variant is made for light surfaces, dark for dark ones.
+        surface = "dark" if theme == "dark" else "light"
+        s = Image.open(MARKETING / "source" / "umbrella" / f"S-R1-{surface}.png").convert("RGBA")
         s = s.crop(s.getchannel("A").getbbox())
         scale = px * s_fill / s.height
         s = s.resize((round(s.width * scale), round(s.height * scale)), Image.Resampling.LANCZOS)
@@ -665,7 +666,8 @@ def design_inputs():
         FONT_PATH,
         MARKETING / "identities.json",
         MARKETING / "source" / "identities-provenance.json",
-        MARKETING / "source" / "umbrella" / "S-A3.png",
+        MARKETING / "source" / "umbrella" / "S-R1-light.png",
+        MARKETING / "source" / "umbrella" / "S-R1-dark.png",
         MARKETING / "source" / "umbrella" / "PROVENANCE.json",
     ]
     for d in sorted((MARKETING / "source" / "identities").iterdir()):
@@ -752,8 +754,8 @@ def write_manifest(outputs, dmg_info):
             "notes": [
                 "GitHub social preview upload: use social-preview-dark.png (1280x640).",
                 "Cards carry no version, metric or UI screenshot; roles come from Brand/Marketing/identities.json.",
-                "scoop-bucket is provisional (unchanged Symaira S, no approved A3 icon).",
-                "router reuses the Fritz A3 signet for the documented public-kit title 'Symaira Router'; it never replaces Symaira Fritz.",
+                "scoop-bucket is provisional (plate-less K1v2 Symaira S, no approved Scoop icon).",
+                "router reuses the Fritz signet for the documented public-kit title 'Symaira Router'; it never replaces Symaira Fritz.",
             ],
         },
     }

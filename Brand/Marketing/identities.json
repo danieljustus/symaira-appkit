@@ -1,5 +1,5 @@
 {
-  "_comment": "Single source for public marketing identities. `source` is a directory under Brand/Marketing/source/identities (reviewed A3 icon renders) or `umbrella` (unchanged Symaira S, no plate). Roles are factual, short, and never claim a product is a native app unless it is one.",
+  "_comment": "Single source for public marketing identities. `source` is a directory under Brand/Marketing/source/identities (approved K1v2 icon renders) or `umbrella` (plate-less K1v2 Symaira S). Roles are factual, short, and never claim a product is a native app unless it is one.",
   "defaults": {
     "eyebrow": "Symaira",
     "formats": ["social-preview", "og"]
@@ -15,11 +15,11 @@
     {"id": "fritz", "kind": "product", "source": "fritz", "name": ["Fritz"], "role": "FRITZ!Box tools",
      "formats": ["social-preview", "og", "square-1080", "portrait-1080x1350", "story-1080x1920", "release-1600x900"]},
     {"id": "router", "kind": "product-alias", "source": "fritz", "name": ["Router"], "role": "Independent FRITZ!Box tools",
-     "note": "Separate family for the documented public-kit wordmark 'Symaira Router'; reuses the Fritz A3 signet. Does not replace Symaira Fritz.",
+     "note": "Separate family for the documented public-kit wordmark 'Symaira Router'; reuses the Fritz signet. Does not replace Symaira Fritz.",
      "formats": ["social-preview", "og", "square-1080", "portrait-1080x1350", "story-1080x1920", "release-1600x900"]},
     {"id": "homebrew-tap", "kind": "distribution", "source": "homebrew-tap", "name": ["Homebrew", "Tap"], "role": "Homebrew tap for Symaira tools"},
     {"id": "scoop-bucket", "kind": "distribution", "source": "umbrella", "name": ["Scoop", "Bucket"], "role": "Scoop bucket for Symaira tools",
-     "provisional": true, "note": "No approved A3 icon exists for the Scoop bucket; uses the unchanged Symaira S only."},
+     "provisional": true, "note": "No approved icon exists for the Scoop bucket; uses the plate-less Symaira S only."},
     {"id": "symaira-com", "kind": "website", "source": "symaira-com", "eyebrow": "", "name": ["symaira.com"], "role": "The Symaira product family"}
   ],
   "formats": {

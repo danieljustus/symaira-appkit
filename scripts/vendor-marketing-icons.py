@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["pillow==12.1.0"]
 # ///
-"""Vendor reviewed A3 icon renders as inputs for the marketing generator.
+"""Vendor approved icon renders as inputs for the marketing generator.
 
 Reads the Icon Composer render directory produced by the brand refresh
 (`<icons-root>/<key>/exports/macOS-{Default,Dark}.png` plus `<icons-root>/manifest.json`)
