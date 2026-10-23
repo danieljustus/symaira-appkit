@@ -43,7 +43,7 @@
     ]
   },
   "generator": "scripts/generate-marketing-assets.py",
-  "generator_sha256": "5257a890dafe90faf9ee0b8e11550ebba4614ea50a8c231b3118c69854c2b54f",
+  "generator_sha256": "f9b490576a9dc0ace405cd008757f09c2d8dc14102eb5dc8373723a6435a0268",
   "generator_version": 1,
   "identities": {
     "appkit": {
@@ -197,36 +197,36 @@
   },
   "outputs": [
     {
-      "bytes": 20296,
+      "bytes": 18988,
       "identity": "dmg",
       "mode": "RGB",
       "path": "Brand/DMG/symaira-dmg-background.png",
       "role": "DMG background",
-      "sha256": "67a6f55d021a96f31c149f75fcc0782877d068a337bcec5491386b6210fcb5a7",
+      "sha256": "94571a72867b9e38100783191c0d1d7a8c8732e599cd074f083ae561c452e458",
       "size": [
         660,
         420
       ]
     },
     {
-      "bytes": 27050,
+      "bytes": 26126,
       "identity": "dmg",
       "mode": "svg",
       "path": "Brand/DMG/symaira-dmg-background.svg",
       "role": "DMG background source (vector arrow + embedded terrain raster)",
-      "sha256": "9738871f30d938b5a31978b0e59dfcb9e6c25df4ef465b0d7eea5791012f0ef7",
+      "sha256": "3110d5437d431f70e408f4e16da2ef8b7ada5533cdd14b616a9283da43959c6f",
       "size": [
         660,
         420
       ]
     },
     {
-      "bytes": 54457,
+      "bytes": 51853,
       "identity": "dmg",
       "mode": "RGB",
       "path": "Brand/DMG/symaira-dmg-background@2x.png",
       "role": "DMG background @2x",
-      "sha256": "886d5573db1581ebaa4e4445db9d3da1dc6dfd27df86b374d1174104f8a29226",
+      "sha256": "9efbacc4326e98114ed317476b76c36af45b158828dfa86512b7eba09191667a",
       "size": [
         1320,
         840
@@ -259,13 +259,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 165707,
+      "bytes": 167973,
       "format": "og",
       "identity": "appkit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/appkit/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "00d9c123821d1be449a65d9bfe5a9814f6c0e1749b7da34f182bfbe3e668a60a",
+      "sha256": "b483df707fd61dc048e325e884b092f8a00e877d4c8987ceabdb53b67d217a8e",
       "size": [
         1200,
         630
@@ -273,13 +273,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 157616,
+      "bytes": 160298,
       "format": "og",
       "identity": "appkit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/appkit/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "bfeee0be682735c49697116df4613be015fde10666d92fe61c4f3e7729a8ece3",
+      "sha256": "160c757dce83baa7b38819de30a71cdcacc30cb99dca1484f09b0355c24879ac",
       "size": [
         1200,
         630
@@ -313,13 +313,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 182988,
+      "bytes": 185616,
       "format": "social-preview",
       "identity": "appkit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/appkit/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "93e46532a320e1a1d4ed7efb3f12e1db8022b6036100ae3c11c58e894d77c5dc",
+      "sha256": "fe93dda94afd9d488b3cbba312fe31a0a885b1e61f8d95ce66388a0fcf90690d",
       "size": [
         1280,
         640
@@ -327,13 +327,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 170427,
+      "bytes": 173697,
       "format": "social-preview",
       "identity": "appkit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/appkit/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "22e9c9b3e31138a4bc7ff425a2e928b211dd1d392bf9309bf5199714a3115e3b",
+      "sha256": "562f9c143897c3d14ca49ba720c2d45b3aa0a24d6ed3342c14168d6d11f3fcd5",
       "size": [
         1280,
         640
@@ -393,13 +393,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 167480,
+      "bytes": 169474,
       "format": "og",
       "identity": "brain",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/brain/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "1059f85435782187b17216218ffb19fb94aa946e39a12aa894a76ba7d462104d",
+      "sha256": "781183b647f8f6632674e27983f668ffd330f05871a1d4dacb2b7a7ff7fd63dd",
       "size": [
         1200,
         630
@@ -407,13 +407,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 159225,
+      "bytes": 161724,
       "format": "og",
       "identity": "brain",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/brain/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "b26da4cfeec7b5fe5b3385c236082f3613daa6f82c825b99ca9814605cc8f683",
+      "sha256": "93420e58b0260e0d60962547860969b7b48d233d81a0dbc0be640acd9d8a1c46",
       "size": [
         1200,
         630
@@ -447,13 +447,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 185266,
+      "bytes": 187494,
       "format": "social-preview",
       "identity": "brain",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/brain/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "a9dd988b467838f34ced0ccfc30b319d8c1ba4e95d0ad6fa3026d26d50415325",
+      "sha256": "3ed686838403268d852f970be09a60bd3533b2c5b1b35daaa8f80ccaf9d86f58",
       "size": [
         1280,
         640
@@ -461,13 +461,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 171987,
+      "bytes": 174913,
       "format": "social-preview",
       "identity": "brain",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/brain/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "5da41d098b42d0f7d3022a333d32d75cfe3ce686a900701ec4a875e387494380",
+      "sha256": "39282b75b3563fe5ef8a20bd35972125fa6753f67257ce18cebf0cf300dcf763",
       "size": [
         1280,
         640
@@ -527,13 +527,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 171310,
+      "bytes": 172345,
       "format": "og",
       "identity": "cockpit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/cockpit/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "19db258bbba4cd4328e0a0efa9cf06316bece794e0a83f5da7b474983a49775b",
+      "sha256": "7ec81514465df0a688d9b8e4834f9a7e33795a9acd2b253154ea0e2810730b34",
       "size": [
         1200,
         630
@@ -541,13 +541,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 163501,
+      "bytes": 164955,
       "format": "og",
       "identity": "cockpit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/cockpit/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "d2afef43c3912421490f4bda62c66bcce8be9f62e0b389142d74355a2d6cb63e",
+      "sha256": "6b887c779148f89efa6e1ae8ab637e0f960bb996156dcdaaa5cbe8acecfcc2b6",
       "size": [
         1200,
         630
@@ -581,13 +581,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 190105,
+      "bytes": 191487,
       "format": "social-preview",
       "identity": "cockpit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/cockpit/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "c3b82c206271695fc90706d304d7eacdf375bc9a5fed78d4c3ff1685af3fb828",
+      "sha256": "e7917b5d2de7399cea747f9b66a0bf2cca623adaeca52386464f8f925ae8e826",
       "size": [
         1280,
         640
@@ -595,13 +595,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 176915,
+      "bytes": 178724,
       "format": "social-preview",
       "identity": "cockpit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/cockpit/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "4c69eb33b4c87c51b177f0e6f2ed770020b77e3e96ec565936095e34747db63d",
+      "sha256": "0b1fe5f4fc9ed7cf988f5bc275e6e6ac712389f088862c10bc06398d34fafe5d",
       "size": [
         1280,
         640
@@ -661,13 +661,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 170026,
+      "bytes": 171109,
       "format": "og",
       "identity": "corekit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/corekit/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "4656822125c91aba475b2f577dec5642e73b0f2721ada01d6ccc7348d1ae70e1",
+      "sha256": "78cb400de327410a333b3c6062535022670a39e611788c282afbf277a50fe791",
       "size": [
         1200,
         630
@@ -675,13 +675,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 162275,
+      "bytes": 163744,
       "format": "og",
       "identity": "corekit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/corekit/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "6ebb344c66a6bf8faba1e68372b6da8b7839485e942dd1d013adf832a974ca17",
+      "sha256": "5497d4dc7d29a0816eb35d8d3cea5d960524676092e7da28917abeb6f191393f",
       "size": [
         1200,
         630
@@ -715,13 +715,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 189410,
+      "bytes": 190617,
       "format": "social-preview",
       "identity": "corekit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/corekit/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "ce7fe917e4f247dbf83c26fd23f4590519c26b5b0cc991f100083487ee17712e",
+      "sha256": "224ca73a1f37b1e2378190526c312d29ab0db49b5d66f04096a3306145ea9152",
       "size": [
         1280,
         640
@@ -729,13 +729,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 176135,
+      "bytes": 178139,
       "format": "social-preview",
       "identity": "corekit",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/corekit/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "793b6b654da6ab5b58b2a45067c4528b9e71265f640aa114c1ad88fc7895adce",
+      "sha256": "1f8b95a1443ca993f8e6ddae6030a89995942d35f8aec7731296ceb5ae2be5cc",
       "size": [
         1280,
         640
@@ -795,13 +795,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 166625,
+      "bytes": 164984,
       "format": "og",
       "identity": "desktop",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/desktop/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "e161f5e8c71a86ef7f8d3c5264bd92e7874579bbe4ce286943c94a4113cd88f8",
+      "sha256": "053a0a133e9eb9e3ba10860f72b12df3d606355fcb5bc3ef06a93148405d4cfe",
       "size": [
         1200,
         630
@@ -809,13 +809,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 159484,
+      "bytes": 158323,
       "format": "og",
       "identity": "desktop",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/desktop/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "50c1a656dffb9de200d09b99015958329bc100a05ceaf02b24920ff7fba3f0f0",
+      "sha256": "2f3a4b45c7c27bf15a62ef1d7c8ef5d102400a3e00221e8e2bd5be305f198b1d",
       "size": [
         1200,
         630
@@ -849,13 +849,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 185996,
+      "bytes": 183243,
       "format": "social-preview",
       "identity": "desktop",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/desktop/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "6bd0b8e95529927ec4c64e84409b86391a835948821105518472e862f138142d",
+      "sha256": "e215786f9ab1c1b3918f52754fb77645f51b5b6dcd8104b15944127ff3b95d81",
       "size": [
         1280,
         640
@@ -863,13 +863,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 173732,
+      "bytes": 171875,
       "format": "social-preview",
       "identity": "desktop",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/desktop/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "3dc4fa9abe398d49304d60f0fc29d69e7adfa5d0802def8fd124d920c0caea34",
+      "sha256": "e716b1be0b0b09c8470660a252baee2c0f52322b72ab58ecc0b7614809ebb5a3",
       "size": [
         1280,
         640
@@ -929,13 +929,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 167398,
+      "bytes": 167457,
       "format": "og",
       "identity": "eraseme",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/eraseme/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "eb44087ba4c47df2213392a640cd4e06c2f14882f60acea17e32332500b1e4d5",
+      "sha256": "c2aa6a9233820eae2fcd92f39f75aeaa787b231e02c1f4dae216dcc11f478d26",
       "size": [
         1200,
         630
@@ -943,13 +943,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 159611,
+      "bytes": 160043,
       "format": "og",
       "identity": "eraseme",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/eraseme/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "42a3d47c09f6a4689e1339e7864e5297cee44b61e411ddda4bb91c6cb27bb2e2",
+      "sha256": "9769652f4f5aaf9202ce6ecfcda24edb19a741ebb4b51751dabc23c2292454f4",
       "size": [
         1200,
         630
@@ -983,13 +983,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 186719,
+      "bytes": 186560,
       "format": "social-preview",
       "identity": "eraseme",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/eraseme/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "8cf643258685e86a09fad4f501e602ca7b3a53e86a03df08165126402a80b59a",
+      "sha256": "2178a634940e8a144b8fa500f72115605bba64aecce5e45ec184ffbcb8c8ce7e",
       "size": [
         1280,
         640
@@ -997,13 +997,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 173610,
+      "bytes": 174176,
       "format": "social-preview",
       "identity": "eraseme",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/eraseme/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "cf448562e876b2d1c1f7cd7210aea19f15fc9f4a46b7df60f2f3097d055e40f1",
+      "sha256": "41f5f7a5f2e2e70618ce1d29e7243e3c9c34cbeefc8cf0bd830e0ec8701b1371",
       "size": [
         1280,
         640
@@ -1063,13 +1063,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 162199,
+      "bytes": 167585,
       "format": "og",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "9b494c3d8eb65e13213d392d56580a7f8cbbe27621fa29eb469f39418403133f",
+      "sha256": "37c7c750aac4bb6ef4ef8cdee81da36981080fd2f5abada5bdfe4e194323d97e",
       "size": [
         1200,
         630
@@ -1077,13 +1077,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 154280,
+      "bytes": 159988,
       "format": "og",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "2f3e2781aa5feeffc78a56a08aa1f7b2591d5463e07b427f30c5c81b3f67d4e4",
+      "sha256": "8a79d88ebd2a1634862d7be43afe781aefe2e209445da325c0934ee25014a889",
       "size": [
         1200,
         630
@@ -1091,13 +1091,13 @@
       "theme": "light"
     },
     {
-      "bytes": 332391,
+      "bytes": 350258,
       "format": "portrait-1080x1350",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/portrait-1080x1350-dark.png",
       "role": "Portrait social post",
-      "sha256": "2630d3f47bb7ce1de0c461553f3e871c8a31397ce257e221d63355ffa46a72cb",
+      "sha256": "7a9ec8e6f44b05a8a2e1d49312cede9002db023759e6149497ef0735b30f20ed",
       "size": [
         1080,
         1350
@@ -1105,13 +1105,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 311910,
+      "bytes": 330242,
       "format": "portrait-1080x1350",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/portrait-1080x1350-light.png",
       "role": "Portrait social post",
-      "sha256": "96481d321f9fe1f7b28e3406c0f3187744b89f3bc6e41731216db9adef931cc6",
+      "sha256": "f23f74cb5d2e630adac0643ecfaf1ef71bb833a792474719f215ba6aca20e89a",
       "size": [
         1080,
         1350
@@ -1145,13 +1145,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 275177,
+      "bytes": 282683,
       "format": "release-1600x900",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/release-1600x900-dark.png",
       "role": "Release / README hero, 16:9",
-      "sha256": "4ada0c30d1eb7dfb51dea3ab0133549e779bb3e804dfa2eced358ee1478a558b",
+      "sha256": "0da5f256c48d35d42625f540014220b03337a8d43db4f20211454efee06a5f3e",
       "size": [
         1600,
         900
@@ -1159,13 +1159,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 260447,
+      "bytes": 269448,
       "format": "release-1600x900",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/release-1600x900-light.png",
       "role": "Release / README hero, 16:9",
-      "sha256": "40cf934ae3412edb79fdfbe377087d7157f6ed864ff9627cd37d25e1422193e1",
+      "sha256": "de9ba0b19e38c158c4c2df977ebeda949972841c173cc36bdcaacf58950d83d7",
       "size": [
         1600,
         900
@@ -1173,13 +1173,13 @@
       "theme": "light"
     },
     {
-      "bytes": 179599,
+      "bytes": 185833,
       "format": "social-preview",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "9908ae103d747b6fafde6710222534396e919d670213375c935a1d82359d68da",
+      "sha256": "17a4c80b43626e761d3aecbd4b43369059525cbc683c1125d751d94cf60ce8a1",
       "size": [
         1280,
         640
@@ -1187,13 +1187,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 166734,
+      "bytes": 173075,
       "format": "social-preview",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "58ffa70716ebc3b7157db82d043d90d162a452de8d6c0af6f189d9857e29a29c",
+      "sha256": "60639e9e6cb5810948fa357f4a0eed8f2838d4e6f612ac7273331eefd2430833",
       "size": [
         1280,
         640
@@ -1201,13 +1201,13 @@
       "theme": "light"
     },
     {
-      "bytes": 280839,
+      "bytes": 288524,
       "format": "square-1080",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/square-1080-dark.png",
       "role": "Square social post",
-      "sha256": "737ff28ef2a52a9f79f037f13e61de23e8a8b5d4f28bf1d9223a63b095460338",
+      "sha256": "6322d8f09cc8c8106c70caf731aaadd69bb95ca6cb11796896c889bbf8af2808",
       "size": [
         1080,
         1080
@@ -1215,13 +1215,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 263867,
+      "bytes": 271902,
       "format": "square-1080",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/square-1080-light.png",
       "role": "Square social post",
-      "sha256": "0413e6545730a2e7397222e10de68a4885cc9a19ad54a75e464fbb6190dfae67",
+      "sha256": "aa08277b463d7f8e68d17bcab4a1cb35d33d4362a9ffeb1277c8f4479ff9d4df",
       "size": [
         1080,
         1080
@@ -1229,13 +1229,13 @@
       "theme": "light"
     },
     {
-      "bytes": 445958,
+      "bytes": 482260,
       "format": "story-1080x1920",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/story-1080x1920-dark.png",
       "role": "Story / vertical (top and bottom 14% kept free)",
-      "sha256": "7042f2670b63b1c67a19ec0e10d214dbc020e893e12fa6047c2ea9d6d144ad7d",
+      "sha256": "939e3ad0ab53afb56ef43e2ae4675e5a12518dc41d5ad7fde7106e38d403be96",
       "size": [
         1080,
         1920
@@ -1243,13 +1243,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 415388,
+      "bytes": 453095,
       "format": "story-1080x1920",
       "identity": "fritz",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/fritz/story-1080x1920-light.png",
       "role": "Story / vertical (top and bottom 14% kept free)",
-      "sha256": "b90b5630d7716c925f36ad4415c1fee061e3f1cb9882e52e0f8a2a6efc9ecfa8",
+      "sha256": "49db4410489cd49b5e9dbdd4731e1d7fc52da6257b40a3f9cdb53ffa207980dc",
       "size": [
         1080,
         1920
@@ -1309,13 +1309,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 164214,
+      "bytes": 158735,
       "format": "og",
       "identity": "homebrew-tap",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/homebrew-tap/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "bd1074f9bcd507914f132b036a0bd952351f575999410c7abd3b84977b476fb1",
+      "sha256": "b9ee74eeabbcfb7ab533b293e7919f0387783cfc6ed4ce9c223d71c0a9f7777c",
       "size": [
         1200,
         630
@@ -1323,13 +1323,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 157272,
+      "bytes": 153678,
       "format": "og",
       "identity": "homebrew-tap",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/homebrew-tap/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "a5475166755f992677311d0d45555a05076e8b8cc186c8f5224c22938bfdfbc0",
+      "sha256": "a851cf27e928a302c252c9fcc97d264c162cffc2f8184e57022e0486b304ef61",
       "size": [
         1200,
         630
@@ -1363,13 +1363,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 181588,
+      "bytes": 176811,
       "format": "social-preview",
       "identity": "homebrew-tap",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/homebrew-tap/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "97a6f443501021014865384f312b78f1d7ac1ed38c716c5040701c8e5cbca34e",
+      "sha256": "46c0f12621bfbc2a3a6bf91357602fb56e81c79fc0a96737ba0b7322b836d5fc",
       "size": [
         1280,
         640
@@ -1377,13 +1377,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 171259,
+      "bytes": 165692,
       "format": "social-preview",
       "identity": "homebrew-tap",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/homebrew-tap/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "c3ae6040ea2a8e99ced630e7c72560f6f5b41a234300be44cb5eba7bcd498e6d",
+      "sha256": "f39a5ab039e5b7d72e721dcaac570a842d1c8f255801a9198fc88b85d0b3f721",
       "size": [
         1280,
         640
@@ -1443,13 +1443,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 167106,
+      "bytes": 168118,
       "format": "og",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "725d7eaed4751a259e7b44d3842145d7f58a0d86a58f84b4644fdb41ab4ef549",
+      "sha256": "b0f424a1968adbe245288f0ba0cb53d202ab131adc5fc1bc8ae7eeca160d93bc",
       "size": [
         1200,
         630
@@ -1457,13 +1457,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 159556,
+      "bytes": 161153,
       "format": "og",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "efdeecf9aa4de449c58bf15fe5772abf4c110c39e75a2047274f42dfe418af70",
+      "sha256": "3b3742f9ccb033833028333fae6cd498f70b43d9852ae916af647f32f98b6046",
       "size": [
         1200,
         630
@@ -1471,13 +1471,13 @@
       "theme": "light"
     },
     {
-      "bytes": 335639,
+      "bytes": 345469,
       "format": "portrait-1080x1350",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/portrait-1080x1350-dark.png",
       "role": "Portrait social post",
-      "sha256": "e881534e68866629398dff32ef9b14830bf253798242bdc6c12b39e6a70d729a",
+      "sha256": "6b11d5eea49bc2122a9847b98a11d9c17d6527b17e1730efd7137376903fea54",
       "size": [
         1080,
         1350
@@ -1485,13 +1485,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 315536,
+      "bytes": 326236,
       "format": "portrait-1080x1350",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/portrait-1080x1350-light.png",
       "role": "Portrait social post",
-      "sha256": "19489acde7d67e41c0409878cabbb72c04abf96b854c8141343fa9a8ecbe62ac",
+      "sha256": "4bc5accd28cae825e23616474456d7d25169a5c0932401e0227f1736d6854ae2",
       "size": [
         1080,
         1350
@@ -1525,13 +1525,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 281202,
+      "bytes": 282800,
       "format": "release-1600x900",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/release-1600x900-dark.png",
       "role": "Release / README hero, 16:9",
-      "sha256": "36ea3f61df3787aa36797e3982ba35537d4ceaa2853a9a407f50c5f1fc010a70",
+      "sha256": "2d0104ddbb9627a877819afd6016b055545732b4094bd1c2461cdf046b50bba4",
       "size": [
         1600,
         900
@@ -1539,13 +1539,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 267754,
+      "bytes": 270275,
       "format": "release-1600x900",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/release-1600x900-light.png",
       "role": "Release / README hero, 16:9",
-      "sha256": "db5d254ff4367771396756edca34aa368427598801ec4bcefe9d8647ed4d0784",
+      "sha256": "945b746238b90ff06d21174c3dd5f397c4a9ca7a414592bf3189b2db6d590d4e",
       "size": [
         1600,
         900
@@ -1553,13 +1553,13 @@
       "theme": "light"
     },
     {
-      "bytes": 186351,
+      "bytes": 187784,
       "format": "social-preview",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "40d1e14f8ec84d9469f93e93cfb92c738ebd5853c7eee067fe41e6fdaea6330d",
+      "sha256": "26be0eba7e58421f2862d0bb63bc045a3b32a55beb8893574b6257b06437ecce",
       "size": [
         1280,
         640
@@ -1567,13 +1567,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 173381,
+      "bytes": 175411,
       "format": "social-preview",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "1b64875c9813d79c8ce46edad0011a5a4daa018650a46eb43dddac23a905e334",
+      "sha256": "736dd9914dce31545938ad62f3938b3f85f601337aaaf1621605d974acb3739c",
       "size": [
         1280,
         640
@@ -1581,13 +1581,13 @@
       "theme": "light"
     },
     {
-      "bytes": 281941,
+      "bytes": 283300,
       "format": "square-1080",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/square-1080-dark.png",
       "role": "Square social post",
-      "sha256": "03c25b0fac55b26aeccfc70b8e1f195a3b3e027f2577c591ed14b635d056fc42",
+      "sha256": "7a91f4bce9f4bf6a391483118c2dca0b7085d743eaf0b769b6ff8c682b5728ed",
       "size": [
         1080,
         1080
@@ -1595,13 +1595,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 265914,
+      "bytes": 267411,
       "format": "square-1080",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/square-1080-light.png",
       "role": "Square social post",
-      "sha256": "131fe2111caf2375bd7172b55134cbd86f9ec6a848474922cedd79bee7b7c016",
+      "sha256": "5a69804520b49580bcea04602c902b7a01c2c1d844594eb2c3efc104d28addb6",
       "size": [
         1080,
         1080
@@ -1609,13 +1609,13 @@
       "theme": "light"
     },
     {
-      "bytes": 451602,
+      "bytes": 480256,
       "format": "story-1080x1920",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/story-1080x1920-dark.png",
       "role": "Story / vertical (top and bottom 14% kept free)",
-      "sha256": "cd28c4abc58924d26fa430469642723b36e41050492ae94eaa89adfe39e4cbe5",
+      "sha256": "8f8b28047433561ad8a96112c3ac19fe28ace904571c53b1b74728d9b2f86073",
       "size": [
         1080,
         1920
@@ -1623,13 +1623,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 421799,
+      "bytes": 451937,
       "format": "story-1080x1920",
       "identity": "router",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/router/story-1080x1920-light.png",
       "role": "Story / vertical (top and bottom 14% kept free)",
-      "sha256": "83fd54e63d6a6c3a02e8a536a90fc04d493c061e89695c5f8982b6ff27dce75f",
+      "sha256": "d2e5de5ee2d4c82d602a56f6cb339850309e8bbf0bfee6cbc3effddc5cc46541",
       "size": [
         1080,
         1920
@@ -1689,13 +1689,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 125555,
+      "bytes": 129308,
       "format": "og",
       "identity": "scoop-bucket",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/scoop-bucket/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "632041219c7f0372ba4c63f295d492b90e7b7849a7b882d23f39b7154c375ffe",
+      "sha256": "ced4ecbdf4c67347160dab09fc8a671db0e32dc5a4b4f52a5396d6ec918008c2",
       "size": [
         1200,
         630
@@ -1703,13 +1703,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 117649,
+      "bytes": 122701,
       "format": "og",
       "identity": "scoop-bucket",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/scoop-bucket/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "00f4ef5ada10289099e369eb25b0c8a7632fe4833bd8477ba79a10d6b2cfc8fd",
+      "sha256": "35311342d39ae7908a4ce386e226a6d2546555ec149cf6fdbfcc6f084bce893b",
       "size": [
         1200,
         630
@@ -1743,13 +1743,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 131563,
+      "bytes": 135678,
       "format": "social-preview",
       "identity": "scoop-bucket",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/scoop-bucket/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "727baeb1a8155eb2d2ba82b748f4e1cb1de478a5e549f13db26c78a9ecc5bda1",
+      "sha256": "16ccd65f3ffca43ee7bdd22e112de2491c0d32499dd89e165a99a1f5ec0e30f2",
       "size": [
         1280,
         640
@@ -1757,13 +1757,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 123304,
+      "bytes": 128083,
       "format": "social-preview",
       "identity": "scoop-bucket",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/scoop-bucket/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "7d10321ca6414429b6bb854e88eeef5fc127e76eeb2694887d7ba510b2efe9d9",
+      "sha256": "6e6a2c8fa8d49c2ef630bed17e5d258012e1781ece89906e072084ac49f45cfe",
       "size": [
         1280,
         640
@@ -1823,13 +1823,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 171218,
+      "bytes": 171017,
       "format": "og",
       "identity": "symaira-com",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/symaira-com/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "42c7d67f628ea471e85930fef845d95ca31b5098a7294b9d3109a3dce43fea27",
+      "sha256": "66f8cdf0eda6268e44533e9092cf8e7351771c03a0b1231f7e682c76c2564b76",
       "size": [
         1200,
         630
@@ -1837,13 +1837,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 163876,
+      "bytes": 163677,
       "format": "og",
       "identity": "symaira-com",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/symaira-com/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "56087f80c5042b42204f2c3ad35cd4f66c50466a19ca42c14d56b349fb2110d2",
+      "sha256": "d06c1832cc28ef450e229b6a64313a15db7d6f1af16124373b47fda6c226aac4",
       "size": [
         1200,
         630
@@ -1877,13 +1877,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 187970,
+      "bytes": 186967,
       "format": "social-preview",
       "identity": "symaira-com",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/symaira-com/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "e587d51d245c1bfe99f1adda75b5caf6bfc39c0343bdb19bcc400a28feb18a83",
+      "sha256": "6aa67efeade29175bcbd427a0c757a6fe50f322845a481cff989c78aa87d72ba",
       "size": [
         1280,
         640
@@ -1891,13 +1891,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 175902,
+      "bytes": 175502,
       "format": "social-preview",
       "identity": "symaira-com",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/symaira-com/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "22041f49ebf116a6442345720e42c0962100631f695a114d52d9359fe2b53a0c",
+      "sha256": "9fa6cbde08a7b2a608655a83f6a859a670674a3d6a70fcf514bdb3e1f0a31e14",
       "size": [
         1280,
         640
@@ -1957,13 +1957,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 162421,
+      "bytes": 166731,
       "format": "og",
       "identity": "vault",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/vault/og-dark.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "8713dbe8249fba8c8745fde4fe3f5b2e208652c4e1bdb2464d1b9a4961b0584f",
+      "sha256": "63fb9aeab021d541029b7a8fa41fa7ee1ef781e01209a2e8e5777bbc76e14792",
       "size": [
         1200,
         630
@@ -1971,13 +1971,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 154738,
+      "bytes": 159455,
       "format": "og",
       "identity": "vault",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/vault/og-light.png",
       "role": "OpenGraph / Twitter large card",
-      "sha256": "e7b854f0466df8036218cf92f763287056b78b3bdf7f44bd24b623f3a002683a",
+      "sha256": "4e9e04785656f51f3ce8cce443e3536acb85dcee1e403dbad2230eb82d6930c1",
       "size": [
         1200,
         630
@@ -2011,13 +2011,13 @@
       "surface": "on-light"
     },
     {
-      "bytes": 180719,
+      "bytes": 185613,
       "format": "social-preview",
       "identity": "vault",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/vault/social-preview-dark.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "7363097033c7e5a3d4d6162abc94ec7ce630afb4402ad6621990c79e5695d5d4",
+      "sha256": "f08e6ea2b7d3bd5c95e8ac034041d027cb9c5ffbf11a1bd702554552405d31e3",
       "size": [
         1280,
         640
@@ -2025,13 +2025,13 @@
       "theme": "dark"
     },
     {
-      "bytes": 168282,
+      "bytes": 173620,
       "format": "social-preview",
       "identity": "vault",
       "mode": "RGB",
       "path": "Brand/Marketing/exports/vault/social-preview-light.png",
       "role": "GitHub social preview (upload in repository settings)",
-      "sha256": "660caa482139ebb3c13ef35a6066162d5deca9285e27927b53eb487bcbfa1940",
+      "sha256": "8d4757e2a6a9f1427f6518cdb88cf90cddc7a6776015f3be5ad1fb25de517715",
       "size": [
         1280,
         640

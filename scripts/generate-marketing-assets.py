@@ -63,6 +63,9 @@ DMG_GRAY = "#767572"
 FLOW_T = 38.0  # fixed idle frame (runtime picks a random start; marketing art uses this one)
 # Marketing art shows more terrain than the app: same shader and line weight, smaller features.
 TOPO_ZOOM = 1.6
+# Legibility halo (CSS px): instead of the shader's centred basin, lines are attenuated by
+# topo.json `basinOpen` behind the text block and the logo and recover over this distance.
+HALO_RADIUS = 110
 CARD_DPR = 1.5  # line weight of the shader at a 1280 px wide card
 TEXT_SS = 4  # text supersampling
 OPSZ = 18
@@ -183,27 +186,32 @@ def topo_selfcheck(params):
         )
 
 
-def topo_alpha(width, height, dpr, params, rects, dark, flow_t=FLOW_T):
+def _sd_box(px, py, rx, ry, rw, rh, rad):
+    """Signed distance to a rounded rectangle (shader sdBox), all in CSS px."""
+    cx, cy = rx + rw * 0.5, ry + rh * 0.5
+    dx = np.abs(px - cx) - rw * 0.5 + rad
+    dy = np.abs(py - cy) - rh * 0.5 + rad
+    return np.sqrt(np.maximum(dx, 0) ** 2 + np.maximum(dy, 0) ** 2) + np.minimum(np.maximum(dx, dy), 0) - rad
+
+
+def topo_alpha(width, height, dpr, params, rects, dark, halo, flow_t=FLOW_T):
     """Alpha coverage (0..1) of the topography at the idle frame.
 
     rects: list of (x, y, w, h, radius, is_hill) in output pixels. They become protected zones
     (shader `data-topo=protect`) and, when is_hill, a gentle hill (`data-topo=hill`).
+    halo: list of (x, y, w, h) in output pixels (text block, logo). Marketing deviation from the
+    shader: its centred basin is replaced by a soft fade around these, see HALO_RADIUS.
     """
     f32 = np.float64
     cols = (np.arange(width, dtype=f32) + f32(0.5)) / f32(dpr)
     rows = (np.arange(height, dtype=f32) + f32(0.5)) / f32(dpr)
     px, py = np.meshgrid(cols, rows)
-    res_x, res_y = f32(width / dpr), f32(height / dpr)
     h = _height(px, py, params, flow_t, TOPO_ZOOM)
 
     mask = np.ones_like(px)
     hill = np.zeros_like(px)
     for rx, ry, rw, rh, rad, is_hill in rects:
-        rx, ry, rw, rh, rad = (f32(v / dpr) for v in (rx, ry, rw, rh, rad))
-        cx, cy = rx + rw * f32(0.5), ry + rh * f32(0.5)
-        dx = np.abs(px - cx) - rw * f32(0.5) + rad
-        dy = np.abs(py - cy) - rh * f32(0.5) + rad
-        sd = np.sqrt(np.maximum(dx, 0) ** 2 + np.maximum(dy, 0) ** 2) + np.minimum(np.maximum(dx, dy), 0) - rad
+        sd = _sd_box(px, py, *(f32(v / dpr) for v in (rx, ry, rw, rh, rad)))
         if is_hill:
             hill = np.maximum(hill, f32(0.025) * np.exp(-np.maximum(sd, 0) / f32(24)))
         mask = np.minimum(mask, _smoothstep(f32(2), f32(8), sd))
@@ -212,10 +220,11 @@ def topo_alpha(width, height, dpr, params, rects, dark, flow_t=FLOW_T):
     v = h * f32(params["levels"])
     line = _iso(v, 0.65 * dpr, 0.5)
     idx = _iso(v / f32(params["indexEvery"]), 1.0 * dpr, 1.6)
-    ex = (px - res_x * f32(0.6)) / (res_x * f32(0.36))
-    ey = (py - res_y * f32(0.55)) / (res_y * f32(0.5))
+    near = np.full_like(px, np.inf)
+    for rx, ry, rw, rh in halo:
+        near = np.minimum(near, _sd_box(px, py, *(f32(v / dpr) for v in (rx, ry, rw, rh)), f32(0)))
     basin = f32(params["basinOpen"])
-    vis = f32(1) + (np.clip((np.sqrt(ex * ex + ey * ey) - f32(0.78)) / f32(0.42), 0, 1) - f32(1)) * basin
+    vis = f32(1) + (_smoothstep(f32(0), f32(HALO_RADIUS), near) - f32(1)) * basin
     k = f32(1.0 if dark else params["lightModeFactor"])
     a = np.minimum(np.maximum(line * f32(params["lineAlpha"]), idx * f32(params["indexAlpha"])) * vis, f32(params["maxAlpha"]))
     return (a * mask * k).astype(np.float64)
@@ -493,8 +502,15 @@ def card(ident, theme, fmt, params):
     else:
         protected.append((icon_x, icon_y, icon, icon, icon * 0.23, True))
 
+    text_rects = protected[:-1]
+    x0 = min(r[0] for r in text_rects)
+    y0 = min(r[1] for r in text_rects)
+    x1 = max(r[0] + r[2] for r in text_rects)
+    y1 = max(r[1] + r[3] for r in text_rects)
+    halo = [(x0, y0, x1 - x0, y1 - y0), protected[-1][:4]]
+
     dpr = CARD_DPR * width / 1280
-    alpha = topo_alpha(width, height, dpr, params, protected, th["dark"])
+    alpha = topo_alpha(width, height, dpr, params, protected, th["dark"], halo)
     img = composite_topo(rgb(th["canvas"]), alpha, rgb(th["topo"]))
     paste_identity(img, ident, theme, icon_x, icon_y, icon)
     for text, tx, base, size, weight, tracking, color in texts:
@@ -586,7 +602,7 @@ def dmg_assets(params, scale):
     protected = []
     for cx, cy in DMG_ICON_CENTERS:
         protected.append(((cx - 86) * scale, (cy - 84) * scale, 172 * scale, 188 * scale, 18 * scale, False))
-    alpha = topo_alpha(w, h, 1.5 * scale, params, protected, False)
+    alpha = topo_alpha(w, h, 1.5 * scale, params, protected, False, [r[:4] for r in protected])
     flat = composite_topo(rgb(DMG_GRAY), alpha, rgb(THEMES["light"]["topo"])).convert("RGBA")
     terrain = Image.new("RGBA", (w, h), rgb(THEMES["light"]["topo"]) + (0,))
     terrain.putalpha(Image.fromarray(np.clip(np.rint(alpha * 255), 0, 255).astype(np.uint8), "L"))
