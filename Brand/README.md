@@ -14,9 +14,9 @@ bundled file, opsz 18) and the idle frame of the topography shader (`topo.json`,
 Nothing is invented: no swirls, grids, extra colours, fake UI, metrics or version numbers.
 
 ```bash
-python3 scripts/generate-marketing-assets.py      # renders Marketing/exports/** and Brand/DMG/**
-python3 scripts/verify-marketing-assets.py        # hashes, sizes, alpha, DMG geometry, path safety
-python3 scripts/verify-marketing-assets.py --determinism   # re-render AppKit, compare bytes
+uv run scripts/generate-marketing-assets.py      # renders Marketing/exports/** and Brand/DMG/**
+uv run scripts/verify-marketing-assets.py        # hashes, sizes, alpha, DMG geometry, path safety
+uv run scripts/verify-marketing-assets.py --determinism   # re-render AppKit, compare bytes
 ```
 
 * `Marketing/identities.json` – public identities, factual one-line roles, formats.

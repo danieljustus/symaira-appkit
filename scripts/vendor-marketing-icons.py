@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["pillow==12.1.0"]
+# ///
 """Vendor reviewed A3 icon renders as inputs for the marketing generator.
 
 Reads the Icon Composer render directory produced by the brand refresh

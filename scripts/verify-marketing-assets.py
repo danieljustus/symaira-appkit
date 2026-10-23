@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["numpy==2.5.4", "pillow==12.1.0", "fonttools==4.64.0"]
+# ///
 """Verify the generated marketing assets against Brand/Marketing/manifest.json.
 
 Checks: design/font/source input hashes, every output's hash/size/mode, card sizes per format,
 transparency of lockups/wordmarks/product logos, canvas colour fidelity of cards, DMG geometry
-and label contrast, absence of absolute or sibling-checkout paths, and (with --determinism)
-that re-rendering AppKit reproduces the committed bytes.
+and label contrast, absence of absolute or sibling-checkout paths, the generator's numeric
+topography self-check, and (with --determinism) that re-rendering AppKit reproduces the committed
+bytes. Run with `uv run scripts/verify-marketing-assets.py` so the pinned NumPy is used.
 """
 
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -159,7 +165,18 @@ def main() -> int:
             if banned.search(line) and "banned = re.compile" not in line:
                 fail(f"{rel}:{n} absolute/sibling path: {line.strip()[:80]}")
 
-    # 5. determinism
+    # 5. numeric self-check: the committed bytes are only trustworthy if this NumPy computes the
+    # height field correctly (see topo_selfcheck in the generator).
+    sys.dont_write_bytecode = True  # no scripts/__pycache__ in the working tree
+    gen_spec = importlib.util.spec_from_file_location("marketing_generator", ROOT / "scripts/generate-marketing-assets.py")
+    gen = importlib.util.module_from_spec(gen_spec)
+    gen_spec.loader.exec_module(gen)
+    try:
+        gen.topo_selfcheck(gen.load_params())
+    except SystemExit as exc:
+        fail(str(exc))
+
+    # 6. determinism
     if args.determinism:
         with tempfile.TemporaryDirectory(prefix="marketing-det-") as tmp:
             subprocess.run([sys.executable, str(ROOT / "scripts/generate-marketing-assets.py"), "--only", "appkit", "--out", tmp, "--dmg"], check=True, stdout=subprocess.DEVNULL)

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.11"
+# dependencies = ["numpy==2.5.4", "pillow==12.1.0", "fonttools==4.64.0"]
+# ///
 """Deterministic Liquid Topography marketing asset generator.
 
 Renders social/OpenGraph cards, transparent product lockups/wordmarks and the DMG background
@@ -12,11 +16,17 @@ for the Symaira public identities. Design inputs are read from this repository o
 * Sources/SymairaTheme/Resources/Fonts/GoogleSansFlex.ttf   original font, opsz 18
 * Brand/Marketing/source/                  vendored, reviewed A3 icon renders (see manifest.json)
 
-No network, no model, no sibling checkout. Needs Pillow + numpy (+ fontTools for GPOS kerning).
+No model, no sibling checkout. Dependencies are pinned in the inline script metadata above, so
+`uv run` renders byte-identical output on every machine:
 
-    python3 scripts/generate-marketing-assets.py                 # everything
-    python3 scripts/generate-marketing-assets.py --only appkit   # one identity (+ DMG with --dmg)
-    python3 scripts/generate-marketing-assets.py --out DIR       # write elsewhere (determinism check)
+    uv run scripts/generate-marketing-assets.py                 # everything
+    uv run scripts/generate-marketing-assets.py --only appkit   # one identity (+ DMG with --dmg)
+    uv run scripts/generate-marketing-assets.py --out DIR       # write elsewhere (determinism check)
+
+Every run starts with `topo_selfcheck()`: NumPy 2.2 on Python 3.14 silently corrupts arithmetic on
+arrays above its temporary-elision threshold (>= 32768 elements), which turned the contour lines
+into jagged lattice steps. The check renders the same field in one large and in many small arrays
+and refuses to write anything if they differ or the field is not continuous.
 """
 
 from __future__ import annotations
@@ -133,6 +143,40 @@ def _iso(v, w, s):
     return np.float64(1) - _smoothstep(a * max(w - s, 0.0), a * (w + s), d)
 
 
+def _height(px, py, params, flow_t=FLOW_T):
+    """Idle-state height field at CSS-pixel coordinates (shader lines 34-36)."""
+    f32 = np.float64
+    scale = f32(params["scale"])
+    qx, qy = px / scale, py / scale
+    t = f32(flow_t)
+    wx = _fbm(qx * f32(0.7), qy * f32(0.7), np.full_like(qx, t * f32(0.6)))
+    wy = _fbm(qx * f32(0.7) + f32(5.2), qy * f32(0.7) + f32(5.2), np.full_like(qx, t * f32(0.6)))
+    warp = f32(params["states"]["idle"]["warp"])
+    return _fbm(qx + wx * warp, qy + wy * warp, np.full_like(qx, t))
+
+
+def topo_selfcheck(params):
+    """Fail closed if this NumPy build cannot compute the height field correctly.
+
+    256 x 256 = 65536 elements crosses NumPy's temporary-elision threshold; each 256-element row
+    stays below it. A correct build gives identical values both ways, and neighbouring pixels of
+    the smooth field never differ by more than a small fraction of one contour interval.
+    """
+    side = 256
+    grid = (np.arange(side, dtype=np.float64) + 0.5) * 3.0
+    px, py = np.meshgrid(grid, grid)
+    whole = _height(px, py, params)
+    rows = np.stack([_height(px[i].copy(), py[i].copy(), params) for i in range(side)])
+    step = max(np.abs(np.diff(whole, axis=0)).max(), np.abs(np.diff(whole, axis=1)).max())
+    interval = 1.0 / params["levels"]
+    if not np.array_equal(whole, rows) or step > 0.25 * interval:
+        raise SystemExit(
+            f"topography self-check failed (numpy {np.__version__}, max neighbour step {step:.4f}, "
+            f"large/small array mismatch {np.abs(whole - rows).max():.4f}). "
+            "Run with `uv run scripts/generate-marketing-assets.py` to use the pinned NumPy."
+        )
+
+
 def topo_alpha(width, height, dpr, params, rects, dark, flow_t=FLOW_T):
     """Alpha coverage (0..1) of the topography at the idle frame.
 
@@ -140,18 +184,11 @@ def topo_alpha(width, height, dpr, params, rects, dark, flow_t=FLOW_T):
     (shader `data-topo=protect`) and, when is_hill, a gentle hill (`data-topo=hill`).
     """
     f32 = np.float64
-    state = params["states"]["idle"]
     cols = (np.arange(width, dtype=f32) + f32(0.5)) / f32(dpr)
     rows = (np.arange(height, dtype=f32) + f32(0.5)) / f32(dpr)
     px, py = np.meshgrid(cols, rows)
     res_x, res_y = f32(width / dpr), f32(height / dpr)
-    scale = f32(params["scale"])
-    qx, qy = px / scale, py / scale
-    t = f32(flow_t)
-    wx = _fbm(qx * f32(0.7), qy * f32(0.7), np.full_like(qx, t * f32(0.6)))
-    wy = _fbm(qx * f32(0.7) + f32(5.2), qy * f32(0.7) + f32(5.2), np.full_like(qx, t * f32(0.6)))
-    warp = f32(state["warp"])
-    h = _fbm(qx + wx * warp, qy + wy * warp, np.full_like(qx, t))
+    h = _height(px, py, params, flow_t)
 
     mask = np.ones_like(px)
     hill = np.zeros_like(px)
@@ -324,12 +361,18 @@ def wrap_text(text, size, weight, tracking, max_width):
 
 
 # --- identity artwork ------------------------------------------------------------------------
-def load_identity_image(ident, theme, px):
+CARD_S_FILL = 674 / 1024  # bare S on cards: same height as the S inside every A3 icon
+LOCKUP_S_FILL = 674 / 793  # bare S in lockups/logos: the previous visual size, now centred
+
+
+def load_identity_image(ident, theme, px, s_fill=CARD_S_FILL):
     """Return (RGBA image of side px, corner-radius fraction, has_plate)."""
     src = ident["source"]
     if src == "umbrella":
+        # S-A3.png keeps transparent margin right/bottom; crop to the glyph so it centres.
         s = Image.open(MARKETING / "source" / "umbrella" / "S-A3.png").convert("RGBA")
-        scale = px / max(s.size)
+        s = s.crop(s.getchannel("A").getbbox())
+        scale = px * s_fill / s.height
         s = s.resize((round(s.width * scale), round(s.height * scale)), Image.Resampling.LANCZOS)
         out = Image.new("RGBA", (px, px), (0, 0, 0, 0))
         out.alpha_composite(s, ((px - s.width) // 2, (px - s.height) // 2))
@@ -339,8 +382,8 @@ def load_identity_image(ident, theme, px):
     return im.resize((px, px), Image.Resampling.LANCZOS), 0.23, True
 
 
-def paste_identity(img, ident, theme, x, y, size, shadow=True):
-    art, _, plate = load_identity_image(ident, theme, size)
+def paste_identity(img, ident, theme, x, y, size, shadow=True, s_fill=CARD_S_FILL):
+    art, _, plate = load_identity_image(ident, theme, size, s_fill)
     if plate and shadow and not THEMES[theme]["dark"]:
         a = art.getchannel("A").point(lambda v: int(v * 0.16))
         sh = Image.new("RGBA", art.size, rgb(THEMES[theme]["ink"]) + (0,))
@@ -415,7 +458,8 @@ def card(ident, theme, fmt, params):
         gap_role = 0.042 * width
         block = (eb_size * 1.29 if eyebrow else 0) + name_size * 0.74 + (len(names) - 1) * name_size * 1.04
         block += gap_role + role_size * 0.74 + (len(role_lines) - 1) * role_size * 1.32
-        top = height - safe_bottom - block
+        # block ends on the last baseline; keep descenders (g, p, y) out of the bottom safe zone
+        top = height - safe_bottom - block - role_size * 0.24
         x = m
 
     y = top
@@ -435,7 +479,13 @@ def card(ident, theme, fmt, params):
         w = text_width(text, size, weight, tracking)
         pad = 14 * (width / 1280)
         protected.append((tx - pad, base - size * 0.80 - pad, w + 2 * pad, size * 1.05 + 2 * pad, 12, False))
-    protected.append((icon_x, icon_y, icon, icon, icon * 0.23 if ident["source"] != "umbrella" else 12, True))
+    if ident["source"] == "umbrella":
+        # plate-less S: protect the glyph itself, not the whole (mostly empty) icon box
+        gx0, gy0, gx1, gy1 = load_identity_image(ident, theme, icon)[0].getchannel("A").getbbox()
+        pad = round(0.04 * icon)
+        protected.append((icon_x + gx0 - pad, icon_y + gy0 - pad, gx1 - gx0 + 2 * pad, gy1 - gy0 + 2 * pad, 12, True))
+    else:
+        protected.append((icon_x, icon_y, icon, icon, icon * 0.23, True))
 
     dpr = CARD_DPR * width / 1280
     alpha = topo_alpha(width, height, dpr, params, protected, th["dark"])
@@ -497,7 +547,7 @@ def horizontal_lockup(ident, surface):
     height = max(icon, math.ceil(h)) + 2 * pad
     img = Image.new("RGBA", (pad + icon + gap + math.ceil(w) + pad, height), (0, 0, 0, 0))
     theme = "dark" if surface == "on-dark" else "light"
-    paste_identity(img, ident, theme, pad, (height - icon) // 2, icon, shadow=False)
+    paste_identity(img, ident, theme, pad, (height - icon) // 2, icon, shadow=False, s_fill=LOCKUP_S_FILL)
     text_stack(img, ident, surface, pad + icon + gap, (height - h) / 2, name_size, eb_size)
     return img
 
@@ -514,7 +564,7 @@ def product_logo(ident, surface):
     img = Image.new("RGBA", (side, side), (0, 0, 0, 0))
     top = (side - total) / 2
     theme = "dark" if surface == "on-dark" else "light"
-    paste_identity(img, ident, theme, (side - icon) // 2, round(top), icon, shadow=False)
+    paste_identity(img, ident, theme, (side - icon) // 2, round(top), icon, shadow=False, s_fill=LOCKUP_S_FILL)
     text_stack(img, ident, surface, 0, top + icon + gap, name_size, eb_size, align_width=side)
     return img
 
@@ -604,6 +654,7 @@ def design_inputs():
 def build(out_root: Path, only: set[str] | None, dmg: bool, dmg_out: Path | None):
     spec = json.loads((MARKETING / "identities.json").read_text())
     params = load_params()
+    topo_selfcheck(params)
     outputs = []
 
     def record(img, path, role, identity, **extra):
@@ -670,9 +721,9 @@ def write_manifest(outputs, dmg_info):
         "dmg": dmg_info,
         "outputs": sorted(outputs, key=lambda o: o["path"]),
         "usage": {
-            "regenerate": "python3 scripts/generate-marketing-assets.py",
-            "verify": "python3 scripts/verify-marketing-assets.py [--determinism]",
-            "refresh_icons": "python3 scripts/vendor-marketing-icons.py --icons-root <dir with <key>/exports/macOS-{Default,Dark}.png + manifest.json>",
+            "regenerate": "uv run scripts/generate-marketing-assets.py",
+            "verify": "uv run scripts/verify-marketing-assets.py [--determinism]",
+            "refresh_icons": "uv run scripts/vendor-marketing-icons.py --icons-root <dir with <key>/exports/macOS-{Default,Dark}.png + manifest.json>",
             "naming": "social-preview-{dark,light}.png 1280x640; og-{dark,light}.png 1200x630; lockup-on-{light,dark}.png and wordmark-on-{light,dark}.png transparent (suffix = surface the ink is made for); product-logo.png / product-logo-on-dark.png 1024x1024 transparent vertical lockup",
             "vendoring": vendor,
             "readme_picture": '<picture><source media="(prefers-color-scheme: dark)" srcset="docs/assets/social-preview-dark.png"><img alt="Symaira <Product>" src="docs/assets/social-preview-light.png"></picture>',
