@@ -17,6 +17,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the guidelines (`file:line - RULE-ID severity message`, JSON output,
   `--fail-on`, `--self-test`). CI runs the self-test.
 - `AGENTS.md` and `README.md` route GUI work through the guidelines.
+- `SymairaKeychainStorage` and a `storage:` parameter on both `SymairaKeychain`
+  initializers. `.loginKeychain` stores items in the file-based login keychain
+  so unsandboxed Developer ID apps without the `keychain-access-groups`
+  entitlement can persist credentials; `.dataProtection` stays the default.
+  The login keychain accepts only `accessControl: .none` and performs no
+  legacy migration (#178).
+
+### Changed
+- A save or read that fails with `errSecMissingEntitlement` (-34018) now names
+  the missing entitlement and the `.loginKeychain` alternative in its error
+  description (#178).
 
 ### Fixed
 - `DaemonSupervisor` no longer drops output that a process writes right
