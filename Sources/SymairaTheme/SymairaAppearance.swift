@@ -50,7 +50,7 @@ public struct SymairaSettingsButton: View {
 
     public var body: some View {
         Button(action: openSettings) {
-            Label("Settings", systemImage: "gearshape")
+            Label("Settings", symairaIcon: .settings)
         }
         .labelStyle(.iconOnly)
         .accessibilityLabel("Settings")
