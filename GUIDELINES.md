@@ -105,9 +105,9 @@ Six lines, kept in the pull request or issue:
 
 ## 4. Screen layout
 
-- **LAYOUT-1** Every page has a stable header: a title in
+- **LAYOUT-1** Use `SymairaPage` for a stable title in
   `.symairaText(.display)` and a one-line subtitle, both `.topoProtected()`.
-  A page without a subtitle misaligns its controls against the other pages.
+  The subtitle may be omitted; its line remains reserved to align controls.
 - **LAYOUT-2** Prose stays within `SymairaMetrics.readableContentWidth`;
   dashboards and tables may use a wider product-owned budget.
 - **LAYOUT-3** Content that carries text sits on `.symairaCard()`; sections
@@ -140,7 +140,9 @@ Six lines, kept in the pull request or issue:
 - **STATE-4** Unreachable backend: a persistent `SymairaStatusLabel` in the
   sidebar plus the error state where content would start; never silent zeros.
 - **STATE-5** Success: an inline `SymairaNotice` with `.positive` or a status
-  change; no modal alert for success.
+  change; no modal alert for success. Page loading/error/empty placeholders use
+  `SymairaPageState` and `SymairaPageEmpty` with one shared fixed state height,
+  so state changes do not shift the page toolbar.
 - **STATE-6** A disabled control carries `SymairaLockedLabel` or a caption
   that says why; opacity alone is not a signal.
 - **STATE-7** Progress with a known duration uses `SymairaProgressStyle`;
@@ -156,7 +158,8 @@ Six lines, kept in the pull request or issue:
 
 - **ACTION-1** Button labels are specific verbs ("Execute Campaign",
   "Save API Key"); never "OK", "Continue", "Yes", "Submit".
-- **ACTION-2** Primary and secondary content actions share geometry
+- **ACTION-2** Primary and secondary content actions share geometry through
+  `.symairaButtonStyle(.primary/.secondary)` and `SymairaSheetScaffold`
   (`SymairaMetrics.contentActionHeight`, 20 pt horizontal padding). Switching
   role or label must not change size; reserve width for stateful labels.
 - **ACTION-3** Confirm consequential or irreversible actions with
@@ -362,17 +365,10 @@ the project-level absences KEY-1, SHELL-7, SHELL-9, POINTER-2, POINTER-3.
 
 Listed so that nobody invents a rule or a component:
 
-- `SymairaLockedLabel` defaults to a German label and draws an SF Symbol; pass
-  an English label until the shared default changes (#185).
-- `SymairaSettingsButton` still draws its gear from an SF Symbol string while
-  `SymairaIcon.settings` exists (#185).
-- No shared helper for app menu commands, ⌘-destination shortcuts or
-  `.searchable` placement; products wire these natively (#187).
+- No shared helper for `.searchable` placement; products wire it natively.
+  Destination commands and the Settings scene use `SymairaCommands` and
+  `SymairaSettingsScene` (SHELL-7, SHELL-9).
 - No shared table styling or numeric-column helper; products use the native
   `Table` with `.monospacedDigit()`.
-- No shared page scaffold (title, subtitle, toolbar row, state height) or
-  sheet scaffold yet. Symaira EraseMe's `Page`, `PageState`, `PageEmpty` and
-  `SheetScaffold` are the reference implementations and move here once a
-  second consumer needs them (#186).
 - The iOS shell and the onboarding scaffold adoption are documented as
   sketches, not as verified consumers.
