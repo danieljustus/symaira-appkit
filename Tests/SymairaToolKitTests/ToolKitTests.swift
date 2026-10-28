@@ -562,7 +562,12 @@ final class ToolDetectorTests: XCTestCase {
     }
 
     func testDetectInstalledSlidesWindowWithoutBarrier() async throws {
-        let fastEnded = tempDir.appendingPathComponent("fast-ended")
+        // Ordering is enforced by marker files, not by sleep durations: the slow
+        // handshake cannot finish until the waiting tool has started. A sliding
+        // window starts it as soon as the fast handshake completes; a barrier
+        // implementation would only start it after the slow one, so the slow
+        // tool gives up after its bounded wait and the ordering assertion fails.
+        let waitingStarted = tempDir.appendingPathComponent("waiting-started")
         let events = tempDir.appendingPathComponent("events.txt")
 
         let slow = try makeFakeTool(
@@ -570,7 +575,8 @@ final class ToolDetectorTests: XCTestCase {
             script: """
                 #!/bin/sh
                 printf 'slow-start\\n' >> "\(events.path)"
-                sleep 1
+                i=0
+                while [ ! -f "\(waitingStarted.path)" ] && [ $i -lt 150 ]; do sleep 0.02; i=$((i+1)); done
                 printf 'slow-end\\n' >> "\(events.path)"
                 echo '{"version":"1.0.0","schema_version":1}'
                 """
@@ -580,9 +586,7 @@ final class ToolDetectorTests: XCTestCase {
             script: """
                 #!/bin/sh
                 printf 'fast-start\\n' >> "\(events.path)"
-                sleep 0.1
                 printf 'fast-end\\n' >> "\(events.path)"
-                touch "\(fastEnded.path)"
                 echo '{"version":"1.0.0","schema_version":1}'
                 """
         )
@@ -591,7 +595,7 @@ final class ToolDetectorTests: XCTestCase {
             script: """
                 #!/bin/sh
                 printf 'waiting-start\\n' >> "\(events.path)"
-                while [ ! -f "\(fastEnded.path)" ]; do sleep 0.02; done
+                touch "\(waitingStarted.path)"
                 printf 'waiting-end\\n' >> "\(events.path)"
                 echo '{"version":"1.0.0","schema_version":1}'
                 """
