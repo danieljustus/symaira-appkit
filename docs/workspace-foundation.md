@@ -57,6 +57,51 @@ Reduce Motion, low power and window visibility. The workspace does not own a
 ScrollView, so editors, grids and existing ScrollViewReader navigation can keep
 their own content lifecycle.
 
+## App menu commands and Settings scene (macOS)
+
+`SymairaCommands(destinations:selection:)` adds a native Navigate menu. Pass
+ordered `(value: Destination, label: String)` entries and the same `Binding`
+used by sidebar buttons. Entries 1–9 receive ⌘1–⌘9; additional destinations
+remain menu items without numeric shortcuts. `SymairaSidebarState` owns layout
+only and deliberately has no destination selection. Products still add their
+own primary-action commands and ⌘R refresh.
+
+```swift
+struct ProductApp: App {
+    @State private var selection = "overview"
+    private let destinations = [
+        (value: "overview", label: "Overview"),
+        (value: "events", label: "Events"),
+    ]
+
+    var body: some Scene {
+        WindowGroup {
+            ProductWorkspace(selection: $selection)
+        }
+        .symairaWorkspaceWindow()
+        .commands {
+            SymairaCommands(destinations: destinations, selection: $selection)
+        }
+        SymairaSettingsScene { ProductSettings() }
+    }
+}
+```
+
+Selection in this example is intentionally app-owned. A multi-window product
+that keeps independent selections must pass a binding targeting its active
+workspace (for example via focused scene values), not introduce a second
+selection just for menu commands. The helper stores no global state.
+
+`SymairaSettingsScene(content:)` delegates to native `Settings`, retaining its
+standard app-menu item and ⌘, shortcut. Use `SymairaSettingsButton()` to open it
+through SwiftUI's macOS 14 `openSettings` environment action. The existing
+`SymairaSettingsButton(openSettings:)` remains available for native hosts and
+custom callbacks; workspace toolbars can continue passing that callback.
+Settings content and appearance persistence remain product-owned; place
+`SymairaAppearancePicker(selection:)` in `ProductSettings`, using the existing
+key. These scene/menu helpers and the no-argument button initializer are
+macOS-only; the callback button initializer remains cross-platform.
+
 ## Approved rule inventory
 
 | Rule | AppKit owner | Product responsibility |

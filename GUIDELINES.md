@@ -92,14 +92,16 @@ Six lines, kept in the pull request or issue:
 - **SHELL-6** The sidebar holds navigation and one compact status line
   (`SymairaStatusLabel`, or `SymairaStatusDot` in the icon rail); no forms and
   no actions in it.
-- **SHELL-7** Settings live in the `Settings { }` scene (⌘,) and contain
+- **SHELL-7** Settings live in `SymairaSettingsScene { }` (native `Settings`,
+  ⌘,), opened directly by `SymairaSettingsButton()` on macOS, and contain
   `SymairaAppearancePicker(selection:)` bound to the product's existing
   preference key; appearance changes apply to every open window.
 - **SHELL-8** Pass `topography:` only for the main overview; omit it behind
   dense lists, tables and settings.
-- **SHELL-9** Provide app menu commands (`.commands { CommandMenu(...) }`) with
-  ⌘ shortcuts for every primary action and destination; ⌘R refreshes, ⌘1 to
-  ⌘9 switch destinations where that reads naturally.
+- **SHELL-9** Provide `.commands { SymairaCommands(destinations:selection:) }`
+  using the same ordered destinations and product-owned selection as the sidebar
+  for ⌘1 to ⌘9; add native commands for primary actions and ⌘R refresh alongside
+  it. `SymairaSidebarState` continues to own layout, not navigation selection.
 
 ## 4. Screen layout
 
@@ -249,7 +251,8 @@ Six lines, kept in the pull request or issue:
 ## 10. Keyboard, pointer and accessibility
 
 - **KEY-1** Every primary action and destination has a ⌘ shortcut through menu
-  commands; Esc cancels, Return confirms, Delete removes the selection in
+  commands (`SymairaCommands(destinations:selection:)` covers the first nine
+  destinations); Esc cancels, Return confirms, Delete removes the selection in
   lists.
 - **KEY-2** Tab order follows reading order; custom controls are
   `.focusable()` and show the 2 pt `focus` ring.
