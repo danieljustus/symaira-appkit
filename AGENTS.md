@@ -1,3 +1,11 @@
+# Agent Instructions — symaira-appkit (ARCHIVED)
+
+**Stop: this repository is archived and read-only.** AppKit lives in
+`symaira-corekit/appkit/` since 2026-11-10 (CoreKit ADR 0006). Make every AppKit
+change in `/Volumes/1TB_NVMe_SN850X/Dev/Symaira_Dev/Repos/symaira-corekit`
+(`appkit/AGENTS.md` there) and file issues against `danieljustus/symaira-corekit`.
+The content below is the historical instruction set.
+
 # Agent Instructions — symaira-appkit
 
 ## Current product contract
